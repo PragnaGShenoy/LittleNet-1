@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recommended | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{background:#f5f7fb;padding-bottom:90px;}
+
+a{text-decoration:none;color:inherit;}
+
+/* Header */
+.header{
+  position:sticky;top:0;background:white;
+  padding:15px 20px;display:flex;
+  justify-content:space-between;align-items:center;
+  border-bottom:1px solid #e5e7eb;z-index:999;
+}
+.logo{font-size:28px;font-weight:700;color:#2563eb;}
+.header-icons{display:flex;gap:18px;font-size:22px;color:#444;}
+
+/* Container */
+.container{max-width:600px;margin:20px auto;padding:0 15px;}
+
+/* Post card */
+.post{
+  background:white;border-radius:18px;
+  overflow:hidden;margin-bottom:22px;
+  box-shadow:0 4px 20px rgba(0,0,0,.07);
+  animation:fade .4s ease;
+}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.post-header{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:14px 16px;
+}
+.user{display:flex;align-items:center;gap:12px;}
+.avatar{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,#4f46e5,#2563eb);
+  display:flex;justify-content:center;align-items:center;
+  color:white;font-size:20px;flex-shrink:0;
+}
+.username{font-weight:600;font-size:15px;}
+.category{color:#888;font-size:13px;margin-top:2px;}
+
+/* Media */
+.post img,.post video{width:100%;display:block;max-height:480px;object-fit:cover;}
+
+/* Actions */
+.post-actions{padding:12px 16px 6px;}
+.action-row{display:flex;align-items:center;gap:18px;margin-bottom:10px;}
+
+.like-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:26px;color:#888;padding:0;
+  transition:transform .15s;line-height:1;
+}
+.like-btn:active{transform:scale(1.3);}
+.like-btn.liked{color:#e0245e;}
+
+.comment-icon{font-size:24px;color:#555;cursor:pointer;}
+.like-count{font-weight:600;font-size:14px;margin-bottom:6px;}
+.caption{font-size:14px;line-height:1.6;margin-bottom:10px;}
+.caption strong{margin-right:6px;}
+
+/* Comments section */
+.comments-section{padding:0 16px 6px;}
+.comment-item{
+  display:flex;gap:10px;margin-bottom:10px;
+  align-items:flex-start;
+}
+.comment-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#4f46e5,#2563eb);
+  display:flex;justify-content:center;align-items:center;
+  color:white;font-size:13px;flex-shrink:0;
+}
+.comment-bubble{background:#f3f4f6;border-radius:14px;padding:8px 12px;font-size:13px;}
+.comment-bubble strong{display:block;margin-bottom:2px;font-size:12px;color:#2563eb;}
+
+/* Comment input */
+.comment-form{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px 14px;border-top:1px solid #f0f0f0;
+}
+.comment-form input{
+  flex:1;border:1px solid #e5e7eb;border-radius:25px;
+  padding:9px 16px;font-size:14px;outline:none;
+  background:#f9fafb;transition:.2s;
+}
+.comment-form input:focus{border-color:#2563eb;background:white;}
+.send-btn{
+  background:#2563eb;border:none;border-radius:50%;
+  width:36px;height:36px;display:flex;justify-content:center;
+  align-items:center;cursor:pointer;color:white;
+  font-size:14px;transition:.2s;flex-shrink:0;
+}
+.send-btn:hover{background:#1d4ed8;}
+
+/* Quiz card */
+.quiz-card{
+  background:white;border-radius:18px;padding:22px;
+  margin-bottom:22px;box-shadow:0 4px 20px rgba(0,0,0,.07);
+}
+.quiz-badge{
+  display:inline-block;background:#eef2ff;color:#4f46e5;
+  font-size:12px;font-weight:600;padding:4px 12px;
+  border-radius:20px;margin-bottom:14px;
+}
+.quiz-question{font-size:17px;font-weight:600;margin-bottom:16px;line-height:1.5;}
+.quiz-option{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;border:1px solid #e5e7eb;
+  border-radius:12px;margin-bottom:10px;cursor:pointer;
+  transition:.2s;font-size:14px;
+}
+.quiz-option:hover{border-color:#2563eb;background:#eef2ff;}
+.quiz-option input{accent-color:#2563eb;}
+.quiz-submit{
+  width:100%;padding:13px;background:linear-gradient(135deg,#4f46e5,#2563eb);
+  border:none;border-radius:12px;color:white;font-size:15px;
+  font-weight:600;cursor:pointer;margin-top:6px;transition:.2s;
+}
+.quiz-submit:hover{opacity:.9;}
+.quiz-result{
+  margin-top:14px;padding:14px;border-radius:12px;font-size:14px;
+}
+.quiz-result.correct{background:#d1fae5;color:#065f46;}
+.quiz-result.wrong{background:#fee2e2;color:#991b1b;}
+.skip-link{display:block;text-align:center;margin-top:12px;color:#2563eb;font-size:14px;}
+
+/* Pagination */
+.load-more{
+  display:block;text-align:center;margin:10px auto 30px;
+  padding:14px 30px;background:white;border-radius:14px;
+  box-shadow:0 4px 15px rgba(0,0,0,.07);color:#2563eb;
+  font-weight:600;font-size:15px;transition:.2s;
+}
+.load-more:hover{background:#2563eb;color:white;}
+
+/* Bottom nav */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;width:100%;
+  background:white;display:flex;justify-content:space-around;
+  padding:14px 0;border-top:1px solid #e5e7eb;z-index:999;
+}
+.bottom-nav a{font-size:22px;color:#888;transition:.2s;}
+.bottom-nav a:hover,.bottom-nav a.active{color:#2563eb;}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo">LittleNet</div>
+  <div class="header-icons">
+    <i class="fa-regular fa-bell"></i>
+    <a href="/logout/"><i class="fa-solid fa-right-from-bracket"></i></a>
+  </div>
+</div>
+
+<div class="container">
+
+  {% for item in feed_items %}
+
+  {% if item.type == "POST" %}
+  {% set post = item.data %}
+
+  <div class="post" id="post-{{ post.post_id }}">
+
+    <!-- Post header -->
+    <div class="post-header">
+      <div class="user">
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <div class="username">{{ post.full_name }}</div>
+          <div class="category">{{ post.content_category }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media -->
+    {% if post.media_type == "IMAGE" %}
+    <img src="/{{ post.media_path }}" alt="post image">
+    {% endif %}
+    {% if post.media_type == "VIDEO" %}
+    <video controls><source src="/{{ post.media_path }}" type="video/mp4"></video>
+    {% endif %}
+
+    <!-- Actions -->
+    <div class="post-actions">
+      <div class="action-row">
+
+        <!-- Like button — uses fetch, no page navigation -->
+        <button
+          class="like-btn"
+          data-post-id="{{ post.post_id }}"
+          onclick="toggleLike(this)"
+          title="Like">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+
+        <!-- Comment toggle -->
+        <span
+          class="comment-icon"
+          onclick="focusComment('input-{{ post.post_id }}')"
+          title="Comment">
+          <i class="fa-regular fa-comment"></i>
+        </span>
+
+      </div>
+
+      <div class="like-count" id="likes-{{ post.post_id }}">
+        {{ post.likes }} {{ 'like' if post.likes == 1 else 'likes' }}
+      </div>
+
+      <div class="caption">
+        <strong>{{ post.full_name }}</strong>{{ post.caption }}
+      </div>
+    </div>
+
+    <!-- Existing comments -->
+    <div class="comments-section" id="comments-{{ post.post_id }}">
+      {% for comment in post.comments %}
+      <div class="comment-item">
+        <div class="comment-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="comment-bubble">
+          <strong>{{ comment.full_name }}</strong>
+          {{ comment.comment_text }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Comment input — uses fetch, no page navigation -->
+    <div class="comment-form">
+      <input
+        type="text"
+        id="input-{{ post.post_id }}"
+        placeholder="Add a comment..."
+        onkeydown="if(event.key==='Enter') submitComment('{{ post.post_id }}', this)">
+      <button
+        class="send-btn"
+        onclick="submitComment('{{ post.post_id }}', document.getElementById('input-{{ post.post_id }}'))">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+
+  </div>
+
+  {% endif %}
+
+  {% if item.type == "QUIZ" %}
+  {% set quiz = item.data %}
+
+  <div class="quiz-card">
+    <div class="quiz-badge">🧠 Quiz Time!</div>
+    <div class="quiz-question">{{ quiz.question }}</div>
+
+    <form method="POST" action="/quiz/submit/">
+      <input type="hidden" name="quiz_id" value="{{ quiz.quiz_id }}">
+
+      {% for opt_val, opt_label in [
+          (quiz.option_a, quiz.option_a),
+          (quiz.option_b, quiz.option_b),
+          (quiz.option_c, quiz.option_c),
+          (quiz.option_d, quiz.option_d)
+      ] %}
+      <label class="quiz-option">
+        <input type="radio" name="answer" value="{{ opt_val }}" required>
+        {{ opt_label }}
+      </label>
+      {% endfor %}
+
+      <button class="quiz-submit" type="submit">Submit Answer</button>
+    </form>
+
+    {% if quiz_result %}
+    <div class="quiz-result {{ 'correct' if quiz_result.is_correct else 'wrong' }}">
+      {% if quiz_result.is_correct %}
+      ✅ Correct Answer!
+      {% else %}
+      ❌ Wrong! Correct answer: <strong>{{ quiz_result.correct_answer }}</strong>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if not settings["mandatory_quiz"] %}
+    <a class="skip-link" href="/recommended/?page={{ page + 1 }}">Skip Quiz →</a>
+    {% endif %}
+  </div>
+
+  {% endif %}
+
+  {% endfor %}
+
+  <a class="load-more" href="/recommended/?page={{ page + 1 }}">
+    <i class="fa-solid fa-rotate-right"></i> &nbsp;Load More
+  </a>
+
+</div>
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <a href="/feed/"><i class="fa-solid fa-house"></i></a>
+  <a href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
+  <a href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
+  <a href="/recommended/" class="active"><i class="fa-solid fa-heart"></i></a>
+  <a href="/child/profile/"><i class="fa-solid fa-user"></i></a>
+</div>
+
+<script>
+
+function toggleLike(btn) {
+  const postId = btn.dataset.postId;
+  const icon = btn.querySelector('i');
+  const countEl = document.getElementById('likes-' + postId);
+
+  // Toggle visual state immediately (optimistic update)
+  const isLiked = btn.classList.contains('liked');
+  btn.classList.toggle('liked');
+  icon.className = isLiked ? 'fa-regular fa-heart' : 'fa-solid fa-heart';
+
+  // Parse current count and adjust
+  const currentCount = parseInt(countEl.textContent) || 0;
+  const newCount = isLiked ? currentCount - 1 : currentCount + 1;
+  countEl.textContent = newCount + (newCount === 1 ? ' like' : ' likes');
+
+  // Send to backend without navigating away
+  fetch('/like/' + postId + '/', { method: 'GET', credentials: 'same-origin' })
+    .catch(() => {
+      // Revert on network error
+      btn.classList.toggle('liked');
+      icon.className = isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
+      countEl.textContent = currentCount + (currentCount === 1 ? ' like' : ' likes');
+    });
+}
+
+function focusComment(inputId) {
+  const input = document.getElementById(inputId);
+  if (input) input.focus();
+}
+
+function submitComment(postId, input) {
+  const text = input.value.trim();
+  if (!text) return;
+
+  const formData = new FormData();
+  formData.append('comment', text);
+
+  fetch('/comment/' + postId + '/', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(() => {
+    // Append the new comment to the list without reloading
+    const commentsEl = document.getElementById('comments-' + postId);
+    const div = document.createElement('div');
+    div.className = 'comment-item';
+    div.innerHTML = `
+      <div class="comment-avatar"><i class="fa-solid fa-user"></i></div>
+      <div class="comment-bubble">
+        <strong>You</strong>${escapeHtml(text)}
+      </div>`;
+    commentsEl.appendChild(div);
+    input.value = '';
+  })
+  .catch(() => alert('Could not post comment. Please try again.'));
+}
+
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+</script>
+
+</body>
+</html>

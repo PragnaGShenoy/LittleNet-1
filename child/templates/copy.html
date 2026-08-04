@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LittleNet Child Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #fafafa;
+            --card: #ffffff;
+            --border: #dbdbdb;
+            --text: #262626;
+            --muted: #8e8e8e;
+            --blue: #0095f6;
+            --grad: linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 70px;
+        }
+
+        /* ---------- Top Bar ---------- */
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+        }
+        .logo {
+            font-family: "Segoe UI", cursive;
+            font-size: 26px; font-weight: 700;
+            background: var(--grad);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .top-icons { display: flex; gap: 18px; font-size: 22px; }
+        .top-icons a { text-decoration: none; }
+
+        .container { max-width: 600px; margin: 0 auto; }
+
+        /* ---------- Stories ---------- */
+        .stories {
+            display: flex; gap: 14px; overflow-x: auto;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 16px;
+        }
+        .stories::-webkit-scrollbar { display: none; }
+        .story { text-align: center; flex: 0 0 auto; }
+        .story .ring {
+            width: 62px; height: 62px; border-radius: 50%;
+            padding: 3px; background: var(--grad);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .story .ring span {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: #fff; display: flex; align-items: center; justify-content: center;
+            font-size: 26px; border: 2px solid #fff;
+        }
+        .story p { font-size: 12px; margin-top: 5px; color: var(--muted); }
+
+        .section-title {
+            font-size: 15px; font-weight: 600; color: var(--muted);
+            padding: 16px 4px 8px;
+        }
+
+        /* ---------- Post Card ---------- */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .card-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px;
+        }
+        .card-user { display: flex; align-items: center; gap: 10px; }
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--grad);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #fff;
+        }
+        .card-user b { font-size: 14px; }
+        .card-user small { display: block; color: var(--muted); font-size: 12px; }
+        .more { font-size: 20px; color: var(--muted); cursor: pointer; }
+
+        .card-img {
+            height: 360px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: #fff; gap: 8px;
+            background: linear-gradient(135deg,#a18cd1,#fbc2eb);
+        }
+        .card-actions {
+            display: flex; gap: 18px; font-size: 22px;
+            padding: 12px 14px 6px;
+        }
+        .card-actions span { cursor: pointer; }
+        .card-actions .spacer { margin-left: auto; }
+        .likes { font-weight: 600; font-size: 14px; padding: 2px 14px; }
+        .caption { font-size: 14px; padding: 4px 14px 10px; }
+        .caption b { margin-right: 6px; }
+
+        .comments { border-top: 1px solid var(--border); padding: 10px 14px; }
+        .comments p { font-size: 14px; margin-bottom: 4px; }
+        .comments p b { margin-right: 6px; }
+        .comment-box {
+            display: flex; align-items: center; gap: 8px;
+            border-top: 1px solid var(--border); padding: 10px 14px;
+        }
+        .comment-box input {
+            flex: 1; border: none; outline: none;
+            font-size: 14px; background: transparent;
+        }
+        .comment-box button {
+            border: none; background: none; color: var(--blue);
+            font-weight: 600; font-size: 14px; cursor: pointer;
+        }
+
+        /* ---------- Quiz Card ---------- */
+        .quiz-head {
+            font-weight: 600; font-size: 16px;
+            padding: 14px; display: flex; align-items: center; gap: 8px;
+        }
+        .quiz-q { padding: 0 14px 10px; font-size: 15px; }
+        .quiz-opt {
+            display: flex; align-items: center; gap: 10px;
+            margin: 0 14px 8px; padding: 10px 14px;
+            border: 1px solid var(--border); border-radius: 10px;
+            cursor: pointer; font-size: 14px; transition: .15s;
+        }
+        .quiz-opt:hover { background: #f0f8ff; border-color: var(--blue); }
+        .quiz-opt input { accent-color: var(--blue); }
+        .btn {
+            display: block; width: calc(100% - 28px); margin: 10px 14px 16px;
+            background: var(--blue); color: #fff; border: none;
+            padding: 11px; border-radius: 10px; font-size: 15px;
+            font-weight: 600; cursor: pointer;
+        }
+        .btn:hover { opacity: .9; }
+
+        /* ---------- Quick Menu Buttons ---------- */
+        .quick {
+            display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;
+            padding: 14px 0;
+        }
+        .quick a {
+            text-decoration: none; text-align: center;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 10px; padding: 12px; color: var(--text);
+            font-size: 14px; font-weight: 600;
+        }
+        .quick a:hover { background: #f5f5f5; }
+
+        .load-more {
+            text-align: center; color: var(--muted);
+            font-size: 14px; font-weight: 600; padding: 14px; cursor: pointer;
+        }
+
+        /* ---------- Bottom Nav ---------- */
+        .bottomnav {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+            display: flex; justify-content: space-around; align-items: center;
+            background: var(--card); border-top: 1px solid var(--border);
+            padding: 12px 0; font-size: 24px;
+        }
+        .bottomnav a { text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="logo">LittleNet</div>
+        <div class="top-icons">
+            <a href="#">❤️</a>
+            <a href="#">🔔</a>
+            <a href="/child/profile/">👤</a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Stories -->
+        <div class="stories">
+            <div class="story"><div class="ring"><span>➕</span></div><p>You</p></div>
+            <div class="story"><div class="ring"><span>👦</span></div><p>Rahul</p></div>
+            <div class="story"><div class="ring"><span>👧</span></div><p>Emma</p></div>
+            <div class="story"><div class="ring"><span>🧒</span></div><p>Alex</p></div>
+            <div class="story"><div class="ring"><span>👶</span></div><p>Sara</p></div>
+            <div class="story"><div class="ring"><span>🙂</span></div><p>Max</p></div>
+        </div>
+
+        <p style="padding:0 14px;font-size:14px;color:var(--muted);margin-top:10px;">
+            Welcome <b style="color:var(--text)">{{ full_name }}</b> 👋
+        </p>
+
+        <div class="section-title" style="padding-left:14px;">Recommended Feed</div>
+
+        <!-- Post Card -->
+        <div class="card">
+            <div class="card-head">
+                <div class="card-user">
+                    <div class="avatar">👤</div>
+                    <div><b>Rahul</b><small>2 hours ago</small></div>
+                </div>
+                <div class="more">•••</div>
+            </div>
+            <div class="card-img">📷 Beautiful Image</div>
+            <div class="card-actions">
+                <span>❤️</span><span>💬</span><span>📤</span>
+                <span class="spacer">🔖</span>
+            </div>
+            <div class="likes">120 likes</div>
+            <div class="caption"><b>Rahul</b>This is my new drawing... 🎨</div>
+            <div class="comments">
+                <p><b>Alex</b>Nice! 😊</p>
+                <p><b>Emma</b>Great work! 😊</p>
+                <p style="color:var(--muted)">View all 25 comments</p>
+            </div>
+            <div class="comment-box">
+                <span>😊</span>
+                <input type="text" placeholder="Write a comment...">
+                <button>Post</button>
+            </div>
+        </div>
+
+        <!-- Quiz Card -->
+        <div class="card">
+            <div class="quiz-head">🎯 Quiz Time</div>
+            <div class="quiz-q">Which animal is the largest?</div>
+            <label class="quiz-opt"><input type="radio" name="quiz"> Elephant</label>
+            <label class="quiz-opt"><input type="radio" name="quiz"> Lion</label>
+            <label class="quiz-opt"><input type="radio" name="quiz"> Tiger</label>
+            <label class="quiz-opt"><input type="radio" name="quiz"> Horse</label>
+            <button class="btn">Submit Answer</button>
+        </div>
+
+        <div class="load-more">────────── Load More ──────────</div>
+
+        <!-- Quick Menu -->
+        <div class="section-title" style="padding-left:4px;">Quick Menu</div>
+        <div class="quick">
+            <a href="/child/profile/">👤 Profile</a>
+            <a href="/child/upload-post/">➕ Upload Post</a>
+            <a href="/my-posts/">🖼️ My Posts</a>
+            <a href="/feed/">📰 Feed</a>
+            <a href="/recommended/">⭐ Recommended</a>
+            <a href="/discover/">🔍 Discover Children</a>
+        </div>
+
+        <a href="/logout/" style="display:block;text-align:center;color:#ed4956;
+            font-weight:600;font-size:14px;padding:18px;text-decoration:none;">
+            Logout
+        </a>
+
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottomnav">
+        <a href="/child/dashboard/">🏠</a>
+        <a href="/discover/">🔍</a>
+        <a href="/child/upload-post/">➕</a>
+        <a href="/recommended/">❤️</a>
+        <a href="/child/profile/">👤</a>
+    </div>
+
+    {% if strict_mode %}
+    <script>
+        var remainingMinutes = Number("{{ remaining_time }}");
+        let remainingMilliseconds = remainingMinutes * 60 * 1000;
+        setTimeout(() => {
+            alert("Daily Screen Time Limit Reached");
+            window.location.href = "/time-limit-reached/";
+        }, remainingMilliseconds);
+    </script>
+    {% endif %}
+
+</body>
+</html>

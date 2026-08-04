@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Quiz Report | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#f5f7fb;
+color:#222;
+}
+
+.header{
+position:sticky;
+top:0;
+background:white;
+padding:18px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #ddd;
+z-index:100;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+}
+
+.back{
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+}
+
+.container{
+max-width:900px;
+margin:25px auto;
+padding:0 15px;
+}
+
+.title{
+font-size:30px;
+font-weight:700;
+margin-bottom:25px;
+}
+
+.summary{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+margin-bottom:35px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:18px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.card i{
+font-size:35px;
+margin-bottom:15px;
+color:#2563EB;
+}
+
+.card h2{
+font-size:30px;
+margin-bottom:5px;
+}
+
+.card p{
+color:#666;
+font-weight:600;
+}
+
+.report{
+background:white;
+border-radius:18px;
+padding:25px;
+margin-bottom:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.question{
+font-size:19px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.row{
+margin-bottom:12px;
+line-height:1.7;
+}
+
+.label{
+font-weight:700;
+color:#2563EB;
+}
+
+.correct{
+
+display:inline-block;
+padding:6px 12px;
+background:#DCFCE7;
+color:#166534;
+border-radius:25px;
+font-weight:600;
+
+}
+
+.wrong{
+
+display:inline-block;
+padding:6px 12px;
+background:#FEE2E2;
+color:#B91C1C;
+border-radius:25px;
+font-weight:600;
+
+}
+
+.date{
+margin-top:20px;
+color:#666;
+font-size:14px;
+}
+
+.empty{
+
+background:white;
+padding:60px;
+text-align:center;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.empty i{
+
+font-size:70px;
+color:#d1d5db;
+margin-bottom:20px;
+
+}
+
+@media(max-width:768px){
+
+.logo{
+font-size:24px;
+}
+
+.title{
+font-size:24px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="title">
+
+Quiz Report
+
+</div>
+
+<div class="summary">
+
+<div class="card">
+
+<i class="fa-solid fa-list-check"></i>
+
+<h2>
+
+{{ summary.total }}
+
+</h2>
+
+<p>
+
+Total Quizzes
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-circle-check"></i>
+
+<h2>
+
+{{ summary.correct }}
+
+</h2>
+
+<p>
+
+Correct
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+<h2>
+
+{{ summary.wrong }}
+
+</h2>
+
+<p>
+
+Wrong
+
+</p>
+
+</div>
+
+<div class="card">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h2>
+
+{% if summary.total > 0 %}
+
+{{ (summary.correct * 100 // summary.total) }}%
+
+{% else %}
+
+0%
+
+{% endif %}
+
+</h2>
+
+<p>
+
+Accuracy
+
+</p>
+
+</div>
+
+</div>
+
+{% if attempts %}
+
+{% for item in attempts %}
+
+<div class="report">
+
+<div class="question">
+
+❓ {{ item.question }}
+
+</div>
+
+<div class="row">
+
+<span class="label">
+
+Child Answer:
+
+</span>
+
+{{ item.selected_answer }}
+
+</div>
+
+<div class="row">
+
+<span class="label">
+
+Correct Answer:
+
+</span>
+
+{{ item.correct_answer }}
+
+</div>
+
+<div class="row">
+
+<span class="label">
+
+Result:
+
+</span>
+
+{% if item.is_correct %}
+
+<span class="correct">
+
+✓ Correct
+
+</span>
+
+{% else %}
+
+<span class="wrong">
+
+✗ Wrong
+
+</span>
+
+{% endif %}
+
+</div>
+
+<div class="date">
+
+<i class="fa-regular fa-calendar"></i>
+
+{{ item.attempted_at }}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-file-circle-question"></i>
+
+<h2>
+
+No Quiz Attempts
+
+</h2>
+
+<p>
+
+The child hasn't attempted any quizzes yet.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

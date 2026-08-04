@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LittleNet | Parent Registration</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#EEF2FF,#F8FAFC,#FFFFFF);
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:20px;
+
+}
+
+.container{
+
+width:100%;
+max-width:460px;
+
+}
+
+.card{
+
+background:#fff;
+
+padding:40px 35px;
+
+border-radius:24px;
+
+box-shadow:0 18px 45px rgba(0,0,0,.08);
+
+animation:fade .6s ease;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(25px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.logo{
+
+width:85px;
+
+height:85px;
+
+margin:auto;
+
+border-radius:22px;
+
+background:linear-gradient(135deg,#4F46E5,#2563EB);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:34px;
+
+color:white;
+
+margin-bottom:18px;
+
+}
+
+h1{
+
+text-align:center;
+
+font-size:30px;
+
+color:#111827;
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+font-size:15px;
+
+line-height:1.6;
+
+color:#6B7280;
+
+margin-bottom:30px;
+
+}
+
+.notice{
+
+background:#EEF4FF;
+
+border-left:4px solid #4F46E5;
+
+padding:14px 16px;
+
+border-radius:12px;
+
+font-size:14px;
+
+color:#374151;
+
+margin-bottom:24px;
+
+}
+
+.input-group{
+
+position:relative;
+
+margin-bottom:18px;
+
+}
+
+.input-group i{
+
+position:absolute;
+
+left:16px;
+
+top:18px;
+
+color:#9CA3AF;
+
+}
+
+.input-group input{
+
+width:100%;
+
+height:54px;
+
+padding-left:48px;
+
+border:1px solid #E5E7EB;
+
+border-radius:14px;
+
+font-size:15px;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+.input-group input:focus{
+
+border-color:#4F46E5;
+
+box-shadow:0 0 0 4px rgba(79,70,229,.12);
+
+}
+
+button{
+
+width:100%;
+
+height:56px;
+
+border:none;
+
+border-radius:14px;
+
+background:linear-gradient(135deg,#4F46E5,#2563EB);
+
+color:white;
+
+font-size:16px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 12px 28px rgba(37,99,235,.28);
+
+}
+
+.footer{
+
+margin-top:25px;
+
+text-align:center;
+
+font-size:13px;
+
+color:#9CA3AF;
+
+}
+
+@media(max-width:480px){
+
+.card{
+
+padding:28px 22px;
+
+}
+
+h1{
+
+font-size:26px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="logo">
+
+<i class="fa-solid fa-user-shield"></i>
+
+</div>
+
+<h1>Parent Registration</h1>
+
+<p class="subtitle">
+
+Create your LittleNet parent account to approve, monitor, and manage your child's activities in a safe environment.
+
+</p>
+
+<div class="notice">
+
+<strong>Parent Verification</strong><br>
+This account will be linked to your child's profile after registration.
+
+</div>
+
+<form method="POST">
+
+<div class="input-group">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+name="full_name"
+placeholder="Parent Full Name"
+required>
+
+</div>
+
+<div class="input-group">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+name="email"
+placeholder="Parent Email Address"
+required>
+
+</div>
+
+<div class="input-group">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+name="password"
+placeholder="Create Password"
+required>
+
+</div>
+
+<button type="submit">
+
+<i class="fa-solid fa-circle-check"></i>
+
+&nbsp;
+
+Create Parent Account
+
+</button>
+
+</form>
+
+<div class="footer">
+
+© 2026 LittleNet • Safe Social Network for Kids
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discover Children | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#F5F7FB;
+
+color:#222;
+
+padding-bottom:90px;
+
+}
+
+.header{
+
+position:sticky;
+
+top:0;
+
+background:white;
+
+padding:18px 20px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+border-bottom:1px solid #E5E7EB;
+
+z-index:100;
+
+}
+
+.logo{
+
+font-size:28px;
+
+font-weight:700;
+
+color:#2563EB;
+
+}
+
+.back{
+
+color:#2563EB;
+
+font-size:15px;
+
+font-weight:600;
+
+text-decoration:none;
+
+}
+
+.container{
+
+max-width:700px;
+
+margin:25px auto;
+
+padding:0 15px;
+
+}
+
+.title{
+
+font-size:26px;
+
+font-weight:700;
+
+margin-bottom:8px;
+
+}
+
+.subtitle{
+
+color:#6B7280;
+
+margin-bottom:25px;
+
+}
+
+.search{
+
+background:white;
+
+padding:15px;
+
+border-radius:16px;
+
+margin-bottom:25px;
+
+box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.search input{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+background:#F3F4F6;
+
+border-radius:12px;
+
+outline:none;
+
+font-size:15px;
+
+}
+
+.child-card{
+
+background:white;
+
+border-radius:20px;
+
+padding:20px;
+
+margin-bottom:18px;
+
+box-shadow:0 5px 20px rgba(0,0,0,.06);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+transition:.3s;
+
+}
+
+.child-card:hover{
+
+transform:translateY(-3px);
+
+}
+
+.left{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.avatar{
+
+width:65px;
+
+height:65px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#4F46E5,#2563EB);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+color:white;
+
+font-size:26px;
+
+}
+
+.name{
+
+font-size:18px;
+
+font-weight:600;
+
+}
+
+.followers{
+
+font-size:14px;
+
+color:#6B7280;
+
+margin-top:5px;
+
+}
+
+.follow-btn{
+
+padding:10px 22px;
+
+border-radius:25px;
+
+background:#2563EB;
+
+color:white;
+
+text-decoration:none;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.follow-btn:hover{
+
+background:#1D4ED8;
+
+}
+
+.following{
+
+padding:10px 22px;
+
+border-radius:25px;
+
+background:#E5F3FF;
+
+color:#2563EB;
+
+text-decoration:none;
+
+font-weight:600;
+
+border:1px solid #2563EB;
+
+}
+
+.bottom-nav{
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+width:100%;
+
+background:white;
+
+display:flex;
+
+justify-content:space-around;
+
+padding:16px 0;
+
+border-top:1px solid #ddd;
+
+}
+
+.bottom-nav a{
+
+font-size:24px;
+
+color:#555;
+
+transition:.3s;
+
+}
+
+.bottom-nav a:hover{
+
+color:#2563EB;
+
+}
+
+@media(max-width:768px){
+
+.child-card{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:18px;
+
+}
+
+.follow-btn,
+
+.following{
+
+width:100%;
+
+text-align:center;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/child/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="title">
+
+Discover Children
+
+</div>
+
+<div class="subtitle">
+
+Find new friends and connect in a safe environment.
+
+</div>
+
+<div class="search">
+
+<input type="text" placeholder="Search children...">
+
+</div>
+
+{% for child in children %}
+
+<div class="child-card">
+
+<div class="left">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div>
+
+<div class="name">
+
+{{ child.full_name }}
+
+</div>
+
+<div class="followers">
+
+<i class="fa-solid fa-user-group"></i>
+
+{{ child.followers }} Followers
+
+</div>
+
+</div>
+
+</div>
+
+{% if child.is_following %}
+
+<a href="/unfollow/{{ child.user_id }}/" class="following">
+
+<i class="fa-solid fa-check"></i>
+
+Following
+
+</a>
+
+{% else %}
+
+<a href="/follow/{{ child.user_id }}/" class="follow-btn">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Follow
+
+</a>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="bottom-nav">
+
+<a href="/feed/">
+
+<i class="fa-solid fa-house"></i>
+
+</a>
+
+<a href="/discover/">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+</a>
+
+<a href="/child/upload-post/">
+
+<i class="fa-solid fa-square-plus"></i>
+
+</a>
+
+<a href="/my-posts/">
+
+<i class="fa-solid fa-heart"></i>
+
+</a>
+
+<a href="/child/profile/">
+
+<i class="fa-solid fa-user"></i>
+
+</a>
+
+</div>
+
+</body>
+
+</html>

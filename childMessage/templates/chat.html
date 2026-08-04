@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat | LittleNet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{background:#f3f5f9;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+
+/* ── Header ── */
+.chat-header{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 18px;background:white;
+  border-bottom:1px solid #e5e7eb;flex-shrink:0;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;color:#111827;font-size:18px;transition:.2s;
+}
+.back-btn:hover{background:#f1f3f5;}
+.peer-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:18px;font-weight:700;flex-shrink:0;
+}
+.peer-info{flex:1;min-width:0;}
+.peer-name{font-size:16px;font-weight:700;color:#111827;}
+.peer-status{font-size:12px;color:#6b7280;margin-top:1px;}
+
+/* ── Messages area ── */
+.messages-area{
+  flex:1;overflow-y:auto;padding:18px 16px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.messages-area::-webkit-scrollbar{width:4px;}
+.messages-area::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px;}
+
+/* Date divider */
+.date-divider{
+  text-align:center;font-size:12px;color:#9ca3af;
+  margin:6px 0;position:relative;
+}
+.date-divider::before,.date-divider::after{
+  content:'';position:absolute;top:50%;width:38%;
+  height:1px;background:#e5e7eb;
+}
+.date-divider::before{left:0;}
+.date-divider::after{right:0;}
+
+/* Bubbles */
+.msg-row{display:flex;margin-bottom:2px;}
+.msg-row.sent{justify-content:flex-end;}
+.msg-row.received{justify-content:flex-start;}
+
+.bubble{
+  max-width:72%;padding:10px 14px;border-radius:18px;
+  word-break:break-word;font-size:14px;line-height:1.5;
+  position:relative;
+}
+.bubble.sent{
+  background:#2563eb;color:white;
+  border-bottom-right-radius:4px;
+}
+.bubble.received{
+  background:white;color:#111827;
+  border-bottom-left-radius:4px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+}
+.bubble .time{
+  display:block;font-size:10px;margin-top:4px;
+  opacity:.65;text-align:right;
+}
+
+/* Media in bubble */
+.bubble img{
+  max-width:100%;border-radius:10px;display:block;margin-bottom:4px;cursor:pointer;
+}
+.bubble video,.bubble audio{max-width:100%;border-radius:10px;display:block;margin-bottom:4px;}
+.file-link{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.15);border-radius:10px;
+  padding:8px 12px;text-decoration:none;
+  color:inherit;font-size:13px;font-weight:600;
+}
+.bubble.received .file-link{background:#f3f4f6;color:#2563eb;}
+
+/* Empty state */
+.empty-chat{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  color:#9ca3af;text-align:center;gap:10px;
+}
+.empty-chat i{font-size:48px;color:#d1d5db;}
+
+/* ── Input bar ── */
+.input-bar{
+  background:white;border-top:1px solid #e5e7eb;
+  padding:10px 14px;flex-shrink:0;
+}
+
+/* Attachment menu (slides up) */
+.attach-menu{
+  display:none;flex-wrap:wrap;gap:10px;
+  padding:10px 0 12px;
+}
+.attach-menu.open{display:flex;}
+.attach-opt{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;font-size:12px;color:#374151;font-weight:600;
+}
+.attach-opt .icon-circle{
+  width:52px;height:52px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:white;
+}
+.opt-image .icon-circle{background:#10b981;}
+.opt-video .icon-circle{background:#f59e0b;}
+.opt-audio .icon-circle{background:#8b5cf6;}
+.opt-file  .icon-circle{background:#3b82f6;}
+
+/* Text row */
+.text-row{
+  display:flex;align-items:center;gap:10px;
+}
+.attach-toggle{
+  width:40px;height:40px;border:none;background:#f3f4f6;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#6b7280;cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.attach-toggle:hover,.attach-toggle.active{background:#eff6ff;color:#2563eb;}
+
+.text-input{
+  flex:1;border:1px solid #e5e7eb;border-radius:25px;
+  padding:10px 16px;font-size:14px;outline:none;background:#f9fafb;
+  transition:.2s;resize:none;max-height:100px;line-height:1.4;
+}
+.text-input:focus{border-color:#2563eb;background:white;}
+
+/* Voice record button */
+.voice-btn{
+  width:40px;height:40px;border:none;border-radius:50%;
+  background:#f3f4f6;color:#6b7280;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.voice-btn:hover{background:#fee2e2;color:#ef4444;}
+.voice-btn.recording{background:#ef4444;color:white;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+
+/* Send button */
+.send-btn{
+  width:40px;height:40px;border:none;border-radius:50%;
+  background:#2563eb;color:white;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.send-btn:hover{background:#1d4ed8;}
+
+/* Hidden file inputs */
+input[type=file].hidden-input{display:none;}
+
+/* Recording indicator */
+.recording-bar{
+  display:none;align-items:center;gap:10px;
+  padding:8px 12px;background:#fee2e2;border-radius:12px;
+  margin-bottom:8px;font-size:13px;color:#b91c1c;font-weight:600;
+}
+.recording-bar.show{display:flex;}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite;}
+.rec-timer{flex:1;}
+.rec-cancel{background:none;border:none;color:#b91c1c;cursor:pointer;font-size:18px;}
+
+/* Upload progress */
+.upload-indicator{
+  display:none;font-size:12px;color:#6b7280;
+  padding:4px 8px;text-align:center;
+}
+.upload-indicator.show{display:block;}
+
+@media(max-width:600px){
+  .bubble{max-width:86%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<div class="chat-header">
+  <a href="/messages/" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+  <div class="peer-avatar" id="peerInitial">?</div>
+  <div class="peer-info">
+    <div class="peer-name" id="peerName">{{ receiver_name }}</div>
+    <div class="peer-status">LittleNet</div>
+  </div>
+</div>
+
+<!-- Messages -->
+<div class="messages-area" id="messagesArea">
+
+  {% if messages %}
+    {% for message in messages %}
+
+      {% if message.sender_child_id == current_child_id %}
+        <div class="msg-row sent">
+          <div class="bubble sent">
+            {% if message.message_type == "TEXT" %}
+              {{ message.message_text }}
+            {% elif message.message_type == "IMAGE" %}
+              <img src="/{{ message.media_path }}" alt="image" onclick="openImg(this.src)">
+            {% elif message.message_type == "VIDEO" %}
+              <video controls><source src="/{{ message.media_path }}"></video>
+            {% elif message.message_type == "VOICE" %}
+              <audio controls><source src="/{{ message.media_path }}"></audio>
+            {% elif message.message_type == "FILE" %}
+              <a class="file-link" href="/{{ message.media_path }}" target="_blank">
+                <i class="fa-regular fa-file"></i> Download file
+              </a>
+            {% endif %}
+            <span class="time">{{ message.sent_at.strftime('%H:%M') if message.sent_at else '' }}</span>
+          </div>
+        </div>
+
+      {% else %}
+        <div class="msg-row received">
+          <div class="bubble received">
+            {% if message.message_type == "TEXT" %}
+              {{ message.message_text }}
+            {% elif message.message_type == "IMAGE" %}
+              <img src="/{{ message.media_path }}" alt="image" onclick="openImg(this.src)">
+            {% elif message.message_type == "VIDEO" %}
+              <video controls><source src="/{{ message.media_path }}"></video>
+            {% elif message.message_type == "VOICE" %}
+              <audio controls><source src="/{{ message.media_path }}"></audio>
+            {% elif message.message_type == "FILE" %}
+              <a class="file-link" href="/{{ message.media_path }}" target="_blank">
+                <i class="fa-regular fa-file"></i> Download file
+              </a>
+            {% endif %}
+            <span class="time">{{ message.sent_at.strftime('%H:%M') if message.sent_at else '' }}</span>
+          </div>
+        </div>
+      {% endif %}
+
+    {% endfor %}
+
+  {% else %}
+    <div class="empty-chat">
+      <i class="fa-regular fa-comments"></i>
+      <p>No messages yet.<br>Say hello!</p>
+    </div>
+  {% endif %}
+
+</div>
+
+<!-- Input bar -->
+<div class="input-bar">
+
+  <!-- Recording indicator -->
+  <div class="recording-bar" id="recBar">
+    <div class="rec-dot"></div>
+    <span class="rec-timer" id="recTimer">0:00</span>
+    <span>Recording…</span>
+    <button class="rec-cancel" onclick="cancelRecording()" title="Cancel"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <!-- Upload progress -->
+  <div class="upload-indicator" id="uploadIndicator">Uploading…</div>
+
+  <!-- Attachment options -->
+  <div class="attach-menu" id="attachMenu">
+    <div class="attach-opt opt-image" onclick="document.getElementById('fileImage').click()">
+      <div class="icon-circle"><i class="fa-regular fa-image"></i></div>
+      <span>Photo</span>
+    </div>
+    <div class="attach-opt opt-video" onclick="document.getElementById('fileVideo').click()">
+      <div class="icon-circle"><i class="fa-solid fa-video"></i></div>
+      <span>Video</span>
+    </div>
+    <div class="attach-opt opt-audio" onclick="document.getElementById('fileAudio').click()">
+      <div class="icon-circle"><i class="fa-solid fa-music"></i></div>
+      <span>Audio</span>
+    </div>
+    <div class="attach-opt opt-file" onclick="document.getElementById('fileDoc').click()">
+      <div class="icon-circle"><i class="fa-regular fa-file"></i></div>
+      <span>File</span>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="fileImage" class="hidden-input" accept="image/*" onchange="sendFile(this)">
+  <input type="file" id="fileVideo" class="hidden-input" accept="video/*" onchange="sendFile(this)">
+  <input type="file" id="fileAudio" class="hidden-input" accept="audio/*" onchange="sendFile(this)">
+  <input type="file" id="fileDoc"   class="hidden-input" accept=".pdf,.doc,.docx,.txt" onchange="sendFile(this)">
+
+  <!-- Text row -->
+  <div class="text-row">
+    <button class="attach-toggle" id="attachToggle" onclick="toggleAttach()" title="Attach">
+      <i class="fa-solid fa-paperclip"></i>
+    </button>
+
+    <textarea
+      class="text-input"
+      id="textInput"
+      placeholder="Message…"
+      rows="1"
+      onkeydown="handleKey(event)"
+      oninput="autoResize(this)"></textarea>
+
+    <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Voice message">
+      <i class="fa-solid fa-microphone"></i>
+    </button>
+
+    <button class="send-btn" onclick="sendText()" title="Send">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+
+</div>
+
+<!-- Lightbox for images -->
+<div id="lightbox" onclick="this.style.display='none'" style="
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
+  z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;">
+  <img id="lightboxImg" style="max-width:95%;max-height:90vh;border-radius:10px;">
+</div>
+
+<script>
+const RECEIVER_ID = {{ receiver_child_id }};
+const mediaArea   = document.getElementById('messagesArea');
+
+// ── Scroll to bottom on load ──
+mediaArea.scrollTop = mediaArea.scrollHeight;
+
+// ── Peer avatar initial ──
+const peerName = document.getElementById('peerName').textContent.trim();
+document.getElementById('peerInitial').textContent = peerName[0] ? peerName[0].toUpperCase() : '?';
+
+// ── Auto-resize textarea ──
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+// ── Send text on Enter (Shift+Enter = newline) ──
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendText();
+  }
+}
+
+// ── Send text message ──
+function sendText() {
+  const input = document.getElementById('textInput');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/send-message/' + RECEIVER_ID + '/';
+  const field = document.createElement('input');
+  field.type = 'hidden';
+  field.name = 'message_text';
+  field.value = text;
+  form.appendChild(field);
+
+  // Optimistic bubble
+  appendBubble('TEXT', null, text);
+  input.value = '';
+  input.style.height = 'auto';
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
+// ── Toggle attachment menu ──
+function toggleAttach() {
+  const menu   = document.getElementById('attachMenu');
+  const toggle = document.getElementById('attachToggle');
+  const open   = menu.classList.toggle('open');
+  toggle.classList.toggle('active', open);
+}
+
+// ── Send a picked file ──
+function sendFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  // Close attach menu
+  document.getElementById('attachMenu').classList.remove('open');
+  document.getElementById('attachToggle').classList.remove('active');
+
+  const formData = new FormData();
+  formData.append('media', file);
+
+  setUploading(true);
+
+  fetch('/send-media/' + RECEIVER_ID + '/', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(data => {
+    setUploading(false);
+    if (data.ok) {
+      appendBubble(data.message_type, '/' + data.media_path, null);
+    } else {
+      alert('Upload failed: ' + (data.error || 'unknown error'));
+    }
+  })
+  .catch(() => { setUploading(false); alert('Upload failed. Please try again.'); });
+
+  // Reset so same file can be picked again
+  input.value = '';
+}
+
+function setUploading(on) {
+  const el = document.getElementById('uploadIndicator');
+  el.className = on ? 'upload-indicator show' : 'upload-indicator';
+}
+
+// ── Voice recording ──
+let mediaRecorder = null;
+let audioChunks   = [];
+let recInterval   = null;
+let recSeconds    = 0;
+
+function toggleVoice() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('Voice recording is not supported in this browser.');
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        stream.getTracks().forEach(t => t.stop());
+        uploadVoice();
+      };
+      mediaRecorder.start();
+
+      // UI
+      document.getElementById('recBar').classList.add('show');
+      document.getElementById('voiceBtn').classList.add('recording');
+      document.getElementById('voiceBtn').querySelector('i').className = 'fa-solid fa-stop';
+      recSeconds = 0;
+      recInterval = setInterval(() => {
+        recSeconds++;
+        const m = Math.floor(recSeconds / 60);
+        const s = String(recSeconds % 60).padStart(2, '0');
+        document.getElementById('recTimer').textContent = m + ':' + s;
+      }, 1000);
+    })
+    .catch(() => alert('Could not access microphone.'));
+}
+
+function stopRecording() {
+  if (mediaRecorder) mediaRecorder.stop();
+  clearInterval(recInterval);
+  document.getElementById('recBar').classList.remove('show');
+  document.getElementById('voiceBtn').classList.remove('recording');
+  document.getElementById('voiceBtn').querySelector('i').className = 'fa-solid fa-microphone';
+}
+
+function cancelRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.ondataavailable = null;
+    mediaRecorder.onstop = null;
+    mediaRecorder.stop();
+  }
+  audioChunks = [];
+  clearInterval(recInterval);
+  document.getElementById('recBar').classList.remove('show');
+  document.getElementById('voiceBtn').classList.remove('recording');
+  document.getElementById('voiceBtn').querySelector('i').className = 'fa-solid fa-microphone';
+}
+
+function uploadVoice() {
+  if (audioChunks.length === 0) return;
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+  const formData = new FormData();
+  formData.append('media', blob, 'voice_' + Date.now() + '.webm');
+
+  setUploading(true);
+  fetch('/send-media/' + RECEIVER_ID + '/', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(data => {
+    setUploading(false);
+    if (data.ok) appendBubble('VOICE', '/' + data.media_path, null);
+    else alert('Could not send voice message.');
+  })
+  .catch(() => { setUploading(false); alert('Could not send voice message.'); });
+}
+
+// ── Append a bubble to the chat ──
+function appendBubble(type, mediaSrc, text) {
+  const now = new Date();
+  const timeStr = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+
+  let inner = '';
+  if (type === 'TEXT')  inner = escHtml(text);
+  else if (type === 'IMAGE') inner = `<img src="${mediaSrc}" alt="image" onclick="openImg(this.src)">`;
+  else if (type === 'VIDEO') inner = `<video controls><source src="${mediaSrc}"></video>`;
+  else if (type === 'VOICE') inner = `<audio controls><source src="${mediaSrc}"></audio>`;
+  else if (type === 'FILE')  inner = `<a class="file-link" href="${mediaSrc}" target="_blank"><i class="fa-regular fa-file"></i> Download file</a>`;
+
+  const row = document.createElement('div');
+  row.className = 'msg-row sent';
+  row.innerHTML = `<div class="bubble sent">${inner}<span class="time">${timeStr}</span></div>`;
+  mediaArea.appendChild(row);
+  mediaArea.scrollTop = mediaArea.scrollHeight;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Image lightbox ──
+function openImg(src) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = src;
+  lb.style.display = 'flex';
+}
+</script>
+
+</body>
+</html>

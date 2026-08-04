@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create LittleNet Profile</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#EEF4FF,#F8FAFC,#FFFFFF);
+
+min-height:100vh;
+
+padding:30px 15px;
+
+display:flex;
+
+justify-content:center;
+
+}
+
+.container{
+
+width:100%;
+
+max-width:700px;
+
+}
+
+.card{
+
+background:white;
+
+border-radius:24px;
+
+padding:35px;
+
+box-shadow:0 10px 35px rgba(0,0,0,.08);
+
+animation:fade .5s;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(25px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.logo{
+
+width:90px;
+
+height:90px;
+
+margin:auto;
+
+border-radius:24px;
+
+background:linear-gradient(135deg,#4F46E5,#2563EB);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+color:white;
+
+font-size:36px;
+
+margin-bottom:20px;
+
+}
+
+h1{
+
+text-align:center;
+
+font-size:32px;
+
+color:#111827;
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+color:#6B7280;
+
+margin-bottom:35px;
+
+line-height:1.6;
+
+}
+
+.section{
+
+margin-top:30px;
+
+margin-bottom:18px;
+
+font-size:18px;
+
+font-weight:700;
+
+color:#2563EB;
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.input-group{
+
+margin-bottom:18px;
+
+}
+
+.input-group label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-weight:600;
+
+color:#374151;
+
+}
+
+.input-group input,
+
+textarea{
+
+width:100%;
+
+padding:15px;
+
+border:1px solid #E5E7EB;
+
+border-radius:14px;
+
+font-size:15px;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+.input-group input:focus,
+
+textarea:focus{
+
+border-color:#2563EB;
+
+box-shadow:0 0 0 4px rgba(37,99,235,.10);
+
+}
+
+textarea{
+
+resize:vertical;
+
+min-height:120px;
+
+}
+
+.option-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+gap:15px;
+
+}
+
+.option{
+
+background:#F9FAFB;
+
+border:1px solid #E5E7EB;
+
+padding:14px;
+
+border-radius:14px;
+
+transition:.3s;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+.option:hover{
+
+background:#EEF4FF;
+
+border-color:#2563EB;
+
+}
+
+.option input{
+
+width:18px;
+
+height:18px;
+
+}
+
+button{
+
+width:100%;
+
+margin-top:35px;
+
+padding:16px;
+
+border:none;
+
+border-radius:14px;
+
+background:linear-gradient(135deg,#4F46E5,#2563EB);
+
+color:white;
+
+font-size:17px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 10px 25px rgba(37,99,235,.25);
+
+}
+
+@media(max-width:768px){
+
+.card{
+
+padding:25px;
+
+border-radius:18px;
+
+}
+
+h1{
+
+font-size:28px;
+
+}
+
+.option-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<div class="logo">
+
+<i class="fa-solid fa-user-astronaut"></i>
+
+</div>
+
+<h1>Create Your Profile</h1>
+
+<p class="subtitle">
+
+Tell everyone about yourself and make your LittleNet profile unique.
+
+</p>
+
+<form method="POST">
+
+<div class="section">
+
+<i class="fa-solid fa-user"></i>
+
+Basic Information
+
+</div>
+
+<div class="input-group">
+
+<label>Full Name</label>
+
+<input
+type="text"
+name="full_name"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>Date of Birth</label>
+
+<input
+type="date"
+name="date_of_birth"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>School Name</label>
+
+<input
+type="text"
+name="school_name">
+
+</div>
+
+<div class="input-group">
+
+<label>Location</label>
+
+<input
+type="text"
+name="location">
+
+</div>
+
+<div class="input-group">
+
+<label>Current Class</label>
+
+<input
+type="text"
+name="current_class">
+
+</div>
+
+<div class="input-group">
+
+<label>Bio</label>
+
+<textarea
+name="bio"
+placeholder="Tell everyone about yourself..."></textarea>
+
+</div>
+
+<div class="section">
+
+<i class="fa-solid fa-code"></i>
+
+Skills
+
+</div>
+
+<div class="option-grid">
+
+<label class="option">
+
+<input type="checkbox" name="skills" value="Coding">
+
+Coding
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="skills" value="Drawing">
+
+Drawing
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="skills" value="Football">
+
+Football
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="skills" value="Music">
+
+Music
+
+</label>
+
+</div>
+
+<div class="section">
+
+<i class="fa-solid fa-heart"></i>
+
+Interests
+
+</div>
+
+<div class="option-grid">
+
+<label class="option">
+
+<input type="checkbox" name="interests" value="AI">
+
+Artificial Intelligence
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="interests" value="Science">
+
+Science
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="interests" value="Space">
+
+Space
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="interests" value="Sports">
+
+Sports
+
+</label>
+
+</div>
+
+<div class="section">
+
+<i class="fa-solid fa-star"></i>
+
+Future Ambitions
+
+</div>
+
+<div class="option-grid">
+
+<label class="option">
+
+<input type="checkbox" name="ambitions" value="Engineer">
+
+Engineer
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="ambitions" value="Doctor">
+
+Doctor
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="ambitions" value="Scientist">
+
+Scientist
+
+</label>
+
+<label class="option">
+
+<input type="checkbox" name="ambitions" value="Artist">
+
+Artist
+
+</label>
+
+</div>
+
+<button type="submit">
+
+<i class="fa-solid fa-circle-check"></i>
+
+&nbsp;
+
+Create My Profile
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

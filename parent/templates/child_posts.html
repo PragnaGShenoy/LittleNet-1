@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Child Posts | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#f5f7fb;
+color:#222;
+padding-bottom:40px;
+
+}
+
+.header{
+
+position:sticky;
+top:0;
+background:white;
+padding:18px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #ddd;
+z-index:100;
+
+}
+
+.logo{
+
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.back{
+
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+
+}
+
+.container{
+
+max-width:850px;
+margin:25px auto;
+padding:0 15px;
+
+}
+
+.page-title{
+
+font-size:30px;
+font-weight:700;
+margin-bottom:8px;
+
+}
+
+.subtitle{
+
+color:#666;
+margin-bottom:30px;
+
+}
+
+.post{
+
+background:white;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.post-header{
+
+display:flex;
+align-items:center;
+gap:15px;
+padding:18px;
+
+}
+
+.avatar{
+
+width:55px;
+height:55px;
+border-radius:50%;
+background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+color:white;
+font-size:22px;
+
+}
+
+.name{
+
+font-size:18px;
+font-weight:600;
+
+}
+
+.category{
+
+font-size:14px;
+color:#666;
+
+}
+
+.post img,
+.post video{
+
+width:100%;
+display:block;
+max-height:500px;
+object-fit:cover;
+
+}
+
+.content{
+
+padding:20px;
+
+}
+
+.caption{
+
+margin-bottom:20px;
+line-height:1.7;
+
+}
+
+.stats{
+
+display:flex;
+gap:30px;
+margin-bottom:20px;
+font-weight:600;
+color:#444;
+
+}
+
+.stats div{
+
+display:flex;
+align-items:center;
+gap:8px;
+
+}
+
+.comments-btn{
+
+display:inline-block;
+padding:12px 20px;
+background:#2563EB;
+color:white;
+text-decoration:none;
+border-radius:12px;
+font-weight:600;
+transition:.3s;
+
+}
+
+.comments-btn:hover{
+
+background:#1D4ED8;
+
+}
+
+.empty{
+
+background:white;
+padding:60px;
+text-align:center;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.empty i{
+
+font-size:70px;
+color:#d1d5db;
+margin-bottom:20px;
+
+}
+
+.empty h2{
+
+margin-bottom:10px;
+
+}
+
+.empty p{
+
+color:#777;
+
+}
+
+@media(max-width:768px){
+
+.logo{
+
+font-size:24px;
+
+}
+
+.page-title{
+
+font-size:24px;
+
+}
+
+.stats{
+
+flex-direction:column;
+gap:10px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="page-title">
+
+Posts Uploaded By
+
+{{ child.full_name }}
+
+</div>
+
+<div class="subtitle">
+
+Review all posts shared by this child.
+
+</div>
+
+{% if posts %}
+
+{% for post in posts %}
+
+<div class="post">
+
+<div class="post-header">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div>
+
+<div class="name">
+
+{{ child.full_name }}
+
+</div>
+
+<div class="category">
+
+{{ post.content_category }}
+
+</div>
+
+</div>
+
+</div>
+
+{% if post.media_type == "IMAGE" %}
+
+<img src="/{{ post.media_path }}">
+
+{% endif %}
+
+{% if post.media_type == "VIDEO" %}
+
+<video controls>
+
+<source
+src="/{{ post.media_path }}">
+
+</video>
+
+{% endif %}
+
+<div class="content">
+
+<div class="caption">
+
+{{ post.caption }}
+
+</div>
+
+<div class="stats">
+
+<div>
+
+❤️ {{ post.likes_count }} Likes
+
+</div>
+
+<div>
+
+💬 {{ post.comments_count }} Comments
+
+</div>
+
+</div>
+
+<a
+href="/parent/post-comments/{{ post.post_id }}/"
+class="comments-btn">
+
+<i class="fa-solid fa-comments"></i>
+
+View Comments
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-regular fa-images"></i>
+
+<h2>
+
+No Posts Yet
+
+</h2>
+
+<p>
+
+This child hasn't uploaded any posts yet.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

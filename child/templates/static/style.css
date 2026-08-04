@@ -1,0 +1,536 @@
+/* ===========================
+   LittleNet - Global Styles
+=========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#fafafa;
+    color:#222;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#d0d0d0;
+    border-radius:20px;
+}
+
+/* Links */
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* Container */
+
+.container{
+
+    width:100%;
+    max-width:700px;
+
+    margin:auto;
+
+    padding-bottom:90px;
+
+}
+
+/* ===========================
+ Header
+=========================== */
+
+.header{
+
+    position:sticky;
+
+    top:0;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px 20px;
+
+    border-bottom:1px solid #e5e5e5;
+
+    z-index:1000;
+
+}
+
+.logo{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:#2563eb;
+
+}
+
+.header-right{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:center;
+
+}
+
+.header-right i{
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.header-right i:hover{
+
+    color:#2563eb;
+
+    transform:scale(1.1);
+
+}
+
+/* ===========================
+ Stories
+=========================== */
+
+.stories{
+
+    background:white;
+
+    margin-top:12px;
+
+    padding:18px;
+
+    display:flex;
+
+    gap:18px;
+
+    overflow-x:auto;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.story{
+
+    flex:0 0 auto;
+
+    text-align:center;
+
+}
+
+.story-circle{
+
+    width:72px;
+
+    height:72px;
+
+    border-radius:50%;
+
+    padding:3px;
+
+    background:linear-gradient(45deg,#ff4d4d,#ffb84d,#ff4da6);
+
+}
+
+.story-circle img{
+
+    width:100%;
+
+    height:100%;
+
+    border-radius:50%;
+
+    border:3px solid white;
+
+    object-fit:cover;
+
+}
+
+.story-name{
+
+    margin-top:8px;
+
+    font-size:13px;
+
+}
+
+/* ===========================
+ Create Post
+=========================== */
+
+.create-post{
+
+    background:white;
+
+    margin-top:15px;
+
+    border-radius:15px;
+
+    padding:18px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+
+}
+
+.create-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.avatar{
+
+    width:50px;
+
+    height:50px;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+}
+
+.post-input{
+
+    flex:1;
+
+    background:#f3f4f6;
+
+    border-radius:30px;
+
+    padding:14px 18px;
+
+    color:#777;
+
+}
+
+/* ===========================
+ Feed Card
+=========================== */
+
+.feed-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    margin-top:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+
+}
+
+.feed-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px;
+
+}
+
+.feed-user{
+
+    display:flex;
+
+    gap:12px;
+
+    align-items:center;
+
+}
+
+.feed-user img{
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
+.feed-name{
+
+    font-weight:600;
+
+}
+
+.feed-time{
+
+    color:#777;
+
+    font-size:13px;
+
+}
+
+.feed-image{
+
+    width:100%;
+
+    display:block;
+
+}
+
+.feed-content{
+
+    padding:18px;
+
+}
+
+.feed-actions{
+
+    display:flex;
+
+    gap:22px;
+
+    font-size:22px;
+
+    margin-bottom:12px;
+
+}
+
+.feed-actions i{
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.feed-actions i:hover{
+
+    color:#2563eb;
+
+    transform:scale(1.1);
+
+}
+
+.caption{
+
+    line-height:1.6;
+
+    margin-top:10px;
+
+}
+
+/* ===========================
+ Comment Box
+=========================== */
+
+.comment-box{
+
+    margin-top:18px;
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.comment-box input{
+
+    flex:1;
+
+    border:none;
+
+    background:#f3f4f6;
+
+    padding:12px 15px;
+
+    border-radius:25px;
+
+}
+
+.comment-box button{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:0 20px;
+
+    border-radius:25px;
+
+    cursor:pointer;
+
+}
+
+/* ===========================
+ Quiz Card
+=========================== */
+
+.quiz-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    margin-top:20px;
+
+    padding:22px;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+
+}
+
+.quiz-card h3{
+
+    color:#2563eb;
+
+    margin-bottom:18px;
+
+}
+
+.quiz-card label{
+
+    display:block;
+
+    margin:12px 0;
+
+}
+
+.quiz-card button{
+
+    width:100%;
+
+    margin-top:18px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+/* ===========================
+ Bottom Navigation
+=========================== */
+
+.bottom-nav{
+
+    position:fixed;
+
+    bottom:0;
+
+    left:0;
+
+    width:100%;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-around;
+
+    padding:15px 0;
+
+    border-top:1px solid #e5e5e5;
+
+    z-index:1000;
+
+}
+
+.bottom-nav a{
+
+    color:#444;
+
+    font-size:24px;
+
+    transition:.3s;
+
+}
+
+.bottom-nav a:hover{
+
+    color:#2563eb;
+
+}
+
+/* ===========================
+ Mobile
+=========================== */
+
+@media(max-width:768px){
+
+.container{
+
+    width:100%;
+
+}
+
+.logo{
+
+    font-size:24px;
+
+}
+
+.story-circle{
+
+    width:60px;
+
+    height:60px;
+
+}
+
+.feed-content{
+
+    padding:15px;
+
+}
+
+}

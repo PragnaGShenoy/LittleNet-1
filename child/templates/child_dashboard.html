@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LittleNet</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+
+            background: #fafafa;
+
+            color: #222;
+
+            padding-bottom: 90px;
+
+        }
+
+        a {
+
+            text-decoration: none;
+
+            color: inherit;
+
+        }
+
+        /* Top Bar */
+
+        .header {
+
+            position: sticky;
+
+            top: 0;
+
+            background: white;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 15px 20px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            z-index: 999;
+
+        }
+
+        .logo {
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            color: #2563eb;
+
+        }
+
+        .header-icons {
+
+            display: flex;
+
+            gap: 18px;
+
+            font-size: 22px;
+
+        }
+
+        .header-icons i {
+
+            cursor: pointer;
+
+            transition: .3s;
+
+        }
+
+        .header-icons i:hover {
+
+            color: #2563eb;
+
+            transform: scale(1.1);
+
+        }
+
+        /* Welcome Card */
+
+        .welcome {
+
+            margin: 20px;
+
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+
+            padding: 25px;
+
+            border-radius: 25px;
+
+            color: white;
+
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
+
+        }
+
+        .welcome h2 {
+
+            font-size: 30px;
+
+            margin-bottom: 10px;
+
+        }
+
+        .welcome p {
+
+            font-size: 15px;
+
+            opacity: .95;
+
+        }
+
+        /* Quick Action Title */
+
+        .section-title {
+
+            margin: 25px 20px 15px;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+        }
+
+        /* Cards */
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+
+            gap: 18px;
+
+            padding: 0 20px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 25px;
+
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+
+            transition: .3s;
+
+            text-align: center;
+
+        }
+
+        .card:hover {
+
+            transform: translateY(-8px);
+
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+
+        }
+
+        .card i {
+
+            font-size: 40px;
+
+            margin-bottom: 18px;
+
+            color: #2563eb;
+
+        }
+
+        .card h3 {
+
+            margin-bottom: 8px;
+
+            font-size: 18px;
+
+        }
+
+        .card p {
+
+            color: #666;
+
+            font-size: 14px;
+
+        }
+
+        /* Screen Time */
+
+        .time-card {
+
+            margin: 20px;
+
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+
+        }
+
+        .progress {
+
+            margin-top: 15px;
+
+            width: 100%;
+
+            height: 12px;
+
+            background: #e5e7eb;
+
+            border-radius: 50px;
+
+            overflow: hidden;
+
+        }
+
+        .progress span {
+
+            display: block;
+
+            height: 100%;
+
+            width: 70%;
+
+            background: linear-gradient(90deg, #4f46e5, #2563eb);
+
+            border-radius: 50px;
+
+        }
+
+        /* Mobile */
+
+        @media(max-width:768px) {
+
+            .logo {
+
+                font-size: 24px;
+
+            }
+
+            .welcome h2 {
+
+                font-size: 24px;
+
+            }
+
+            .grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+        .bottom-nav {
+
+            position: fixed;
+
+            bottom: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            background: white;
+
+            display: flex;
+
+            justify-content: space-around;
+
+            padding: 16px 0;
+
+            border-top: 1px solid #ddd;
+
+        }
+
+        .bottom-nav a {
+
+            font-size: 24px;
+
+            color: #444;
+
+            transition: .3s;
+
+        }
+
+        .bottom-nav a:hover {
+
+            color: #2563EB;
+
+        }
+
+        @media(max-width:700px) {
+
+            .info {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .avatar {
+
+                width: 100px;
+
+                height: 100px;
+
+                font-size: 40px;
+
+            }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <div class="logo">
+
+            LittleNet
+
+        </div>
+
+        <div class="header-icons">
+
+            <a href="/feed/">
+
+                <i class="fa-solid fa-house"></i>
+
+            </a>
+
+            <a href="/logout/">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="welcome">
+
+        <h2>
+
+            👋 Welcome {{ full_name }}
+
+        </h2>
+
+        <p>
+
+            Stay connected with your friends in a safe environment.
+
+        </p>
+
+    </div>
+
+    <div class="time-card">
+
+        <h3>⏱ Today's Screen Time</h3>
+
+        {% if remaining_seconds is not none %}
+
+        <p>You have <strong id="timeDisplay">--:--</strong> remaining today.</p>
+
+        <div class="progress">
+            <span id="progressBar" style="width:0%"></span>
+        </div>
+
+        {% if strict_mode %}
+        <p style="font-size:13px;color:#888;margin-top:8px;">You will be logged out when time runs out.</p>
+        {% endif %}
+
+        {% else %}
+
+        <p>No time limit set by your parent.</p>
+
+        <div class="progress"><span style="width:100%"></span></div>
+
+        {% endif %}
+
+    </div>
+
+    <h2 class="section-title">
+
+        Quick Actions
+
+    </h2>
+
+    <div class="grid">
+
+        <a href="/child/profile/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-user"></i>
+
+                <h3>Profile</h3>
+
+                <p>View your profile</p>
+
+            </div>
+
+        </a>
+
+        <a href="/child/upload-post/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-square-plus"></i>
+
+                <h3>Create Post</h3>
+
+                <p>Share photos and updates</p>
+
+            </div>
+
+        </a>
+
+        <a href="/my-posts/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-images"></i>
+
+                <h3>My Posts</h3>
+
+                <p>View your shared posts</p>
+
+            </div>
+
+        </a>
+        <a href="/messages/" class="quick-action">
+            <span>💬</span>
+            <span>Messages</span>
+        </a>
+
+        <a href="/feed/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-newspaper"></i>
+
+                <h3>Feed</h3>
+
+                <p>See your friends' posts</p>
+
+            </div>
+
+        </a>
+
+        <a href="/recommended/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3>Recommended</h3>
+
+                <p>Friends you may know</p>
+
+            </div>
+
+        </a>
+
+        <a href="/discover/">
+
+            <div class="card">
+
+                <i class="fa-solid fa-compass"></i>
+
+                <h3>Discover</h3>
+
+                <p>Explore LittleNet</p>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <div class="bottom-nav">
+
+        <a href="/feed/">
+
+            <i class="fa-solid fa-house"></i>
+
+        </a>
+
+        <a href="/discover/">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+        </a>
+
+        <a href="/child/upload-post/">
+
+            <i class="fa-solid fa-square-plus"></i>
+
+        </a>
+
+        <a href="/my-posts/">
+
+            <i class="fa-solid fa-heart"></i>
+
+        </a>
+
+        <a href="/child/profile/">
+
+            <i class="fa-solid fa-user"></i>
+
+        </a>
+
+    </div>
+
+<script>
+(function () {
+    var totalSeconds = {{ remaining_seconds if remaining_seconds is not none else 'null' }};
+    var strict = {{ 'true' if strict_mode else 'false' }};
+
+    if (totalSeconds === null) return;  // no limit set
+
+    var remaining = totalSeconds;
+    var display   = document.getElementById('timeDisplay');
+    var bar       = document.getElementById('progressBar');
+
+    function fmt(s) {
+        var h = Math.floor(s / 3600);
+        var m = Math.floor((s % 3600) / 60);
+        var sec = s % 60;
+        if (h > 0) return h + 'h ' + m + 'm';
+        return m + 'm ' + String(sec).padStart(2, '0') + 's';
+    }
+
+    function updateUI() {
+        if (!display) return;
+        display.textContent = remaining > 0 ? fmt(remaining) : '0m 00s';
+
+        // Progress bar width = fraction of total that's left
+        var pct = totalSeconds > 0 ? (remaining / totalSeconds) * 100 : 0;
+        if (bar) {
+            bar.style.width = pct + '%';
+            // Turn bar red when under 2 minutes
+            bar.style.background = remaining <= 120
+                ? 'linear-gradient(90deg,#ef4444,#f97316)'
+                : 'linear-gradient(90deg,#4f46e5,#2563eb)';
+        }
+
+        // Colour the text red when low
+        display.style.color = remaining <= 120 ? '#ef4444' : '';
+    }
+
+    updateUI();
+
+    var ticker = setInterval(function () {
+        remaining--;
+        updateUI();
+
+        if (remaining <= 0) {
+            clearInterval(ticker);
+            if (strict) {
+                // Show overlay then auto-logout
+                var overlay = document.createElement('div');
+                overlay.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;border-radius:24px;padding:40px 30px;text-align:center;max-width:340px;"><div style="font-size:52px;margin-bottom:16px;">⏰</div><h2 style="margin-bottom:10px;color:#111827;">Time\'s Up!</h2><p style="color:#6b7280;margin-bottom:20px;">Your screen time for today is finished. See you tomorrow!</p><div id="logoutCount" style="font-size:28px;font-weight:700;color:#2563eb;">5</div></div></div>';
+                document.body.appendChild(overlay);
+
+                var count = 5;
+                var cd = setInterval(function () {
+                    count--;
+                    var el = document.getElementById('logoutCount');
+                    if (el) el.textContent = count;
+                    if (count <= 0) {
+                        clearInterval(cd);
+                        window.location.href = '/logout/';
+                    }
+                }, 1000);
+            }
+        }
+    }, 1000);
+
+    // Re-sync with server every 2 minutes to avoid drift
+    setInterval(function () {
+        fetch('/api/time-remaining/', { credentials: 'same-origin' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.remaining_seconds !== null && data.remaining_seconds !== undefined) {
+                    remaining = data.remaining_seconds;
+                }
+            })
+            .catch(function () {});
+    }, 120000);
+})();
+</script>
+
+</body>
+
+</html>

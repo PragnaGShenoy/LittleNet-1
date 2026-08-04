@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Approve Child Content | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#f5f7fb;
+padding:20px;
+color:#222;
+
+}
+
+.container{
+
+max-width:850px;
+margin:auto;
+
+}
+
+.header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+
+}
+
+.logo{
+
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.back{
+
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+
+}
+
+.card{
+
+background:white;
+border-radius:20px;
+padding:30px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+h1{
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+color:#777;
+margin-bottom:30px;
+
+}
+
+.section{
+
+margin-bottom:35px;
+
+}
+
+.section h2{
+
+margin-bottom:18px;
+color:#2563EB;
+font-size:22px;
+
+}
+
+.option{
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:15px 18px;
+background:#f8f9fc;
+border-radius:12px;
+margin-bottom:12px;
+transition:.3s;
+
+}
+
+.option:hover{
+
+background:#eef4ff;
+
+}
+
+.option label{
+
+display:flex;
+align-items:center;
+gap:12px;
+font-size:16px;
+cursor:pointer;
+width:100%;
+
+}
+
+.option input[type="checkbox"]{
+
+width:20px;
+height:20px;
+accent-color:#2563EB;
+
+}
+
+.save{
+
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#2563EB,#4F46E5);
+color:white;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.save:hover{
+
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(37,99,235,.30);
+
+}
+
+@media(max-width:768px){
+
+.card{
+
+padding:20px;
+
+}
+
+.logo{
+
+font-size:24px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="card">
+
+<h1>
+
+Approve Child Content
+
+</h1>
+
+<p class="subtitle">
+
+Choose which profile information should be visible on your child's account.
+
+</p>
+
+<form method="POST"
+action="/parent/save-approval/">
+
+<div class="section">
+
+<h2>
+
+<i class="fa-solid fa-code"></i>
+
+Skills
+
+</h2>
+
+{% for skill in content.skills %}
+
+<div class="option">
+
+<label>
+
+<input
+type="checkbox"
+name="skills"
+value="{{ skill.skill_id }}"
+{% if skill.approved %}
+checked
+{% endif %}>
+
+{{ skill.skill_name }}
+
+</label>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="section">
+
+<h2>
+
+<i class="fa-solid fa-heart"></i>
+
+Interests
+
+</h2>
+
+{% for interest in content.interests %}
+
+<div class="option">
+
+<label>
+
+<input
+type="checkbox"
+name="interests"
+value="{{ interest.interest_id }}"
+{% if interest.approved %}
+checked
+{% endif %}>
+
+{{ interest.interest_name }}
+
+</label>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<div class="section">
+
+<h2>
+
+<i class="fa-solid fa-star"></i>
+
+Ambitions
+
+</h2>
+
+{% for ambition in content.ambitions %}
+
+<div class="option">
+
+<label>
+
+<input
+type="checkbox"
+name="ambitions"
+value="{{ ambition.ambition_id }}"
+{% if ambition.approved %}
+checked
+{% endif %}>
+
+{{ ambition.ambition_name }}
+
+</label>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<button
+type="submit"
+class="save">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Approval Settings
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

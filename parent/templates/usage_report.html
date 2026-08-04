@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LittleNet - Weekly Usage Report</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#f5f7fb;
+padding:20px;
+color:#222;
+
+}
+
+.container{
+
+max-width:900px;
+margin:auto;
+
+}
+
+.header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+
+}
+
+.logo{
+
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.back{
+
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+
+}
+
+.card{
+
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.title{
+
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:10px;
+
+}
+
+.title i{
+
+font-size:32px;
+color:#2563EB;
+
+}
+
+.title h1{
+
+font-size:28px;
+
+}
+
+.subtitle{
+
+color:#777;
+margin-bottom:25px;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+overflow:hidden;
+
+border-radius:15px;
+
+}
+
+thead{
+
+background:#2563EB;
+color:white;
+
+}
+
+th{
+
+padding:16px;
+text-align:left;
+font-weight:600;
+
+}
+
+td{
+
+padding:16px;
+
+border-bottom:1px solid #eee;
+
+}
+
+tbody tr:nth-child(even){
+
+background:#f9fbff;
+
+}
+
+tbody tr:hover{
+
+background:#eef4ff;
+
+}
+
+.minutes{
+
+font-weight:700;
+color:#2563EB;
+
+}
+
+.empty{
+
+text-align:center;
+padding:60px;
+
+color:#777;
+
+}
+
+.empty i{
+
+font-size:70px;
+
+color:#d1d5db;
+
+margin-bottom:20px;
+
+display:block;
+
+}
+
+@media(max-width:768px){
+
+.card{
+
+padding:20px;
+
+overflow-x:auto;
+
+}
+
+.logo{
+
+font-size:24px;
+
+}
+
+.title h1{
+
+font-size:22px;
+
+}
+
+table{
+
+min-width:500px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="card">
+
+<div class="title">
+
+<i class="fa-solid fa-chart-column"></i>
+
+<h1>
+
+Weekly Usage Report
+
+</h1>
+
+</div>
+
+<p class="subtitle">
+
+Review your child's daily screen time for the current week.
+
+</p>
+
+{% if report %}
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Date
+
+</th>
+
+<th>
+
+Screen Time
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for row in report %}
+
+<tr>
+
+<td>
+
+{{ row.usage_date }}
+
+</td>
+
+<td class="minutes">
+
+{{ row.total_minutes }} Minutes
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h2>
+
+No Usage Data Available
+
+</h2>
+
+<p>
+
+Screen-time records will appear here once activity is tracked.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+
+</html>

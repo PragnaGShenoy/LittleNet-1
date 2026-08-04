@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Following | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#fafafa;
+
+}
+
+.header{
+
+position:sticky;
+top:0;
+background:white;
+padding:16px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #ddd;
+z-index:100;
+
+}
+
+.logo{
+
+font-size:28px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.back{
+
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+
+}
+
+.container{
+
+max-width:650px;
+margin:25px auto;
+padding:0 15px;
+
+}
+
+.title{
+
+font-size:28px;
+font-weight:700;
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:white;
+border-radius:18px;
+padding:16px;
+margin-bottom:15px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.user{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.avatar{
+
+width:60px;
+height:60px;
+border-radius:50%;
+
+background:linear-gradient(135deg,#7C3AED,#2563EB);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+color:white;
+font-size:24px;
+
+}
+
+.name{
+
+font-size:18px;
+font-weight:600;
+
+}
+
+.unfollow{
+
+text-decoration:none;
+
+background:#ef4444;
+color:white;
+
+padding:10px 18px;
+
+border-radius:25px;
+
+font-size:14px;
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.unfollow:hover{
+
+background:#dc2626;
+
+}
+
+.empty{
+
+background:white;
+padding:60px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.empty i{
+
+font-size:70px;
+color:#ccc;
+margin-bottom:20px;
+
+}
+
+.empty h2{
+
+margin-bottom:10px;
+
+}
+
+.empty p{
+
+color:#777;
+
+}
+
+@media(max-width:768px){
+
+.logo{
+
+font-size:24px;
+
+}
+
+.title{
+
+font-size:24px;
+
+}
+
+.avatar{
+
+width:50px;
+height:50px;
+
+}
+
+.name{
+
+font-size:16px;
+
+}
+
+.card{
+
+flex-direction:column;
+align-items:flex-start;
+gap:15px;
+
+}
+
+.unfollow{
+
+width:100%;
+text-align:center;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/child/profile/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Profile
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="title">
+
+Following
+
+</div>
+
+{% if following %}
+
+{% for user in following %}
+
+<div class="card">
+
+<div class="user">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="name">
+
+{{ user.full_name }}
+
+</div>
+
+</div>
+
+<a
+href="/unfollow/{{ user.user_id }}/"
+class="unfollow">
+
+<i class="fa-solid fa-user-minus"></i>
+
+Unfollow
+
+</a>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-user-plus"></i>
+
+<h2>
+
+You're Not Following Anyone
+
+</h2>
+
+<p>
+
+Discover new friends and start following them to see their posts in your feed.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

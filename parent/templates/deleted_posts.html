@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Deleted Posts | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+
+background:#f5f7fb;
+color:#222;
+
+}
+
+.header{
+
+position:sticky;
+top:0;
+
+background:white;
+
+padding:18px 20px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+border-bottom:1px solid #ddd;
+
+z-index:100;
+
+}
+
+.logo{
+
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.back{
+
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+
+}
+
+.container{
+
+max-width:900px;
+
+margin:25px auto;
+
+padding:0 15px;
+
+}
+
+.page-title{
+
+font-size:30px;
+font-weight:700;
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+color:#666;
+margin-bottom:30px;
+
+}
+
+.post{
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+margin-bottom:25px;
+
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.post-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:18px;
+
+}
+
+.user{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.avatar{
+
+width:55px;
+height:55px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+color:white;
+font-size:22px;
+
+}
+
+.name{
+
+font-size:18px;
+font-weight:600;
+
+}
+
+.deleted{
+
+background:#fee2e2;
+color:#dc2626;
+
+padding:8px 15px;
+
+border-radius:20px;
+
+font-size:13px;
+font-weight:600;
+
+}
+
+.content{
+
+padding:20px;
+
+}
+
+.label{
+
+font-weight:600;
+color:#2563EB;
+
+}
+
+.caption{
+
+margin-top:15px;
+margin-bottom:15px;
+line-height:1.7;
+
+}
+
+.info{
+
+color:#666;
+margin-bottom:18px;
+
+}
+
+img,
+video{
+
+width:100%;
+
+display:block;
+
+max-height:500px;
+
+object-fit:cover;
+
+}
+
+.empty{
+
+background:white;
+
+padding:60px;
+
+border-radius:20px;
+
+text-align:center;
+
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+.empty i{
+
+font-size:70px;
+
+color:#d1d5db;
+
+margin-bottom:20px;
+
+}
+
+.empty h2{
+
+margin-bottom:10px;
+
+}
+
+.empty p{
+
+color:#777;
+
+}
+
+@media(max-width:768px){
+
+.logo{
+
+font-size:24px;
+
+}
+
+.page-title{
+
+font-size:24px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="page-title">
+
+Deleted Posts
+
+</div>
+
+<div class="subtitle">
+
+Posts removed by AI moderation or parental controls.
+
+</div>
+
+{% if posts %}
+
+{% for post in posts %}
+
+<div class="post">
+
+<div class="post-header">
+
+<div class="user">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="name">
+
+{{ post.full_name }}
+
+</div>
+
+</div>
+
+<div class="deleted">
+
+Deleted
+
+</div>
+
+</div>
+
+{% if post.media_type=="IMAGE" %}
+
+<img src="/{{ post.media_path }}">
+
+{% endif %}
+
+{% if post.media_type=="VIDEO" %}
+
+<video controls>
+
+<source
+src="/{{ post.media_path }}"
+type="video/mp4">
+
+</video>
+
+{% endif %}
+
+<div class="content">
+
+<p>
+
+<span class="label">
+
+Category:
+
+</span>
+
+{{ post.content_category }}
+
+</p>
+
+<div class="caption">
+
+{{ post.caption }}
+
+</div>
+
+<div class="info">
+
+<i class="fa-regular fa-calendar"></i>
+
+Deleted on
+
+{{ post.deleted_at }}
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-trash-can"></i>
+
+<h2>
+
+No Deleted Posts
+
+</h2>
+
+<p>
+
+There are currently no deleted posts to review.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

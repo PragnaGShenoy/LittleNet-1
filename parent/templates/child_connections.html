@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Child Connections | LittleNet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#f5f7fb;
+color:#222;
+}
+
+.header{
+position:sticky;
+top:0;
+background:white;
+padding:18px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #ddd;
+z-index:100;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#2563EB;
+}
+
+.back{
+text-decoration:none;
+color:#2563EB;
+font-weight:600;
+}
+
+.container{
+max-width:1000px;
+margin:30px auto;
+padding:0 15px;
+}
+
+.page-title{
+font-size:30px;
+font-weight:700;
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+.section{
+
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.section-title{
+
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:20px;
+font-size:22px;
+font-weight:700;
+color:#2563EB;
+
+}
+
+.user{
+
+display:flex;
+align-items:center;
+gap:15px;
+padding:15px;
+margin-bottom:12px;
+background:#f8f9fc;
+border-radius:14px;
+
+}
+
+.avatar{
+
+width:50px;
+height:50px;
+border-radius:50%;
+
+background:linear-gradient(135deg,#2563EB,#4F46E5);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+color:white;
+font-size:20px;
+
+}
+
+.name{
+
+font-size:17px;
+font-weight:600;
+
+}
+
+.empty{
+
+text-align:center;
+padding:40px 20px;
+color:#777;
+
+}
+
+.empty i{
+
+font-size:60px;
+color:#d1d5db;
+margin-bottom:15px;
+
+}
+
+@media(max-width:768px){
+
+.grid{
+
+grid-template-columns:1fr;
+
+}
+
+.logo{
+
+font-size:24px;
+
+}
+
+.page-title{
+
+font-size:24px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+LittleNet
+
+</div>
+
+<a href="/parent/dashboard/" class="back">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Dashboard
+
+</a>
+
+</div>
+
+<div class="container">
+
+<div class="page-title">
+
+Followers & Following
+
+</div>
+
+<div class="grid">
+
+<!-- Followers -->
+
+<div class="section">
+
+<div class="section-title">
+
+<i class="fa-solid fa-users"></i>
+
+Followers
+
+</div>
+
+{% if followers %}
+
+{% for user in followers %}
+
+<div class="user">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="name">
+
+{{ user.full_name }}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-user-group"></i>
+
+<h3>
+
+No Followers
+
+</h3>
+
+<p>
+
+This child has no followers yet.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+<!-- Following -->
+
+<div class="section">
+
+<div class="section-title">
+
+<i class="fa-solid fa-heart"></i>
+
+Following
+
+</div>
+
+{% if following %}
+
+{% for user in following %}
+
+<div class="user">
+
+<div class="avatar">
+
+<i class="fa-solid fa-user"></i>
+
+</div>
+
+<div class="name">
+
+{{ user.full_name }}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+<i class="fa-solid fa-user-plus"></i>
+
+<h3>
+
+Not Following Anyone
+
+</h3>
+
+<p>
+
+The child is not following any users.
+
+</p>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
