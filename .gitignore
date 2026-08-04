@@ -1,3 +1,7 @@
-.venv
-.vscode
-.ngrok.exe
+.env
+__pycache__/
+*.pyc
+.venv/
+uploads/
+ngrok.exe
+*.pt
