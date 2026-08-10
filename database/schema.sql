@@ -371,3 +371,15 @@ CREATE TABLE child_messages (
         ON DELETE CASCADE
 
 );
+
+
+
+
+ALTER TABLE public.child_messages
+    ADD COLUMN IF NOT EXISTS is_deleted boolean DEFAULT false;
+
+ALTER TABLE public.child_messages
+    ADD COLUMN IF NOT EXISTS delivered_at timestamp without time zone;
+
+ALTER TABLE public.child_messages
+    ADD COLUMN IF NOT EXISTS seen_at timestamp without time zone;

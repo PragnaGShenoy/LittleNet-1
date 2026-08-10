@@ -4,5 +4,10 @@ __pycache__/
 .venv/
 .vscode/
 uploads/
+uploads/images/
+uploads/videos/
+uploads/profile_pictures/
+uploads/messages/
+
 ngrok.exe
 *.pt
