@@ -1,492 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LittleNet - Create Post</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<title>Create Post | LittleNet</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
 
 body{
-
-background:#f4f7fb;
-
-padding:20px;
-
+  background:#fdf6ee;
+  min-height:100vh;
+  padding-bottom:90px;
+  overflow-x:hidden;
 }
 
-.container{
-
-max-width:700px;
-
-margin:auto;
-
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.18;}
+.bg-bubbles span:nth-child(1){left:6%;width:48px;height:48px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:25%;width:28px;height:28px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:45%;width:60px;height:60px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:62%;width:38px;height:38px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:82%;width:52px;height:52px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{
+  0%{transform:translateY(110vh) scale(.8);}
+  100%{transform:translateY(-20vh) scale(1.2);}
 }
 
-.card{
+/* ── Stars ── */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
 
-background:white;
+/* ── Confetti ── */
+.confetti-dot{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:confettiFall linear infinite;}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
 
-border-radius:20px;
-
-padding:30px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-animation:fade .5s;
-
-}
-
-@keyframes fade{
-
-from{
-
-opacity:0;
-transform:translateY(20px);
-
-}
-
-to{
-
-opacity:1;
-transform:translateY(0);
-
-}
-
-}
-
+/* ── Header ── */
 .header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:30px;
-
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+  border-bottom:2px dashed #ffe0a0;
 }
-
 .logo{
-
-font-size:30px;
-
-font-weight:700;
-
-color:#2563EB;
-
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
 }
-
-.back{
-
-text-decoration:none;
-
-color:#2563EB;
-
-font-weight:600;
-
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
+.back-btn{
+  display:flex;align-items:center;gap:7px;
+  width:auto;padding:8px 16px;border-radius:50px;
+  background:#fde8d0;color:#c2430a;font-size:14px;font-weight:800;
+  transition:.25s;border:none;cursor:pointer;
 }
+.back-btn:hover{background:#fcb69f;transform:scale(1.05);}
 
-.preview{
+/* ── Page wrapper ── */
+.page{max-width:520px;margin:0 auto;padding:20px 16px;}
 
-width:180px;
-
-height:180px;
-
-margin:auto;
-
-border-radius:20px;
-
-background:#EEF4FF;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:70px;
-
-color:#2563EB;
-
-overflow:hidden;
-
-margin-bottom:25px;
-
-}
-
-.preview img{
-
-width:100%;
-height:100%;
-object-fit:cover;
-
-}
-
-.group{
-
-margin-bottom:20px;
-
-}
-
-.group label{
-
-display:block;
-
-font-weight:600;
-
-margin-bottom:8px;
-
-color:#444;
-
-}
-
-.group input[type=file]{
-
-width:100%;
-
-padding:12px;
-
-border:2px dashed #2563EB;
-
-border-radius:15px;
-
-background:#F8FAFF;
-
-cursor:pointer;
-
-}
-
-.group textarea{
-
-width:100%;
-
-height:140px;
-
-padding:15px;
-
-border-radius:15px;
-
-border:1px solid #ddd;
-
-resize:none;
-
-font-size:15px;
-
-outline:none;
-
-}
-
-.group textarea:focus{
-
-border-color:#2563EB;
-
-}
-
-.group select{
-
-width:100%;
-
-padding:15px;
-
-border-radius:15px;
-
-border:1px solid #ddd;
-
-font-size:15px;
-
-outline:none;
-
-}
-
-.group select:focus{
-
-border-color:#2563EB;
-
-}
-
-button{
-
-width:100%;
-
-padding:16px;
-
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-border:none;
-
-border-radius:15px;
-
-color:white;
-
-font-size:17px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.30);
-
-}
-
-.bottom-nav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
-}
-
-.bottom-nav a{
-
-font-size:24px;
-
-color:#555;
-
-text-decoration:none;
-
-transition:.3s;
-
-}
-
-.bottom-nav a:hover{
-
-color:#2563EB;
-
-}
-
-@media(max-width:768px){
-
+/* ── Main card ── */
 .card{
-
-padding:20px;
-
+  background:white;border-radius:28px;padding:26px 22px;
+  box-shadow:0 8px 28px rgba(0,0,0,.08);
+  border:2px solid #fff0d8;
+  animation:popIn .5s ease;position:relative;z-index:1;
+}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.88) translateY(20px);}
+  70%{transform:scale(1.02) translateY(-4px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
 }
 
-.preview{
-
-width:140px;
-height:140px;
-
+/* ── Card title ── */
+.card-title{
+  font-size:20px;font-weight:900;color:#1f2937;
+  display:flex;align-items:center;gap:10px;margin-bottom:22px;
 }
 
+/* ── Media preview ── */
+.preview-wrap{
+  width:100%;max-width:260px;margin:0 auto 22px;
+  border-radius:24px;overflow:hidden;
+  background:linear-gradient(135deg,#fef3c7,#fde68a);
+  display:flex;align-items:center;justify-content:center;
+  aspect-ratio:1/1;
+  border:3px dashed #fbbf24;
+  cursor:pointer;transition:.25s;
+  position:relative;
 }
+.preview-wrap:hover{transform:scale(1.02);box-shadow:0 10px 28px rgba(251,191,36,.3);}
+.preview-wrap .preview-icon{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  color:#f59e0b;
+}
+.preview-wrap .preview-icon i{font-size:52px;animation:iconFloat 3s ease-in-out infinite;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.preview-wrap .preview-icon p{font-size:13px;font-weight:800;color:#78350f;}
+.preview-wrap img,
+.preview-wrap video{width:100%;height:100%;object-fit:cover;border-radius:21px;}
+
+/* ── Form groups ── */
+.group{margin-bottom:18px;}
+.group label{
+  display:flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:800;color:#374151;margin-bottom:8px;
+}
+.group label i{font-size:16px;}
+
+/* Hidden real file input */
+input[type=file]#media{display:none;}
+
+/* Styled file trigger button */
+.file-trigger{
+  width:100%;padding:13px 16px;
+  border:2px dashed #fbbf24;border-radius:16px;
+  background:#fffbeb;color:#92400e;
+  font-size:14px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;transition:.25s;
+}
+.file-trigger:hover{background:#fef3c7;border-color:#f59e0b;transform:scale(1.01);}
+.file-name{
+  margin-top:7px;font-size:12px;font-weight:700;
+  color:#78350f;padding:6px 12px;background:#fef3c7;
+  border-radius:10px;display:none;
+  align-items:center;gap:6px;
+}
+.file-name.show{display:flex;}
+
+textarea{
+  width:100%;min-height:110px;padding:14px 16px;
+  border:2px solid #f0f0f0;border-radius:16px;
+  font-size:14px;font-weight:600;color:#374151;
+  resize:none;outline:none;background:#fafafa;
+  transition:.25s;line-height:1.6;
+}
+textarea:focus{border-color:#fbbf24;background:white;box-shadow:0 0 0 4px rgba(251,191,36,.1);}
+textarea::placeholder{color:#d1d5db;}
+
+select{
+  width:100%;padding:14px 16px;
+  border:2px solid #f0f0f0;border-radius:16px;
+  font-size:14px;font-weight:700;color:#374151;
+  background:#fafafa;outline:none;cursor:pointer;transition:.25s;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23f59e0b'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:20px;
+}
+select:focus{border-color:#fbbf24;background-color:white;box-shadow:0 0 0 4px rgba(251,191,36,.1);}
+
+/* Category chips */
+.cat-grid{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;
+}
+.cat-chip{
+  padding:7px 14px;border-radius:50px;
+  font-size:13px;font-weight:800;cursor:pointer;
+  border:2px solid transparent;transition:.2s;
+  background:#f3f4f6;color:#374151;
+}
+.cat-chip:hover{transform:scale(1.06);}
+.cat-chip.selected{border-color:currentColor;}
+.cat-chip.c1{background:#dbeafe;color:#1d4ed8;} /* Tech */
+.cat-chip.c2{background:#d1fae5;color:#065f46;} /* AI */
+.cat-chip.c3{background:#ede9fe;color:#5b21b6;} /* Programming */
+.cat-chip.c4{background:#fce7f3;color:#be185d;} /* Robotics */
+.cat-chip.c5{background:#fef3c7;color:#78350f;} /* Science */
+.cat-chip.c6{background:#ffedd5;color:#c2410c;} /* Sports */
+.cat-chip.c7{background:#ecfccb;color:#365314;} /* Drawing */
+.cat-chip.c8{background:#e0f2fe;color:#0369a1;} /* Music */
+.cat-chip.c9{background:#fdf2f8;color:#86198f;} /* Dance */
+.cat-chip.c10{background:#f0fdf4;color:#14532d;} /* Education */
+.cat-chip.c11{background:#f9fafb;color:#6b7280;} /* Other */
+
+/* Hidden real select */
+select#content_category{display:none;}
+
+/* ── Submit button ── */
+.submit-btn{
+  width:100%;padding:16px;border:none;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-size:17px;font-weight:900;
+  border-radius:20px;cursor:pointer;transition:.25s;
+  box-shadow:0 6px 20px rgba(249,132,74,.25);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:8px;
+}
+.submit-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 30px rgba(249,132,74,.35);}
+.submit-btn:active{transform:scale(.97);}
+.submit-btn i{font-size:20px;animation:iconFloat 3s ease-in-out infinite;}
+
+/* ── Uploading overlay ── */
+.uploading-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(253,246,238,.85);backdrop-filter:blur(6px);
+  flex-direction:column;align-items:center;justify-content:center;gap:18px;
+}
+.uploading-overlay.show{display:flex;}
+.upload-spinner{
+  width:72px;height:72px;border-radius:50%;
+  border:6px solid #fde8d0;border-top-color:#e76f51;
+  animation:spin .9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.upload-text{font-size:18px;font-weight:900;color:#7c3700;}
+.upload-sub{font-size:13px;font-weight:700;color:#9ca3af;}
+
+/* ── Bottom nav ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;
+  border-top:2px dashed #ffe0a0;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
+}
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
+.nav-item.active{color:#e76f51;}
 
 </style>
-
 </head>
-
 <body>
 
-<div class="container">
+<!-- Floating bubbles -->
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
 
-<div class="card">
+<!-- Uploading overlay -->
+<div class="uploading-overlay" id="uploadingOverlay">
+  <div style="font-size:60px;animation:iconFloat 1s ease-in-out infinite;">📸</div>
+  <div class="upload-spinner"></div>
+  <div class="upload-text">Checking your post…</div>
+  <div class="upload-sub">Our safety helpers are reviewing it ✨</div>
+</div>
 
+<!-- Header -->
 <div class="header">
-
-<div class="logo">
-
-LittleNet
-
+  <div class="logo">🌟 LittleNet</div>
+  <a href="/child/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Dashboard
+  </a>
 </div>
 
-<a href="/child/dashboard/" class="back">
+<div class="page">
+  <div class="card">
 
-<i class="fa-solid fa-arrow-left"></i>
+    <div class="card-title">📸 Create a New Post</div>
 
-Dashboard
+    <form method="POST" enctype="multipart/form-data" id="postForm">
 
-</a>
+      <!-- Preview area (click to pick file) -->
+      <div class="preview-wrap" id="previewWrap" onclick="document.getElementById('media').click()">
+        <div class="preview-icon" id="previewIcon">
+          <i class="fa-solid fa-image"></i>
+          <p>Tap to pick a photo or video</p>
+        </div>
+      </div>
 
+      <!-- Hidden file input -->
+      <input type="file" name="media" id="media" accept="image/*,video/*" required>
+
+      <!-- File name pill -->
+      <div class="file-name" id="fileName">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="fileNameText"></span>
+      </div>
+
+      <!-- Caption -->
+      <div class="group" style="margin-top:18px;">
+        <label><i class="fa-solid fa-pen" style="color:#f59e0b;"></i> Caption</label>
+        <textarea name="caption" placeholder="Share something awesome… 🌟"></textarea>
+      </div>
+
+      <!-- Category chips -->
+      <div class="group">
+        <label><i class="fa-solid fa-layer-group" style="color:#a78bfa;"></i> Category</label>
+        <div class="cat-grid" id="catGrid">
+          <div class="cat-chip c1"  data-val="Technology">💻 Tech</div>
+          <div class="cat-chip c2"  data-val="AI">🤖 AI</div>
+          <div class="cat-chip c3"  data-val="Programming">🧑‍💻 Code</div>
+          <div class="cat-chip c4"  data-val="Robotics">🦾 Robots</div>
+          <div class="cat-chip c5"  data-val="Science">🔬 Science</div>
+          <div class="cat-chip c6"  data-val="Sports">⚽ Sports</div>
+          <div class="cat-chip c7"  data-val="Drawing">🎨 Art</div>
+          <div class="cat-chip c8"  data-val="Music">🎵 Music</div>
+          <div class="cat-chip c9"  data-val="Dance">💃 Dance</div>
+          <div class="cat-chip c10" data-val="Education">📚 Learn</div>
+          <div class="cat-chip c11" data-val="Other">✨ Other</div>
+        </div>
+        <!-- Hidden real select that gets submitted -->
+        <select name="content_category" id="content_category" required>
+          <option value="">Select Category</option>
+          <option value="Technology">Technology</option>
+          <option value="AI">AI</option>
+          <option value="Programming">Programming</option>
+          <option value="Robotics">Robotics</option>
+          <option value="Science">Science</option>
+          <option value="Sports">Sports</option>
+          <option value="Drawing">Drawing</option>
+          <option value="Music">Music</option>
+          <option value="Dance">Dance</option>
+          <option value="Education">Education</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <i class="fa-solid fa-paper-plane"></i> Share with Friends!
+      </button>
+
+    </form>
+
+  </div>
 </div>
 
-<form method="POST"
-enctype="multipart/form-data">
-
-<div class="preview" id="preview">
-
-<i class="fa-solid fa-image"></i>
-
-</div>
-
-<div class="group">
-
-<label>
-
-<i class="fa-solid fa-photo-film"></i>
-
-Choose Image / Video
-
-</label>
-
-<input
-type="file"
-name="media"
-id="media"
-required>
-
-</div>
-
-<div class="group">
-
-<label>
-
-<i class="fa-solid fa-pen"></i>
-
-Description
-
-</label>
-
-<textarea
-name="caption"
-placeholder="Share your thoughts..."></textarea>
-
-</div>
-
-<div class="group">
-
-<label>
-
-<i class="fa-solid fa-layer-group"></i>
-
-Content Category
-
-</label>
-
-<select
-name="content_category"
-required>
-
-<option value="">Select Category</option>
-
-<option value="Technology">Technology</option>
-<option value="AI">AI</option>
-<option value="Programming">Programming</option>
-<option value="Robotics">Robotics</option>
-<option value="Science">Science</option>
-<option value="Sports">Sports</option>
-<option value="Drawing">Drawing</option>
-<option value="Music">Music</option>
-<option value="Dance">Dance</option>
-<option value="Education">Education</option>
-<option value="Other">Other</option>
-
-</select>
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-paper-plane"></i>
-
-Upload Post
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/child/dashboard/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus" style="color:#2563EB;"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-</div>
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="/feed/">
+    <i class="fa-solid fa-house"></i><span>Home</span>
+  </a>
+  <a class="nav-item" href="/discover/">
+    <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
+  </a>
+  <a class="nav-item active" href="/child/upload-post/">
+    <i class="fa-solid fa-square-plus"></i><span>Post</span>
+  </a>
+  <a class="nav-item" href="/messages/">
+    <i class="fa-regular fa-comment-dots"></i><span>Chat</span>
+  </a>
+  <a class="nav-item" href="/child/profile/">
+    <i class="fa-solid fa-user"></i><span>Me</span>
+  </a>
+</nav>
 
 <script>
+// ── Stars ──
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');
+    s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
 
-const media=document.getElementById("media");
+// ── Confetti ──
+(function(){
+  var colors=['#ffd6e0','#c3b1e1','#b5ead7','#ffdac1','#a8d8ea','#ffe066'];
+  for(var i=0;i<8;i++){
+    var d=document.createElement('div');
+    d.className='confetti-dot';
+    var sz=Math.random()*7+4;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(Math.random()*10+8)+'s;animation-delay:'+Math.random()*8+'s;opacity:.5';
+    document.body.appendChild(d);
+  }
+})();
 
-const preview=document.getElementById("preview");
+// ── File picker → preview ──
+document.getElementById('media').addEventListener('change', function(){
+  var file = this.files[0];
+  if (!file) return;
 
-media.onchange=function(){
+  // Show filename pill
+  var fn = document.getElementById('fileName');
+  document.getElementById('fileNameText').textContent = file.name;
+  fn.classList.add('show');
 
-const file=this.files[0];
+  var wrap = document.getElementById('previewWrap');
+  var icon = document.getElementById('previewIcon');
 
-if(!file)return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    icon.style.display = 'none';
+    // Remove old preview media
+    var old = wrap.querySelector('img,video');
+    if (old) old.remove();
 
-const reader=new FileReader();
+    if (file.type.startsWith('video/')) {
+      var vid = document.createElement('video');
+      vid.src = e.target.result;
+      vid.controls = true;
+      wrap.appendChild(vid);
+    } else {
+      var img = document.createElement('img');
+      img.src = e.target.result;
+      wrap.appendChild(img);
+    }
+  };
+  reader.readAsDataURL(file);
+});
 
-reader.onload=function(e){
+// ── Category chips ──
+var chips = document.querySelectorAll('.cat-chip');
+var select = document.getElementById('content_category');
 
-preview.innerHTML=
-`<img src="${e.target.result}">`;
+chips.forEach(function(chip){
+  chip.addEventListener('click', function(){
+    chips.forEach(function(c){ c.classList.remove('selected'); });
+    chip.classList.add('selected');
+    select.value = chip.dataset.val;
+  });
+});
 
-}
-
-reader.readAsDataURL(file);
-
-}
-
+// ── Show uploading overlay on submit ──
+document.getElementById('postForm').addEventListener('submit', function(e){
+  // Basic validation
+  var file = document.getElementById('media').files[0];
+  if (!file) { e.preventDefault(); return; }
+  if (!select.value) {
+    e.preventDefault();
+    alert('Please pick a category! 🎯');
+    return;
+  }
+  document.getElementById('uploadingOverlay').classList.add('show');
+});
 </script>
 
 </body>
-
 </html>

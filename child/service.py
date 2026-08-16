@@ -152,7 +152,34 @@ def get_child_profile(child_id):
     cur.close()
     conn.close()
 
+    if profile and profile.get("date_of_birth"):
+        dob = profile["date_of_birth"]
+        today = date.today()
+        profile["age"] = (
+            today.year - dob.year
+            - ((today.month, today.day) < (dob.month, dob.day))
+        )
+
     return profile
+
+
+def get_post_count(child_id):
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT COUNT(*) AS total
+        FROM posts
+        WHERE child_id = %s
+    """, (child_id,))
+
+    total = cur.fetchone()["total"]
+
+    cur.close()
+    conn.close()
+
+    return total
 
 
 def update_child_profile(
@@ -380,6 +407,7 @@ def get_recommended_posts(child_id,limit=5,offset=0):
             SELECT DISTINCT
                 p.*,
                 u.full_name,
+                cp.profile_picture,
 
                 (
                     SELECT COUNT(*)
@@ -397,6 +425,9 @@ def get_recommended_posts(child_id,limit=5,offset=0):
 
             JOIN users u
             ON p.child_id = u.user_id
+
+            LEFT JOIN child_profiles cp
+            ON p.child_id = cp.child_id
 
             WHERE p.content_category IN (
 
@@ -475,6 +506,7 @@ def get_random_children(current_child_id):
         SELECT
             u.user_id,
             u.full_name,
+            cp.profile_picture,
 
             (
                 SELECT COUNT(*)
@@ -483,6 +515,9 @@ def get_random_children(current_child_id):
             ) AS followers
 
         FROM users u
+
+        LEFT JOIN child_profiles cp
+        ON u.user_id = cp.child_id
 
         WHERE u.role = 'CHILD'
         AND u.user_id != %s

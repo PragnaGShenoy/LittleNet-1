@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
-from child.service import follow_child, is_following
+from child.service import follow_child, get_child_profile, is_following
 from uploadPost.ml_service import check_image_safety, check_video_safety
 from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments,  like_post, save_post
 from uploadPost.service import get_all_posts
@@ -157,23 +157,17 @@ def feed():
 @upload_bp.route("/my-posts/")
 def my_posts():
 
-    posts = get_my_posts(
-        session["user_id"]
-    )
-
-    
+    posts = get_my_posts(session["user_id"])
 
     for post in posts:
+        post["comments"] = get_post_comments(post["post_id"])
 
-        post["comments"] = get_post_comments(
-            post["post_id"]
-        )
-
-        
+    profile = get_child_profile(session["user_id"])
 
     return render_template(
         "my_posts.html",
-        posts=posts
+        posts=posts,
+        profile=profile,
     )
 @upload_bp.route("/like/<int:post_id>/")
 def like(post_id):

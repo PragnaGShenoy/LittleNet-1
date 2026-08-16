@@ -4,138 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Messages | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
 
-body{background:#f5f7fb;color:#1f2937;min-height:100vh;padding-bottom:80px;}
+body{background:#fdf6ee;min-height:100vh;padding-bottom:90px;overflow-x:hidden;}
 
-/* Header */
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.15;}
+.bg-bubbles span:nth-child(1){left:6%;width:46px;height:46px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:26%;width:28px;height:28px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:47%;width:58px;height:58px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:65%;width:36px;height:36px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:83%;width:50px;height:50px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{0%{transform:translateY(110vh) scale(.8);}100%{transform:translateY(-20vh) scale(1.2);}}
+
+/* Stars */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
+
+/* ── Header ── */
 .header{
-  position:sticky;top:0;background:white;
-  height:64px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 20px;
-  border-bottom:1px solid #e5e7eb;z-index:100;
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  border-bottom:2px dashed #ffe0a0;
 }
-.header-left{display:flex;align-items:center;gap:14px;}
+.logo{
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
+}
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
 .back-btn{
-  width:38px;height:38px;display:flex;align-items:center;
-  justify-content:center;border-radius:50%;color:#111827;
-  text-decoration:none;font-size:18px;transition:.2s;
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#fde8d0;color:#c2430a;font-size:17px;transition:.25s;
 }
-.back-btn:hover{background:#f1f3f5;}
-.logo{font-size:24px;font-weight:800;color:#2563eb;letter-spacing:-0.5px;}
+.back-btn:hover{background:#fcb69f;transform:scale(1.12) rotate(-8deg);}
 
-/* Container */
-.container{max-width:680px;margin:0 auto;padding:20px 16px;}
+/* ── Page container ── */
+.container{max-width:600px;margin:0 auto;padding:18px 16px;}
 
-/* Search */
-.search-box{
+/* ── Search ── */
+.search-wrap{
   display:flex;align-items:center;gap:10px;
-  background:white;border-radius:14px;
-  padding:12px 16px;margin-bottom:24px;
-  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  background:white;border-radius:50px;
+  padding:11px 18px;margin-bottom:22px;
+  box-shadow:0 4px 14px rgba(0,0,0,.07);
+  border:2px solid #fff0d8;
+  animation:popIn .4s ease;
 }
-.search-box i{color:#9ca3af;font-size:16px;}
-.search-box input{
-  flex:1;border:none;outline:none;
-  font-size:15px;background:transparent;color:#111827;
+@keyframes popIn{0%{opacity:0;transform:translateY(-10px);}100%{opacity:1;transform:translateY(0);}}
+.search-wrap i{color:#f59e0b;font-size:16px;}
+.search-wrap input{
+  flex:1;border:none;outline:none;font-size:14px;font-weight:700;
+  background:transparent;color:#374151;font-family:'Nunito',sans-serif;
 }
+.search-wrap input::placeholder{color:#d1d5db;}
 
-/* Section label */
+/* ── Section label ── */
 .section-label{
-  font-size:13px;font-weight:700;color:#6b7280;
-  text-transform:uppercase;letter-spacing:.8px;
-  margin:0 4px 10px;
+  font-size:13px;font-weight:900;color:#e76f51;
+  margin:0 4px 10px;display:flex;align-items:center;gap:6px;
 }
 
-/* Chat card (used for both recent and all children) */
+/* ── Chat list card ── */
 .chat-list{
-  background:white;border-radius:18px;overflow:hidden;
-  box-shadow:0 4px 16px rgba(0,0,0,.06);margin-bottom:24px;
+  background:white;border-radius:24px;overflow:hidden;
+  box-shadow:0 6px 20px rgba(0,0,0,.07);
+  margin-bottom:22px;
+  border:2px solid #fff0d8;
 }
+
 .chat-card{
   display:flex;align-items:center;gap:14px;
-  padding:14px 16px;text-decoration:none;color:inherit;
-  border-bottom:1px solid #f0f2f5;transition:background .15s;
+  padding:14px 16px;
+  border-bottom:1px dashed #f5ead0;
+  transition:.2s;position:relative;overflow:hidden;
 }
 .chat-card:last-child{border-bottom:none;}
-.chat-card:hover{background:#f8faff;}
+.chat-card:hover{background:#fdf6ee;transform:translateX(4px);}
 .chat-card.hidden{display:none;}
 
-/* Avatar */
+/* avatar */
 .avatar{
-  width:52px;height:52px;min-width:52px;border-radius:50%;
-  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  width:50px;height:50px;min-width:50px;border-radius:50%;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
   display:flex;align-items:center;justify-content:center;
-  color:white;font-size:20px;font-weight:700;
+  font-size:20px;font-weight:900;color:#7c3700;
+  box-shadow:0 3px 10px rgba(249,132,74,.22);flex-shrink:0;
+  border:2px solid white;
 }
 
 .child-info{flex:1;min-width:0;}
-.child-name{font-size:15px;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.last-msg{
-  font-size:13px;color:#6b7280;margin-top:3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.msg-time{font-size:12px;color:#9ca3af;white-space:nowrap;margin-left:auto;padding-left:8px;align-self:flex-start;margin-top:2px;}
+.child-name{font-size:15px;font-weight:800;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.last-msg{font-size:12px;font-weight:600;color:#9ca3af;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.msg-time{font-size:11px;color:#d1d5db;font-weight:700;white-space:nowrap;margin-left:auto;padding-left:8px;align-self:flex-start;margin-top:2px;}
 
 .msg-btn{
-  padding:8px 14px;border-radius:20px;
-  background:#eff6ff;color:#2563eb;
-  font-size:13px;font-weight:600;white-space:nowrap;
+  padding:7px 14px;border-radius:50px;
+  background:#fde8d0;color:#c2430a;
+  font-size:12px;font-weight:900;white-space:nowrap;flex-shrink:0;
+  transition:.2s;
 }
+.chat-card:hover .msg-btn{background:#fcb69f;}
 
-/* Empty / no children */
+/* ── Empty states ── */
 .empty-box{
-  background:white;border-radius:18px;padding:50px 20px;
-  text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.06);
+  background:white;border-radius:24px;padding:50px 20px;
+  text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.07);
+  border:2px solid #fff0d8;
 }
-.empty-box .icon{font-size:48px;margin-bottom:14px;}
-.empty-box h3{font-size:18px;margin-bottom:8px;}
-.empty-box p{color:#6b7280;font-size:14px;line-height:1.6;}
-
-/* search empty */
+.empty-box .icon{font-size:54px;margin-bottom:14px;animation:iconFloat 3s ease-in-out infinite;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.empty-box h3{font-size:18px;font-weight:900;color:#1f2937;margin-bottom:8px;}
+.empty-box p{color:#9ca3af;font-size:14px;font-weight:600;line-height:1.6;}
 #searchEmpty{display:none;}
 
-/* Bottom nav */
+/* ── Bottom nav ── */
 .bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;height:64px;
-  display:flex;align-items:center;justify-content:space-around;
-  background:white;border-top:1px solid #e5e7eb;z-index:200;
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;border-top:2px dashed #ffe0a0;
 }
 .nav-item{
-  display:flex;flex-direction:column;align-items:center;
-  gap:3px;text-decoration:none;color:#6b7280;font-size:10px;font-weight:600;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
 }
-.nav-item i{font-size:20px;}
-.nav-item.active{color:#2563eb;}
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
+.nav-item.active{color:#e76f51;}
 
 </style>
 </head>
-
 <body>
 
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Header -->
 <div class="header">
-  <div class="header-left">
-    <a href="/child/dashboard/" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-    <div class="logo">Messages</div>
-  </div>
-  <i class="fa-regular fa-pen-to-square" style="font-size:20px;color:#2563eb;cursor:pointer;" onclick="document.getElementById('childSearch').focus()"></i>
+  <a href="/child/dashboard/" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+  <div class="logo">💬 Messages</div>
+  <div style="width:38px;"></div>
 </div>
 
 <div class="container">
 
   <!-- Search -->
-  <div class="search-box">
+  <div class="search-wrap">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <input type="text" id="childSearch" placeholder="Search..." onkeyup="filterCards()" autocomplete="off">
+    <input type="text" id="childSearch" placeholder="Search friends…" onkeyup="filterCards()" autocomplete="off">
   </div>
 
   <!-- Recent conversations -->
   {% if recent %}
-  <div class="section-label">Recent</div>
+  <div class="section-label">🕐 Recent</div>
   <div class="chat-list" id="recentList">
     {% for r in recent %}
     <a href="/chat/{{ r.user_id }}/" class="chat-card" data-name="{{ r.full_name|lower }}">
@@ -143,41 +179,35 @@ body{background:#f5f7fb;color:#1f2937;min-height:100vh;padding-bottom:80px;}
       <div class="child-info">
         <div class="child-name">{{ r.full_name }}</div>
         <div class="last-msg">
-          {% if r.message_type == "IMAGE" %}
-            <i class="fa-regular fa-image"></i> Photo
-          {% elif r.message_type == "VIDEO" %}
-            <i class="fa-solid fa-video"></i> Video
-          {% elif r.message_type == "VOICE" %}
-            <i class="fa-solid fa-microphone"></i> Voice message
-          {% elif r.message_type == "FILE" %}
-            <i class="fa-regular fa-file"></i> File
-          {% elif r.message_text %}
-            {{ r.message_text }}
-          {% else %}
-            Tap to chat
+          {% if r.message_type == "IMAGE" %}📷 Photo
+          {% elif r.message_type == "VIDEO" %}🎥 Video
+          {% elif r.message_type == "VOICE" %}🎤 Voice message
+          {% elif r.message_type == "FILE" %}📎 File
+          {% elif r.message_text %}{{ r.message_text }}
+          {% else %}Tap to chat 👋
           {% endif %}
         </div>
       </div>
       {% if r.sent_at %}
-      <div class="msg-time">{{ r.sent_at.strftime('%H:%M') if r.sent_at else '' }}</div>
+      <div class="msg-time">{{ r.sent_at.strftime('%H:%M') }}</div>
       {% endif %}
     </a>
     {% endfor %}
   </div>
   {% endif %}
 
-  <!-- All other children (no conversation yet) -->
+  <!-- New chat -->
   {% if children %}
-  <div class="section-label">Start New Chat</div>
+  <div class="section-label">✨ Start New Chat</div>
   <div class="chat-list" id="childrenList">
     {% for child in children %}
     <a href="/chat/{{ child.user_id }}/" class="chat-card" data-name="{{ child.full_name|lower }}">
       <div class="avatar">{{ child.full_name[0]|upper }}</div>
       <div class="child-info">
         <div class="child-name">{{ child.full_name }}</div>
-        <div class="last-msg">Tap to send a message</div>
+        <div class="last-msg">Tap to send a message 👋</div>
       </div>
-      <div class="msg-btn">Message</div>
+      <div class="msg-btn">Chat</div>
     </a>
     {% endfor %}
   </div>
@@ -186,12 +216,11 @@ body{background:#f5f7fb;color:#1f2937;min-height:100vh;padding-bottom:80px;}
   {% if not recent and not children %}
   <div class="empty-box">
     <div class="icon">👥</div>
-    <h3>No friends yet</h3>
-    <p>Follow other kids to start chatting with them.</p>
+    <h3>No friends yet!</h3>
+    <p>Follow other kids to start chatting with them 🌟</p>
   </div>
   {% endif %}
 
-  <!-- Search empty state -->
   <div class="empty-box" id="searchEmpty">
     <div class="icon">🔍</div>
     <h3>No one found</h3>
@@ -202,22 +231,31 @@ body{background:#f5f7fb;color:#1f2937;min-height:100vh;padding-bottom:80px;}
 
 <!-- Bottom nav -->
 <nav class="bottom-nav">
-  <a href="/feed/" class="nav-item"><i class="fa-solid fa-house"></i><span>Home</span></a>
-  <a href="/discover/" class="nav-item"><i class="fa-solid fa-magnifying-glass"></i><span>Discover</span></a>
-  <a href="/child/upload-post/" class="nav-item"><i class="fa-solid fa-square-plus"></i><span>Create</span></a>
-  <a href="/messages/" class="nav-item active"><i class="fa-solid fa-comment-dots"></i><span>Messages</span></a>
-  <a href="/child/profile/" class="nav-item"><i class="fa-solid fa-user"></i><span>Profile</span></a>
+  <a class="nav-item" href="/feed/"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a>
+  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i><span>Post</span></a>
+  <a class="nav-item active" href="/messages/"><i class="fa-regular fa-comment-dots"></i><span>Chat</span></a>
+  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i><span>Me</span></a>
 </nav>
 
 <script>
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
+
 function filterCards() {
-  const q = document.getElementById('childSearch').value.toLowerCase().trim();
-  const cards = document.querySelectorAll('.chat-card');
-  let visible = 0;
-  cards.forEach(c => {
-    const match = c.dataset.name.includes(q);
+  var q = document.getElementById('childSearch').value.toLowerCase().trim();
+  var cards = document.querySelectorAll('.chat-card');
+  var visible = 0;
+  cards.forEach(function(c){
+    var match = c.dataset.name.includes(q);
     c.classList.toggle('hidden', !match);
-    if (match) visible++;
+    if(match) visible++;
   });
   document.getElementById('searchEmpty').style.display =
     (cards.length > 0 && visible === 0) ? 'block' : 'none';

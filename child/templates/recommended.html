@@ -1,172 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recommended | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
 <style>
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-
-body{background:#f5f7fb;padding-bottom:90px;}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
 a{text-decoration:none;color:inherit;}
 
-/* Header */
+body{background:#fdf6ee;padding-bottom:90px;overflow-x:hidden;}
+
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.13;}
+.bg-bubbles span:nth-child(1){left:5%;width:45px;height:45px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:24%;width:26px;height:26px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:46%;width:58px;height:58px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:64%;width:35px;height:35px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:83%;width:48px;height:48px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{0%{transform:translateY(110vh) scale(.8);}100%{transform:translateY(-20vh) scale(1.2);}}
+
+/* Stars */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
+
+/* ── Header ── */
 .header{
-  position:sticky;top:0;background:white;
-  padding:15px 20px;display:flex;
-  justify-content:space-between;align-items:center;
-  border-bottom:1px solid #e5e7eb;z-index:999;
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;border-bottom:2px dashed #ffe0a0;
 }
-.logo{font-size:28px;font-weight:700;color:#2563eb;}
-.header-icons{display:flex;gap:18px;font-size:22px;color:#444;}
-
-/* Container */
-.container{max-width:600px;margin:20px auto;padding:0 15px;}
-
-/* Post card */
-.post{
-  background:white;border-radius:18px;
-  overflow:hidden;margin-bottom:22px;
-  box-shadow:0 4px 20px rgba(0,0,0,.07);
-  animation:fade .4s ease;
+.logo{
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
 }
-@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
+.header-icons{display:flex;gap:12px;}
+.header-icons a{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#fde8d0;color:#c2430a;font-size:17px;transition:.25s;
+}
+.header-icons a:hover{background:#fcb69f;transform:scale(1.12) rotate(-8deg);}
 
+/* ── Container ── */
+.container{max-width:600px;margin:18px auto;padding:0 14px;position:relative;z-index:1;}
+
+/* ── Post card ── */
+.post-card{
+  background:white;border-radius:28px;overflow:hidden;
+  margin-bottom:20px;
+  box-shadow:0 6px 24px rgba(0,0,0,.08);
+  border:2px solid #fff0d8;
+  animation:popIn .45s ease both;
+}
+.post-card:nth-child(1){animation-delay:.04s;}
+.post-card:nth-child(2){animation-delay:.08s;}
+.post-card:nth-child(3){animation-delay:.12s;}
+.post-card:nth-child(4){animation-delay:.16s;}
+.post-card:nth-child(5){animation-delay:.20s;}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.9) translateY(14px);}
+  70%{transform:scale(1.02) translateY(-3px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+
+/* Post header */
 .post-header{
-  display:flex;justify-content:space-between;
-  align-items:center;padding:14px 16px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 16px;
 }
-.user{display:flex;align-items:center;gap:12px;}
+.user-row{display:flex;align-items:center;gap:12px;}
 .avatar{
-  width:46px;height:46px;border-radius:50%;
-  background:linear-gradient(135deg,#4f46e5,#2563eb);
-  display:flex;justify-content:center;align-items:center;
-  color:white;font-size:20px;flex-shrink:0;
+  width:46px;height:46px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;color:#7c3700;
+  border:2px solid white;box-shadow:0 3px 10px rgba(249,132,74,.22);
+  overflow:hidden;
 }
-.username{font-weight:600;font-size:15px;}
-.category{color:#888;font-size:13px;margin-top:2px;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.username{font-size:15px;font-weight:900;color:#1f2937;}
+.category{font-size:12px;font-weight:700;color:#f59e0b;margin-top:2px;}
 
 /* Media */
-.post img,.post video{width:100%;display:block;max-height:480px;object-fit:cover;}
+.post-media{width:100%;display:block;max-height:480px;object-fit:cover;}
 
-/* Actions */
+/* ── Actions ── */
 .post-actions{padding:12px 16px 6px;}
-.action-row{display:flex;align-items:center;gap:18px;margin-bottom:10px;}
+.action-row{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
 
 .like-btn{
   background:none;border:none;cursor:pointer;
-  font-size:26px;color:#888;padding:0;
-  transition:transform .15s;line-height:1;
+  font-size:26px;color:#d1d5db;padding:0;line-height:1;
+  transition:transform .15s, color .15s;
 }
-.like-btn:active{transform:scale(1.3);}
+.like-btn:active{transform:scale(1.4);}
 .like-btn.liked{color:#e0245e;}
+.like-btn.liked i{animation:heartPop .3s ease;}
+@keyframes heartPop{0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);}}
 
-.comment-icon{font-size:24px;color:#555;cursor:pointer;}
-.like-count{font-weight:600;font-size:14px;margin-bottom:6px;}
-.caption{font-size:14px;line-height:1.6;margin-bottom:10px;}
-.caption strong{margin-right:6px;}
+.comment-toggle-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:24px;color:#d1d5db;padding:0;line-height:1;transition:.2s;
+}
+.comment-toggle-btn:hover{color:#f59e0b;}
 
-/* Comments section */
-.comments-section{padding:0 16px 6px;}
+.like-count{font-size:14px;font-weight:800;color:#374151;margin-bottom:8px;}
+
+.caption-row{font-size:14px;font-weight:600;color:#374151;line-height:1.65;margin-bottom:10px;}
+.caption-row strong{font-weight:900;color:#1f2937;margin-right:6px;}
+
+/* ── Comments (hidden by default) ── */
+.comments-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;padding:6px 0 8px;
+  font-size:13px;font-weight:800;color:#e76f51;
+  border-top:1px dashed #f5ead0;margin:0 16px;
+  user-select:none;
+}
+.comments-toggle i{transition:transform .3s;}
+.comments-toggle.open i{transform:rotate(180deg);}
+
+.comments-wrap{
+  display:none;padding:4px 16px 8px;
+}
+.comments-wrap.open{display:block;animation:slideDown .25s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
 .comment-item{
-  display:flex;gap:10px;margin-bottom:10px;
-  align-items:flex-start;
+  display:flex;gap:9px;margin-bottom:8px;align-items:flex-start;
 }
 .comment-avatar{
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,#4f46e5,#2563eb);
-  display:flex;justify-content:center;align-items:center;
-  color:white;font-size:13px;flex-shrink:0;
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:900;color:#7c3700;
 }
-.comment-bubble{background:#f3f4f6;border-radius:14px;padding:8px 12px;font-size:13px;}
-.comment-bubble strong{display:block;margin-bottom:2px;font-size:12px;color:#2563eb;}
+.comment-bubble{
+  background:#fdf6ee;border-radius:14px;padding:7px 12px;
+  font-size:13px;font-weight:600;color:#374151;
+  border:1px solid #f5ead0;
+}
+.comment-bubble strong{display:block;margin-bottom:2px;font-size:11px;font-weight:900;color:#e76f51;}
 
 /* Comment input */
 .comment-form{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 16px 14px;border-top:1px solid #f0f0f0;
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px 14px;border-top:1px dashed #f5ead0;
 }
 .comment-form input{
-  flex:1;border:1px solid #e5e7eb;border-radius:25px;
-  padding:9px 16px;font-size:14px;outline:none;
-  background:#f9fafb;transition:.2s;
+  flex:1;border:2px solid #f0e8d8;border-radius:25px;
+  padding:9px 14px;font-size:13px;font-weight:700;outline:none;
+  background:#fafafa;transition:.2s;font-family:'Nunito',sans-serif;
 }
-.comment-form input:focus{border-color:#2563eb;background:white;}
-.send-btn{
-  background:#2563eb;border:none;border-radius:50%;
-  width:36px;height:36px;display:flex;justify-content:center;
-  align-items:center;cursor:pointer;color:white;
-  font-size:14px;transition:.2s;flex-shrink:0;
+.comment-form input:focus{border-color:#fbbf24;background:white;}
+.comment-form input::placeholder{color:#d1d5db;}
+.comment-send-btn{
+  width:36px;height:36px;border:none;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+  box-shadow:0 3px 10px rgba(249,132,74,.25);
 }
-.send-btn:hover{background:#1d4ed8;}
+.comment-send-btn:hover{transform:scale(1.1);}
 
-/* Quiz card */
+/* ── Quiz card ── */
 .quiz-card{
-  background:white;border-radius:18px;padding:22px;
-  margin-bottom:22px;box-shadow:0 4px 20px rgba(0,0,0,.07);
+  background:white;border-radius:28px;padding:22px;
+  margin-bottom:20px;
+  box-shadow:0 6px 24px rgba(0,0,0,.08);
+  border:2px solid #fff0d8;
+  animation:popIn .45s ease;
 }
 .quiz-badge{
-  display:inline-block;background:#eef2ff;color:#4f46e5;
-  font-size:12px;font-weight:600;padding:4px 12px;
-  border-radius:20px;margin-bottom:14px;
+  display:inline-flex;align-items:center;gap:6px;
+  background:#fef3c7;color:#78350f;
+  font-size:13px;font-weight:900;
+  padding:5px 14px;border-radius:50px;margin-bottom:14px;
 }
-.quiz-question{font-size:17px;font-weight:600;margin-bottom:16px;line-height:1.5;}
+.quiz-question{font-size:16px;font-weight:800;color:#1f2937;margin-bottom:16px;line-height:1.55;}
 .quiz-option{
   display:flex;align-items:center;gap:10px;
-  padding:12px 14px;border:1px solid #e5e7eb;
-  border-radius:12px;margin-bottom:10px;cursor:pointer;
-  transition:.2s;font-size:14px;
+  padding:12px 14px;border:2px solid #f0e8d8;
+  border-radius:16px;margin-bottom:10px;cursor:pointer;
+  transition:.2s;font-size:14px;font-weight:700;color:#374151;
 }
-.quiz-option:hover{border-color:#2563eb;background:#eef2ff;}
-.quiz-option input{accent-color:#2563eb;}
+.quiz-option:hover{border-color:#fbbf24;background:#fef3c7;}
+.quiz-option input{accent-color:#f59e0b;}
 .quiz-submit{
-  width:100%;padding:13px;background:linear-gradient(135deg,#4f46e5,#2563eb);
-  border:none;border-radius:12px;color:white;font-size:15px;
-  font-weight:600;cursor:pointer;margin-top:6px;transition:.2s;
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  border:none;border-radius:16px;
+  color:#7c3700;font-size:15px;font-weight:900;
+  cursor:pointer;margin-top:4px;transition:.2s;
+  box-shadow:0 4px 14px rgba(249,132,74,.25);
+  font-family:'Nunito',sans-serif;
 }
-.quiz-submit:hover{opacity:.9;}
+.quiz-submit:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(249,132,74,.35);}
 .quiz-result{
-  margin-top:14px;padding:14px;border-radius:12px;font-size:14px;
+  margin-top:14px;padding:14px;border-radius:16px;font-size:14px;font-weight:800;
 }
 .quiz-result.correct{background:#d1fae5;color:#065f46;}
 .quiz-result.wrong{background:#fee2e2;color:#991b1b;}
-.skip-link{display:block;text-align:center;margin-top:12px;color:#2563eb;font-size:14px;}
+.skip-link{
+  display:block;text-align:center;margin-top:12px;
+  color:#f59e0b;font-size:14px;font-weight:800;
+}
 
-/* Pagination */
+/* ── Load more ── */
 .load-more{
   display:block;text-align:center;margin:10px auto 30px;
-  padding:14px 30px;background:white;border-radius:14px;
-  box-shadow:0 4px 15px rgba(0,0,0,.07);color:#2563eb;
-  font-weight:600;font-size:15px;transition:.2s;
+  padding:14px 30px;background:white;border-radius:50px;
+  box-shadow:0 6px 20px rgba(0,0,0,.08);
+  color:#e76f51;font-weight:900;font-size:15px;
+  border:2px solid #fff0d8;transition:.25s;
 }
-.load-more:hover{background:#2563eb;color:white;}
+.load-more:hover{background:linear-gradient(135deg,#ffecd2,#fcb69f);color:#7c3700;transform:translateY(-3px);}
 
-/* Bottom nav */
+/* ── Bottom nav ── */
 .bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;
-  background:white;display:flex;justify-content:space-around;
-  padding:14px 0;border-top:1px solid #e5e7eb;z-index:999;
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;border-top:2px dashed #ffe0a0;
 }
-.bottom-nav a{font-size:22px;color:#888;transition:.2s;}
-.bottom-nav a:hover,.bottom-nav a.active{color:#2563eb;}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
+}
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
+.nav-item.active{color:#e76f51;}
 
 </style>
 </head>
-
 <body>
 
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Header -->
 <div class="header">
-  <div class="logo">LittleNet</div>
+  <div class="logo">🌟 LittleNet</div>
   <div class="header-icons">
-    <i class="fa-regular fa-bell"></i>
-    <a href="/logout/"><i class="fa-solid fa-right-from-bracket"></i></a>
+    <a href="/logout/" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
   </div>
 </div>
 
@@ -174,85 +261,98 @@ a{text-decoration:none;color:inherit;}
 
   {% for item in feed_items %}
 
+  <!-- ── POST ── -->
   {% if item.type == "POST" %}
   {% set post = item.data %}
 
-  <div class="post" id="post-{{ post.post_id }}">
+  <div class="post-card" id="post-{{ post.post_id }}">
 
-    <!-- Post header -->
+    <!-- Header with real DP -->
     <div class="post-header">
-      <div class="user">
-        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+      <div class="user-row">
+        <div class="avatar">
+          {% if post.profile_picture %}
+            <img src="/{{ post.profile_picture }}" alt="dp">
+          {% else %}
+            {{ post.full_name[0]|upper if post.full_name else '?' }}
+          {% endif %}
+        </div>
         <div>
           <div class="username">{{ post.full_name }}</div>
-          <div class="category">{{ post.content_category }}</div>
+          <div class="category">{% if post.content_category %}🏷️ {{ post.content_category }}{% endif %}</div>
         </div>
       </div>
     </div>
 
     <!-- Media -->
     {% if post.media_type == "IMAGE" %}
-    <img src="/{{ post.media_path }}" alt="post image">
-    {% endif %}
-    {% if post.media_type == "VIDEO" %}
-    <video controls><source src="/{{ post.media_path }}" type="video/mp4"></video>
+      <img class="post-media" src="/{{ post.media_path }}" alt="post">
+    {% elif post.media_type == "VIDEO" %}
+      <video class="post-media" autoplay muted loop playsinline
+             onmouseenter="this.muted=false" onmouseleave="this.muted=true">
+        <source src="/{{ post.media_path }}" type="video/mp4">
+      </video>
     {% endif %}
 
     <!-- Actions -->
     <div class="post-actions">
       <div class="action-row">
-
-        <!-- Like button — uses fetch, no page navigation -->
-        <button
-          class="like-btn"
-          data-post-id="{{ post.post_id }}"
-          onclick="toggleLike(this)"
-          title="Like">
+        <button class="like-btn" data-post-id="{{ post.post_id }}" onclick="toggleLike(this)">
           <i class="fa-regular fa-heart"></i>
         </button>
-
-        <!-- Comment toggle -->
-        <span
-          class="comment-icon"
-          onclick="focusComment('input-{{ post.post_id }}')"
-          title="Comment">
+        <button class="comment-toggle-btn"
+                onclick="toggleComments({{ post.post_id }})" title="Comments">
           <i class="fa-regular fa-comment"></i>
-        </span>
-
+        </button>
       </div>
 
       <div class="like-count" id="likes-{{ post.post_id }}">
-        {{ post.likes }} {{ 'like' if post.likes == 1 else 'likes' }}
+        ❤️ {{ post.likes }} {{ 'like' if post.likes == 1 else 'likes' }}
       </div>
 
-      <div class="caption">
+      {% if post.caption %}
+      <div class="caption-row">
         <strong>{{ post.full_name }}</strong>{{ post.caption }}
       </div>
+      {% endif %}
     </div>
 
-    <!-- Existing comments -->
-    <div class="comments-section" id="comments-{{ post.post_id }}">
-      {% for comment in post.comments %}
-      <div class="comment-item">
-        <div class="comment-avatar"><i class="fa-solid fa-user"></i></div>
-        <div class="comment-bubble">
-          <strong>{{ comment.full_name }}</strong>
-          {{ comment.comment_text }}
+    <!-- Comments toggle -->
+    <div class="comments-toggle" id="ctoggle-{{ post.post_id }}"
+         onclick="toggleComments({{ post.post_id }})">
+      <span>💬 View Comments ({{ post.comments | length }})</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </div>
+
+    <!-- Comments list (hidden) -->
+    <div class="comments-wrap" id="cwrap-{{ post.post_id }}">
+      <div id="comments-{{ post.post_id }}">
+        {% for comment in post.comments %}
+        <div class="comment-item">
+          <div class="comment-avatar">{{ comment.full_name[0]|upper if comment.full_name else '?' }}</div>
+          <div class="comment-bubble">
+            <strong>{{ comment.full_name }}</strong>
+            {{ comment.comment_text }}
+          </div>
         </div>
+        {% endfor %}
+        {% if not post.comments %}
+        <p style="font-size:13px;font-weight:700;color:#d1d5db;text-align:center;padding:8px 0;">
+          No comments yet 🌟
+        </p>
+        {% endif %}
       </div>
-      {% endfor %}
     </div>
 
-    <!-- Comment input — uses fetch, no page navigation -->
+    <!-- Comment input -->
     <div class="comment-form">
       <input
         type="text"
         id="input-{{ post.post_id }}"
-        placeholder="Add a comment..."
+        placeholder="Add a comment… ✨"
         onkeydown="if(event.key==='Enter') submitComment('{{ post.post_id }}', this)">
-      <button
-        class="send-btn"
-        onclick="submitComment('{{ post.post_id }}', document.getElementById('input-{{ post.post_id }}'))">
+      <button class="comment-send-btn"
+              onclick="submitComment('{{ post.post_id }}', document.getElementById('input-{{ post.post_id }}'))">
         <i class="fa-solid fa-paper-plane"></i>
       </button>
     </div>
@@ -261,6 +361,7 @@ a{text-decoration:none;color:inherit;}
 
   {% endif %}
 
+  <!-- ── QUIZ ── -->
   {% if item.type == "QUIZ" %}
   {% set quiz = item.data %}
 
@@ -271,25 +372,20 @@ a{text-decoration:none;color:inherit;}
     <form method="POST" action="/quiz/submit/">
       <input type="hidden" name="quiz_id" value="{{ quiz.quiz_id }}">
 
-      {% for opt_val, opt_label in [
-          (quiz.option_a, quiz.option_a),
-          (quiz.option_b, quiz.option_b),
-          (quiz.option_c, quiz.option_c),
-          (quiz.option_d, quiz.option_d)
-      ] %}
+      {% for opt_label in [quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d] %}
       <label class="quiz-option">
-        <input type="radio" name="answer" value="{{ opt_val }}" required>
+        <input type="radio" name="answer" value="{{ opt_label }}" required>
         {{ opt_label }}
       </label>
       {% endfor %}
 
-      <button class="quiz-submit" type="submit">Submit Answer</button>
+      <button class="quiz-submit" type="submit">✅ Submit Answer</button>
     </form>
 
     {% if quiz_result %}
     <div class="quiz-result {{ 'correct' if quiz_result.is_correct else 'wrong' }}">
       {% if quiz_result.is_correct %}
-      ✅ Correct Answer!
+      🎉 Correct Answer! Well done!
       {% else %}
       ❌ Wrong! Correct answer: <strong>{{ quiz_result.correct_answer }}</strong>
       {% endif %}
@@ -306,88 +402,122 @@ a{text-decoration:none;color:inherit;}
   {% endfor %}
 
   <a class="load-more" href="/recommended/?page={{ page + 1 }}">
-    <i class="fa-solid fa-rotate-right"></i> &nbsp;Load More
+    🔄 Load More
   </a>
 
 </div>
 
 <!-- Bottom nav -->
-<div class="bottom-nav">
-  <a href="/feed/"><i class="fa-solid fa-house"></i></a>
-  <a href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
-  <a href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
-  <a href="/recommended/" class="active"><i class="fa-solid fa-heart"></i></a>
-  <a href="/child/profile/"><i class="fa-solid fa-user"></i></a>
-</div>
+<nav class="bottom-nav">
+  <a class="nav-item" href="/feed/"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a>
+  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i><span>Post</span></a>
+  <a class="nav-item active" href="/recommended/"><i class="fa-solid fa-heart"></i><span>For You</span></a>
+  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i><span>Me</span></a>
+</nav>
 
 <script>
+// ── Stars ──
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
 
+// ── Auto-play videos when scrolled into view ──
+(function(){
+  var videos = document.querySelectorAll('video.post-media');
+  if (!videos.length) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.muted = true;
+        e.target.play().catch(function(){});
+      } else {
+        e.target.pause();
+        e.target.muted = true;
+      }
+    });
+  }, {threshold: 0.55});
+  videos.forEach(function(v){ obs.observe(v); });
+})();
+
+// ── Like ──
 function toggleLike(btn) {
-  const postId = btn.dataset.postId;
-  const icon = btn.querySelector('i');
-  const countEl = document.getElementById('likes-' + postId);
+  var postId = btn.dataset.postId;
+  var icon = btn.querySelector('i');
+  var countEl = document.getElementById('likes-' + postId);
+  var isLiked = btn.classList.contains('liked');
 
-  // Toggle visual state immediately (optimistic update)
-  const isLiked = btn.classList.contains('liked');
   btn.classList.toggle('liked');
   icon.className = isLiked ? 'fa-regular fa-heart' : 'fa-solid fa-heart';
 
-  // Parse current count and adjust
-  const currentCount = parseInt(countEl.textContent) || 0;
-  const newCount = isLiked ? currentCount - 1 : currentCount + 1;
-  countEl.textContent = newCount + (newCount === 1 ? ' like' : ' likes');
+  var current = parseInt(countEl.textContent) || 0;
+  var next = isLiked ? current - 1 : current + 1;
+  countEl.textContent = '❤️ ' + next + (next === 1 ? ' like' : ' likes');
 
-  // Send to backend without navigating away
-  fetch('/like/' + postId + '/', { method: 'GET', credentials: 'same-origin' })
-    .catch(() => {
-      // Revert on network error
+  fetch('/like/' + postId + '/', {method:'GET', credentials:'same-origin'})
+    .catch(function(){
       btn.classList.toggle('liked');
       icon.className = isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-      countEl.textContent = currentCount + (currentCount === 1 ? ' like' : ' likes');
+      countEl.textContent = '❤️ ' + current + (current === 1 ? ' like' : ' likes');
     });
 }
 
-function focusComment(inputId) {
-  const input = document.getElementById(inputId);
-  if (input) input.focus();
+// ── Toggle comments ──
+function toggleComments(postId) {
+  var wrap   = document.getElementById('cwrap-'   + postId);
+  var toggle = document.getElementById('ctoggle-' + postId);
+  var isOpen = wrap.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  var label = toggle.querySelector('span');
+  var count = wrap.querySelectorAll('.comment-item').length;
+  label.textContent = isOpen ? '💬 Hide Comments' : '💬 View Comments (' + count + ')';
 }
 
+// ── Submit comment ──
 function submitComment(postId, input) {
-  const text = input.value.trim();
-  if (!text) return;
+  var text = input.value.trim();
+  if(!text) return;
+  var fd = new FormData();
+  fd.append('comment', text);
 
-  const formData = new FormData();
-  formData.append('comment', text);
+  fetch('/comment/' + postId + '/', {method:'POST', credentials:'same-origin', body:fd})
+    .then(function(){
+      var container = document.getElementById('comments-' + postId);
+      // Remove "no comments" placeholder if present
+      var placeholder = container.querySelector('p');
+      if(placeholder) placeholder.remove();
 
-  fetch('/comment/' + postId + '/', {
-    method: 'POST',
-    credentials: 'same-origin',
-    body: formData
-  })
-  .then(() => {
-    // Append the new comment to the list without reloading
-    const commentsEl = document.getElementById('comments-' + postId);
-    const div = document.createElement('div');
-    div.className = 'comment-item';
-    div.innerHTML = `
-      <div class="comment-avatar"><i class="fa-solid fa-user"></i></div>
-      <div class="comment-bubble">
-        <strong>You</strong>${escapeHtml(text)}
-      </div>`;
-    commentsEl.appendChild(div);
-    input.value = '';
-  })
-  .catch(() => alert('Could not post comment. Please try again.'));
+      var item = document.createElement('div');
+      item.className = 'comment-item';
+      item.innerHTML =
+        '<div class="comment-avatar">🧒</div>' +
+        '<div class="comment-bubble"><strong>You</strong>' + escHtml(text) + '</div>';
+      container.appendChild(item);
+
+      // Open comments wrap so the new comment is visible
+      var wrap = document.getElementById('cwrap-' + postId);
+      var toggle = document.getElementById('ctoggle-' + postId);
+      wrap.classList.add('open');
+      toggle.classList.add('open');
+      var label = toggle.querySelector('span');
+      var count = wrap.querySelectorAll('.comment-item').length;
+      label.textContent = '💬 Hide Comments';
+
+      input.value = '';
+    })
+    .catch(function(){ alert('Could not post comment. Try again!'); });
 }
 
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+function escHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 </script>
 
 </body>

@@ -1,461 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Discover Children | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<title>Discover | LittleNet</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
 
-body{
+body{background:#fdf6ee;min-height:100vh;padding-bottom:90px;overflow-x:hidden;}
 
-background:#F5F7FB;
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.15;}
+.bg-bubbles span:nth-child(1){left:5%;width:46px;height:46px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:24%;width:27px;height:27px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:47%;width:58px;height:58px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:64%;width:36px;height:36px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:83%;width:50px;height:50px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{0%{transform:translateY(110vh) scale(.8);}100%{transform:translateY(-20vh) scale(1.2);}}
 
-color:#222;
+/* Stars */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
 
-padding-bottom:90px;
+/* Confetti */
+.confetti-dot{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:confettiFall linear infinite;}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
 
-}
-
+/* ── Header ── */
 .header{
-
-position:sticky;
-
-top:0;
-
-background:white;
-
-padding:18px 20px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-border-bottom:1px solid #E5E7EB;
-
-z-index:100;
-
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;border-bottom:2px dashed #ffe0a0;
 }
-
 .logo{
-
-font-size:28px;
-
-font-weight:700;
-
-color:#2563EB;
-
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
 }
-
-.back{
-
-color:#2563EB;
-
-font-size:15px;
-
-font-weight:600;
-
-text-decoration:none;
-
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
+.back-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:50px;
+  background:#fde8d0;color:#c2430a;font-size:14px;font-weight:800;transition:.25s;
 }
+.back-btn:hover{background:#fcb69f;transform:scale(1.05);}
 
-.container{
+/* ── Container ── */
+.container{max-width:620px;margin:0 auto;padding:18px 16px;position:relative;z-index:1;}
 
-max-width:700px;
+/* ── Page title ── */
+.page-head{margin-bottom:18px;animation:slideDown .4s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+.page-head h2{font-size:22px;font-weight:900;color:#3d2c00;}
+.page-head p{font-size:13px;font-weight:600;color:#9ca3af;margin-top:4px;}
 
-margin:25px auto;
-
-padding:0 15px;
-
+/* ── Search ── */
+.search-wrap{
+  display:flex;align-items:center;gap:10px;
+  background:white;border-radius:50px;
+  padding:11px 18px;margin-bottom:22px;
+  box-shadow:0 4px 14px rgba(0,0,0,.07);
+  border:2px solid #fff0d8;
+  animation:slideDown .4s ease .05s both;
 }
-
-.title{
-
-font-size:26px;
-
-font-weight:700;
-
-margin-bottom:8px;
-
+.search-wrap i{color:#f59e0b;font-size:16px;}
+.search-wrap input{
+  flex:1;border:none;outline:none;font-size:14px;font-weight:700;
+  background:transparent;color:#374151;font-family:'Nunito',sans-serif;
 }
+.search-wrap input::placeholder{color:#d1d5db;}
 
-.subtitle{
-
-color:#6B7280;
-
-margin-bottom:25px;
-
-}
-
-.search{
-
-background:white;
-
-padding:15px;
-
-border-radius:16px;
-
-margin-bottom:25px;
-
-box-shadow:0 5px 20px rgba(0,0,0,.05);
-
-}
-
-.search input{
-
-width:100%;
-
-padding:14px;
-
-border:none;
-
-background:#F3F4F6;
-
-border-radius:12px;
-
-outline:none;
-
-font-size:15px;
-
-}
-
+/* ── Child card ── */
 .child-card{
+  background:white;border-radius:24px;padding:16px 18px;
+  margin-bottom:14px;
+  box-shadow:0 5px 18px rgba(0,0,0,.07);
+  border:2px solid #fff0d8;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  transition:.25s;
+  animation:popIn .4s ease both;
+  position:relative;overflow:hidden;
+}
+.child-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(0,0,0,.11);}
+.child-card.hidden{display:none;}
 
-background:white;
+/* Card shine sweep on hover */
+.child-card::before{
+  content:'';position:absolute;top:0;left:-75%;width:50%;height:100%;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-15deg);transition:left .5s;pointer-events:none;
+}
+.child-card:hover::before{left:125%;}
 
-border-radius:20px;
-
-padding:20px;
-
-margin-bottom:18px;
-
-box-shadow:0 5px 20px rgba(0,0,0,.06);
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-transition:.3s;
-
+/* stagger */
+.child-card:nth-child(1){animation-delay:.04s;}
+.child-card:nth-child(2){animation-delay:.08s;}
+.child-card:nth-child(3){animation-delay:.12s;}
+.child-card:nth-child(4){animation-delay:.16s;}
+.child-card:nth-child(5){animation-delay:.20s;}
+.child-card:nth-child(6){animation-delay:.24s;}
+.child-card:nth-child(7){animation-delay:.28s;}
+.child-card:nth-child(8){animation-delay:.32s;}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.88) translateY(14px);}
+  70%{transform:scale(1.02) translateY(-3px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
 }
 
-.child-card:hover{
+.left{display:flex;align-items:center;gap:14px;min-width:0;}
 
-transform:translateY(-3px);
-
-}
-
-.left{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-}
-
+/* Avatar */
 .avatar{
+  width:58px;height:58px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#7c3700;
+  border:3px solid white;
+  box-shadow:0 4px 14px rgba(249,132,74,.25);
+  overflow:hidden;
+  animation:avatarFloat 3s ease-in-out infinite;
+}
+.child-card:nth-child(even) .avatar{animation-delay:.8s;}
+@keyframes avatarFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 
-width:65px;
-
-height:65px;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-color:white;
-
-font-size:26px;
-
+.child-info{min-width:0;}
+.child-name{font-size:16px;font-weight:900;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.child-followers{
+  font-size:12px;font-weight:700;color:#9ca3af;
+  margin-top:4px;display:flex;align-items:center;gap:5px;
 }
 
-.name{
-
-font-size:18px;
-
-font-weight:600;
-
-}
-
-.followers{
-
-font-size:14px;
-
-color:#6B7280;
-
-margin-top:5px;
-
-}
-
+/* Follow / Following buttons */
 .follow-btn{
-
-padding:10px 22px;
-
-border-radius:25px;
-
-background:#2563EB;
-
-color:white;
-
-text-decoration:none;
-
-font-weight:600;
-
-transition:.3s;
-
+  padding:10px 20px;border-radius:50px;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-size:13px;font-weight:900;
+  white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 12px rgba(249,132,74,.25);
+  transition:.25s;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  display:inline-flex;align-items:center;gap:6px;
 }
+.follow-btn:hover{transform:scale(1.06);box-shadow:0 6px 18px rgba(249,132,74,.35);}
 
-.follow-btn:hover{
-
-background:#1D4ED8;
-
+.following-btn{
+  padding:10px 20px;border-radius:50px;
+  background:#f0fdf4;color:#15803d;
+  font-size:13px;font-weight:900;
+  white-space:nowrap;flex-shrink:0;
+  border:2px solid #bbf7d0;
+  transition:.25s;
+  display:inline-flex;align-items:center;gap:6px;
 }
+.following-btn:hover{background:#dcfce7;transform:scale(1.04);}
 
-.following{
-
-padding:10px 22px;
-
-border-radius:25px;
-
-background:#E5F3FF;
-
-color:#2563EB;
-
-text-decoration:none;
-
-font-weight:600;
-
-border:1px solid #2563EB;
-
+/* ── Empty state ── */
+.empty{
+  text-align:center;padding:60px 20px;
+  animation:popIn .5s ease;
 }
+.empty .icon{font-size:60px;margin-bottom:14px;animation:iconFloat 3s ease-in-out infinite;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.empty p{font-size:16px;font-weight:700;color:#9ca3af;}
 
+/* search-empty */
+#searchEmpty{display:none;}
+
+/* ── Bottom nav ── */
 .bottom-nav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;border-top:2px dashed #ffe0a0;
 }
-
-.bottom-nav a{
-
-font-size:24px;
-
-color:#555;
-
-transition:.3s;
-
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
 }
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
+.nav-item.active{color:#e76f51;}
 
-.bottom-nav a:hover{
-
-color:#2563EB;
-
-}
-
-@media(max-width:768px){
-
-.child-card{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:18px;
-
-}
-
-.follow-btn,
-
-.following{
-
-width:100%;
-
-text-align:center;
-
-}
-
+@media(max-width:480px){
+  .child-card{flex-wrap:wrap;}
+  .follow-btn,.following-btn{width:100%;justify-content:center;}
 }
 
 </style>
-
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
 </div>
 
-<a href="/child/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
+<!-- Header -->
+<div class="header">
+  <div class="logo">🌟 LittleNet</div>
+  <a href="/child/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Dashboard
+  </a>
 </div>
 
 <div class="container">
 
-<div class="title">
+  <!-- Page title -->
+  <div class="page-head">
+    <h2>🧭 Discover Friends</h2>
+    <p>Find new friends and connect in a safe environment 🌈</p>
+  </div>
 
-Discover Children
+  <!-- Search -->
+  <div class="search-wrap">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" id="searchInput" placeholder="Search children…" onkeyup="filterCards()" autocomplete="off">
+  </div>
 
-</div>
+  <!-- Child cards -->
+  {% if children %}
+    {% for child in children %}
+    <div class="child-card" data-name="{{ child.full_name|lower }}">
 
-<div class="subtitle">
+      <div class="left">
+        <!-- DP -->
+        <div class="avatar">
+          {% if child.profile_picture %}
+            <img src="/{{ child.profile_picture }}" alt="dp">
+          {% else %}
+            {{ child.full_name[0]|upper if child.full_name else '?' }}
+          {% endif %}
+        </div>
 
-Find new friends and connect in a safe environment.
+        <div class="child-info">
+          <div class="child-name">{{ child.full_name }}</div>
+          <div class="child-followers">
+            <i class="fa-solid fa-user-group"></i>
+            {{ child.followers }} Follower{{ 's' if child.followers != 1 else '' }}
+          </div>
+        </div>
+      </div>
 
-</div>
+      {% if child.is_following %}
+        <a href="/unfollow/{{ child.user_id }}/" class="following-btn">
+          <i class="fa-solid fa-check"></i> Following
+        </a>
+      {% else %}
+        <a href="/follow/{{ child.user_id }}/" class="follow-btn">
+          <i class="fa-solid fa-user-plus"></i> Follow
+        </a>
+      {% endif %}
 
-<div class="search">
+    </div>
+    {% endfor %}
 
-<input type="text" placeholder="Search children...">
+  {% else %}
+    <div class="empty">
+      <div class="icon">👥</div>
+      <p>No children found yet.<br>Check back soon! 🌟</p>
+    </div>
+  {% endif %}
 
-</div>
-
-{% for child in children %}
-
-<div class="child-card">
-
-<div class="left">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div>
-
-<div class="name">
-
-{{ child.full_name }}
-
-</div>
-
-<div class="followers">
-
-<i class="fa-solid fa-user-group"></i>
-
-{{ child.followers }} Followers
-
-</div>
-
-</div>
-
-</div>
-
-{% if child.is_following %}
-
-<a href="/unfollow/{{ child.user_id }}/" class="following">
-
-<i class="fa-solid fa-check"></i>
-
-Following
-
-</a>
-
-{% else %}
-
-<a href="/follow/{{ child.user_id }}/" class="follow-btn">
-
-<i class="fa-solid fa-user-plus"></i>
-
-Follow
-
-</a>
-
-{% endif %}
+  <!-- Search empty state -->
+  <div class="empty" id="searchEmpty">
+    <div class="icon">🔍</div>
+    <p>No one found.<br>Try a different name.</p>
+  </div>
 
 </div>
 
-{% endfor %}
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="/feed/"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a class="nav-item active" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a>
+  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i><span>Post</span></a>
+  <a class="nav-item" href="/messages/"><i class="fa-regular fa-comment-dots"></i><span>Chat</span></a>
+  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i><span>Me</span></a>
+</nav>
 
-</div>
+<script>
+// ── Stars ──
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
 
-<div class="bottom-nav">
+// ── Confetti ──
+(function(){
+  var colors=['#ffd6e0','#c3b1e1','#b5ead7','#ffdac1','#a8d8ea','#ffe066'];
+  for(var i=0;i<8;i++){
+    var d=document.createElement('div');d.className='confetti-dot';
+    var sz=Math.random()*7+4;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(Math.random()*10+8)+'s;animation-delay:'+Math.random()*8+'s;opacity:.5';
+    document.body.appendChild(d);
+  }
+})();
 
-<a href="/feed/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-</div>
+// ── Search filter ──
+function filterCards(){
+  var q=document.getElementById('searchInput').value.toLowerCase().trim();
+  var cards=document.querySelectorAll('.child-card');
+  var visible=0;
+  cards.forEach(function(c){
+    var match=c.dataset.name.includes(q);
+    c.classList.toggle('hidden',!match);
+    if(match)visible++;
+  });
+  document.getElementById('searchEmpty').style.display=
+    (cards.length>0&&visible===0)?'block':'none';
+}
+</script>
 
 </body>
-
 </html>

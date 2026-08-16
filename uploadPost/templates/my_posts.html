@@ -1,470 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>My Posts | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
 
 body{
-background:#f5f7fb;
-padding-bottom:90px;
+  background:#fdf6ee;
+  min-height:100vh;
+  padding-bottom:90px;
+  overflow-x:hidden;
 }
 
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.15;}
+.bg-bubbles span:nth-child(1){left:6%;width:48px;height:48px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:25%;width:28px;height:28px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:48%;width:60px;height:60px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:64%;width:36px;height:36px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:82%;width:50px;height:50px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{0%{transform:translateY(110vh) scale(.8);}100%{transform:translateY(-20vh) scale(1.2);}}
+
+/* ── Stars ── */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
+
+/* ── Confetti ── */
+.confetti-dot{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:confettiFall linear infinite;}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+
+/* ── Header ── */
 .header{
-
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:1000;
-
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+  border-bottom:2px dashed #ffe0a0;
 }
-
 .logo{
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
+}
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
+.back-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:50px;
+  background:#fde8d0;color:#c2430a;font-size:14px;font-weight:800;transition:.25s;
+}
+.back-btn:hover{background:#fcb69f;transform:scale(1.05);}
 
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
+/* ── Page title ── */
+.page-title{
+  max-width:600px;margin:18px auto 10px;padding:0 16px;
+  font-size:20px;font-weight:900;color:#3d2c00;
+  display:flex;align-items:center;gap:8px;
 }
 
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
+/* ── Empty state ── */
+.empty{
+  text-align:center;padding:60px 20px;color:#9ca3af;
+  animation:popIn .5s ease;
 }
-
-.container{
-
-max-width:700px;
-margin:25px auto;
-padding:0 15px;
-
+.empty .empty-icon{font-size:64px;margin-bottom:14px;}
+.empty p{font-size:16px;font-weight:700;}
+.empty a{
+  display:inline-block;margin-top:18px;padding:12px 24px;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-weight:900;border-radius:50px;
+  box-shadow:0 6px 18px rgba(249,132,74,.25);transition:.25s;
 }
+.empty a:hover{transform:translateY(-3px);}
 
-.post{
-
-background:white;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:25px;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-
+/* ── Post card ── */
+.post-card{
+  max-width:600px;margin:0 auto 20px;
+  background:white;border-radius:28px;overflow:hidden;
+  box-shadow:0 6px 24px rgba(0,0,0,.08);
+  border:2px solid #fff0d8;
+  animation:popIn .5s ease both;
+  position:relative;z-index:1;
 }
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.88) translateY(16px);}
+  70%{transform:scale(1.02) translateY(-3px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+.post-card:nth-child(1){animation-delay:.05s;}
+.post-card:nth-child(2){animation-delay:.1s;}
+.post-card:nth-child(3){animation-delay:.15s;}
+.post-card:nth-child(4){animation-delay:.2s;}
+.post-card:nth-child(5){animation-delay:.25s;}
 
+/* Post header */
 .post-header{
-
-padding:18px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 18px;
 }
+.user-row{display:flex;align-items:center;gap:12px;}
 
-.user{
-
-display:flex;
-align-items:center;
-gap:15px;
-
-}
-
+/* Avatar */
 .avatar{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;overflow:hidden;flex-shrink:0;
+  border:2px solid white;
+  box-shadow:0 3px 10px rgba(249,132,74,.22);
+}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 
-width:55px;
-height:55px;
-border-radius:50%;
-background:linear-gradient(135deg,#2563EB,#4F46E5);
+.user-name{font-size:16px;font-weight:900;color:#1f2937;}
+.user-sub{font-size:12px;font-weight:600;color:#9ca3af;margin-top:1px;}
 
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-font-size:22px;
-
+/* Category chip on header */
+.cat-badge{
+  padding:5px 12px;border-radius:50px;
+  font-size:11px;font-weight:800;
+  background:#fef3c7;color:#78350f;
 }
 
-.name{
+/* Media */
+.post-media{width:100%;display:block;max-height:480px;object-fit:cover;}
 
-font-weight:600;
-font-size:18px;
+/* Content area */
+.post-content{padding:14px 18px 0;}
+.caption{font-size:14px;font-weight:600;color:#374151;line-height:1.7;margin-bottom:12px;}
 
+/* Like / comment stats */
+.stats-row{
+  display:flex;gap:18px;align-items:center;
+  padding:10px 0;
+  border-top:1px solid #f5f5f5;
+  border-bottom:1px solid #f5f5f5;
+  margin-bottom:12px;
+}
+.stat-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:800;color:#6b7280;
+}
+.stat-item span{font-size:16px;}
+
+/* ── Comments toggle ── */
+.comments-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;padding:8px 0 10px;
+  font-size:14px;font-weight:800;color:#e76f51;
+  user-select:none;
+}
+.comments-toggle i{transition:transform .3s;}
+.comments-toggle.open i{transform:rotate(180deg);}
+
+/* Comments list (hidden by default) */
+.comments-list{
+  display:none;
+  background:#fdf6ee;border-radius:16px;
+  padding:10px 12px;margin-bottom:12px;
+  max-height:240px;overflow-y:auto;
+}
+.comments-list.open{display:block;animation:slideDown .3s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.comment-item{
+  padding:8px 0;border-bottom:1px dashed #f0e8d8;
+  font-size:13px;line-height:1.5;
+}
+.comment-item:last-child{border:none;}
+.comment-item strong{color:#e76f51;font-weight:800;}
+.no-comments{
+  font-size:13px;font-weight:700;color:#9ca3af;
+  text-align:center;padding:8px 0;
 }
 
-.post img,
-.post video{
-
-width:100%;
-display:block;
-max-height:500px;
-object-fit:cover;
-
-}
-
-.content{
-
-padding:20px;
-
-}
-
-.caption{
-
-margin-bottom:15px;
-line-height:1.7;
-
-}
-
-.stats{
-
-display:flex;
-gap:25px;
-font-weight:600;
-margin-bottom:20px;
-
-}
-
-.comments{
-
-background:#f8f9fc;
-padding:15px;
-border-radius:15px;
-margin-bottom:20px;
-
-}
-
-.comment{
-
-padding:10px 0;
-border-bottom:1px solid #e5e5e5;
-
-}
-
-.comment:last-child{
-
-border:none;
-
-}
-
-.comment strong{
-
-color:#2563EB;
-
-}
-
+/* Comment input */
 .comment-form{
-
-display:flex;
-gap:10px;
-margin-bottom:20px;
-
+  display:flex;gap:8px;padding-bottom:14px;
 }
-
 .comment-form input{
-
-flex:1;
-padding:12px;
-border-radius:12px;
-border:1px solid #ddd;
-outline:none;
-
+  flex:1;padding:10px 14px;
+  border:2px solid #f0f0f0;border-radius:50px;
+  font-size:13px;font-weight:600;outline:none;
+  background:#fafafa;transition:.2s;
+  font-family:'Nunito',sans-serif;
 }
-
+.comment-form input:focus{border-color:#fbbf24;background:white;}
 .comment-form button{
-
-padding:12px 20px;
-border:none;
-background:#2563EB;
-color:white;
-border-radius:12px;
-cursor:pointer;
-
+  padding:10px 16px;border:none;border-radius:50px;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-size:13px;font-weight:900;
+  cursor:pointer;transition:.2s;white-space:nowrap;
+  font-family:'Nunito',sans-serif;
 }
+.comment-form button:hover{transform:scale(1.05);}
 
-.delete{
-
-display:inline-block;
-padding:12px 18px;
-background:#ef4444;
-color:white;
-text-decoration:none;
-border-radius:12px;
-font-weight:600;
-
+/* Delete button */
+.delete-btn{
+  display:flex;align-items:center;gap:6px;
+  margin:0 18px 16px;padding:11px 16px;border:none;
+  background:#fff0f0;color:#dc2626;font-size:13px;font-weight:800;
+  border-radius:14px;cursor:pointer;transition:.25s;width:calc(100% - 36px);
+  justify-content:center;font-family:'Nunito',sans-serif;
 }
+.delete-btn:hover{background:#fee2e2;transform:scale(1.02);}
 
-.delete:hover{
-
-background:#dc2626;
-
-}
-
+/* ── Bottom nav ── */
 .bottom-nav{
-
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
-
-display:flex;
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;
+  border-top:2px dashed #ffe0a0;
 }
-
-.bottom-nav a{
-
-font-size:24px;
-color:#555;
-text-decoration:none;
-
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
 }
-
-.bottom-nav a:hover{
-
-color:#2563EB;
-
-}
-
-@media(max-width:768px){
-
-.logo{
-
-font-size:24px;
-
-}
-
-.comment-form{
-
-flex-direction:column;
-
-}
-
-.comment-form button{
-
-width:100%;
-
-}
-
-}
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
+.nav-item.active{color:#e76f51;}
 
 </style>
-
 </head>
-
 <body>
 
+<!-- Floating bubbles -->
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Header -->
 <div class="header">
-
-<div class="logo">
-
-LittleNet
-
+  <div class="logo">🌟 LittleNet</div>
+  <a href="/child/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Dashboard
+  </a>
 </div>
 
-<a href="/child/dashboard/" class="back">
+<div class="page-title">🖼️ My Posts</div>
 
-<i class="fa-solid fa-arrow-left"></i>
+{% if posts %}
 
-Dashboard
+  {% for post in posts %}
+  <div class="post-card">
 
-</a>
+    <!-- Post header with real DP -->
+    <div class="post-header">
+      <div class="user-row">
+        <div class="avatar">
+          {% if profile and profile.profile_picture %}
+            <img src="/{{ profile.profile_picture }}" alt="DP">
+          {% else %}
+            🧒
+          {% endif %}
+        </div>
+        <div>
+          <div class="user-name">{{ profile.full_name if profile else 'Me' }}</div>
+          <div class="user-sub">{{ post.created_at.strftime('%d %b %Y') if post.created_at else '' }}</div>
+        </div>
+      </div>
+      {% if post.content_category %}
+      <div class="cat-badge">{{ post.content_category }}</div>
+      {% endif %}
+    </div>
 
-</div>
+    <!-- Media -->
+    {% if post.media_type == "IMAGE" %}
+      <img class="post-media" src="/{{ post.media_path }}" alt="post">
+    {% elif post.media_type == "VIDEO" %}
+      <video class="post-media" controls>
+        <source src="/{{ post.media_path }}">
+      </video>
+    {% endif %}
 
-<div class="container">
+    <!-- Content -->
+    <div class="post-content">
 
-{% for post in posts %}
+      {% if post.caption %}
+      <div class="caption">{{ post.caption }}</div>
+      {% endif %}
 
-<div class="post">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-item"><span>❤️</span> {{ post.likes }} Likes</div>
+        <div class="stat-item"><span>💬</span> {{ post.comments_count }} Comments</div>
+      </div>
 
-<div class="post-header">
+      <!-- Comments toggle -->
+      <div class="comments-toggle" id="toggle-{{ post.post_id }}"
+           onclick="toggleComments({{ post.post_id }})">
+        <span>💬 View Comments ({{ post.comments | length }})</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
 
-<div class="user">
+      <!-- Comments list (hidden by default) -->
+      <div class="comments-list" id="comments-{{ post.post_id }}">
+        {% if post.comments %}
+          {% for comment in post.comments %}
+          <div class="comment-item">
+            <strong>{{ comment.full_name }}</strong> {{ comment.comment_text }}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="no-comments">No comments yet. Be the first! 🌟</div>
+        {% endif %}
+      </div>
 
-<div class="avatar">
+      <!-- Add comment -->
+      <form class="comment-form" action="/comment/{{ post.post_id }}/" method="POST">
+        <input type="text" name="comment" placeholder="Add a comment… ✨" required>
+        <button type="submit">Send</button>
+      </form>
 
-<i class="fa-solid fa-user"></i>
+    </div><!-- /post-content -->
 
-</div>
+    <!-- Delete -->
+    <a href="/delete-post/{{ post.post_id }}/"
+       onclick="return confirm('Delete this post? 🗑️')"
+       class="delete-btn">
+      <i class="fa-solid fa-trash"></i> Delete Post
+    </a>
 
-<div class="name">
+  </div><!-- /post-card -->
+  {% endfor %}
 
-My Post
-
-</div>
-
-</div>
-
-</div>
-
-{% if post.media_type=="IMAGE" %}
-
-<img src="/{{ post.media_path }}">
-
+{% else %}
+  <div class="empty">
+    <div class="empty-icon">📭</div>
+    <p>No posts yet!<br>Share something fun 🎉</p>
+    <a href="/child/upload-post/">📸 Create my first post</a>
+  </div>
 {% endif %}
 
-{% if post.media_type=="VIDEO" %}
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="/feed/">
+    <i class="fa-solid fa-house"></i><span>Home</span>
+  </a>
+  <a class="nav-item" href="/discover/">
+    <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
+  </a>
+  <a class="nav-item" href="/child/upload-post/">
+    <i class="fa-solid fa-square-plus"></i><span>Post</span>
+  </a>
+  <a class="nav-item" href="/messages/">
+    <i class="fa-regular fa-comment-dots"></i><span>Chat</span>
+  </a>
+  <a class="nav-item" href="/child/profile/">
+    <i class="fa-solid fa-user"></i><span>Me</span>
+  </a>
+</nav>
 
-<video controls>
+<script>
+// ── Stars ──
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
 
-<source src="/{{ post.media_path }}">
+// ── Confetti ──
+(function(){
+  var colors=['#ffd6e0','#c3b1e1','#b5ead7','#ffdac1','#a8d8ea','#ffe066'];
+  for(var i=0;i<8;i++){
+    var d=document.createElement('div');d.className='confetti-dot';
+    var sz=Math.random()*7+4;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(Math.random()*10+8)+'s;animation-delay:'+Math.random()*8+'s;opacity:.5';
+    document.body.appendChild(d);
+  }
+})();
 
-</video>
-
-{% endif %}
-
-<div class="content">
-
-<div class="caption">
-
-{{ post.caption }}
-
-</div>
-
-<div class="stats">
-
-<div>
-
-❤️ {{ post.likes }}
-
-</div>
-
-<div>
-
-💬 {{ post.comments_count }}
-
-</div>
-
-</div>
-
-<div class="comments">
-
-<h4>
-
-Comments
-
-</h4>
-
-{% for comment in post.comments %}
-
-<div class="comment">
-
-<strong>
-
-{{ comment.full_name }}
-
-</strong>
-
-<br>
-
-{{ comment.comment_text }}
-
-</div>
-
-{% endfor %}
-
-</div>
-
-<form
-class="comment-form"
-action="/comment/{{ post.post_id }}/"
-method="POST">
-
-<input
-type="text"
-name="comment"
-placeholder="Write a comment..."
-required>
-
-<button type="submit">
-
-Comment
-
-</button>
-
-</form>
-
-<a
-class="delete"
-href="/delete-post/{{ post.post_id }}/">
-
-<i class="fa-solid fa-trash"></i>
-
-Delete Post
-
-</a>
-
-</div>
-
-</div>
-
-{% endfor %}
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/child/dashboard/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart" style="color:#2563EB;"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-</div>
+// ── Toggle comments ──
+function toggleComments(postId) {
+  var list   = document.getElementById('comments-' + postId);
+  var toggle = document.getElementById('toggle-' + postId);
+  var isOpen = list.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+  var label = toggle.querySelector('span');
+  var count  = list.querySelectorAll('.comment-item').length;
+  label.textContent = isOpen
+    ? '💬 Hide Comments'
+    : '💬 View Comments (' + count + ')';
+}
+</script>
 
 </body>
-
 </html>

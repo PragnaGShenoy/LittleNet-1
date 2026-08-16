@@ -1,495 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LittleNet Profile</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<title>My Profile | LittleNet</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
 
 body{
-
-background:#F5F7FB;
-
-padding:20px;
-
-color:#222;
-
+  background:#fdf6ee;
+  min-height:100vh;
+  padding-bottom:90px;
+  overflow-x:hidden;
 }
 
-.container{
-
-max-width:700px;
-
-margin:auto;
-
+/* ── Floating bubbles ── */
+.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.18;}
+.bg-bubbles span:nth-child(1){left:6%;width:48px;height:48px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
+.bg-bubbles span:nth-child(2){left:25%;width:28px;height:28px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
+.bg-bubbles span:nth-child(3){left:45%;width:60px;height:60px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
+.bg-bubbles span:nth-child(4){left:62%;width:38px;height:38px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
+.bg-bubbles span:nth-child(5){left:80%;width:52px;height:52px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
+@keyframes floatUp{
+  0%{transform:translateY(110vh) scale(.8);}
+  100%{transform:translateY(-20vh) scale(1.2);}
 }
 
-.profile-card{
+/* ── Stars ── */
+.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
 
-background:white;
-
-border-radius:22px;
-
-padding:30px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
+/* ── Header ── */
 .header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:30px;
-
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+  border-bottom:2px dashed #ffe0a0;
 }
-
 .logo{
-
-font-size:28px;
-
-font-weight:700;
-
-color:#2563EB;
-
+  font-size:24px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoBounce 3s ease-in-out infinite;
 }
+@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
+.header-icons{display:flex;gap:12px;}
+.header-icons a{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;color:#6b7280;background:#f3f4f6;transition:.25s;
+}
+.header-icons a:hover{background:#fde8d0;color:#e76f51;transform:scale(1.15) rotate(-8deg);}
 
+/* ── Profile card wrapper ── */
+.page{max-width:520px;margin:0 auto;padding:18px 16px;}
+
+/* ── Avatar section ── */
+.avatar-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  margin-bottom:10px;animation:popIn .5s ease;
+}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.7) translateY(16px);}
+  70%{transform:scale(1.06) translateY(-4px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
 .avatar{
-
-width:120px;
-
-height:120px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:48px;
-
-color:white;
-
-margin-bottom:20px;
-
-overflow:hidden;
-
+  width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:46px;overflow:hidden;
+  border:4px solid white;
+  box-shadow:0 8px 28px rgba(249,132,74,.28);
+  animation:avatarFloat 3s ease-in-out infinite;
 }
-
-.avatar img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
+@keyframes avatarFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 
 .name{
-
-text-align:center;
-
-font-size:28px;
-
-font-weight:700;
-
+  margin-top:14px;font-size:26px;font-weight:900;color:#1f2937;
+  animation:slideDown .5s ease .1s both;
 }
-
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);}}
 .bio{
-
-text-align:center;
-
-color:#666;
-
-margin-top:10px;
-
-margin-bottom:25px;
-
-line-height:1.6;
-
+  margin-top:6px;font-size:14px;color:#6b7280;font-weight:600;
+  text-align:center;line-height:1.6;
+  animation:slideDown .5s ease .2s both;
 }
 
+/* ── Stats row ── */
 .stats{
-
-display:flex;
-
-justify-content:space-around;
-
-margin-bottom:30px;
-
+  display:flex;justify-content:space-around;
+  background:white;border-radius:24px;padding:18px 12px;
+  margin:18px 0;
+  box-shadow:0 4px 16px rgba(0,0,0,.07);
+  border:2px solid #fff0d8;
+  animation:popIn .5s ease .15s both;
 }
+.stat{text-align:center;flex:1;}
+.stat h3{font-size:24px;font-weight:900;color:#e76f51;}
+.stat h3 a{color:inherit;}
+.stat p{font-size:12px;color:#9ca3af;font-weight:700;margin-top:3px;}
+.stat-divider{width:1px;background:#f0f0f0;margin:4px 0;}
 
-.stat{
-
-text-align:center;
-
+/* ── Info cards ── */
+.info-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-bottom:14px;
+  animation:slideDown .5s ease .25s both;
 }
-
-.stat h3{
-
-color:#2563EB;
-
-font-size:24px;
-
+.info-item{
+  border-radius:20px;padding:16px;
+  display:flex;flex-direction:column;gap:6px;
+  transition:.25s;
 }
+.info-item:hover{transform:translateY(-4px);}
+.info-item h4{font-size:13px;font-weight:800;margin-bottom:2px;}
+.info-item p{font-size:14px;font-weight:700;color:#1f2937;}
 
-.stat p{
+.info-age     {background:linear-gradient(135deg,#fce7f3,#fbcfe8);}
+.info-age h4  {color:#be185d;}
+.info-school  {background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
+.info-school h4{color:#1d4ed8;}
+.info-loc     {background:linear-gradient(135deg,#d1fae5,#a7f3d0);}
+.info-loc h4  {color:#065f46;}
+.info-class   {background:linear-gradient(135deg,#ede9fe,#ddd6fe);}
+.info-class h4{color:#5b21b6;}
 
-font-size:14px;
-
-color:#777;
-
-margin-top:5px;
-
+/* ── Edit button ── */
+.edit-btn{
+  display:block;width:100%;padding:16px;border:none;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  color:#7c3700;font-size:16px;font-weight:900;border-radius:20px;
+  cursor:pointer;transition:.25s;
+  box-shadow:0 6px 20px rgba(249,132,74,.25);
+  animation:popIn .5s ease .35s both;
+  text-align:center;
 }
+.edit-btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 30px rgba(249,132,74,.35);}
+.edit-btn:active{transform:scale(.97);}
 
-.info{
-
-display:grid;
-
-grid-template-columns:1fr 1fr;
-
-gap:18px;
-
-margin-top:20px;
-
-}
-
-.item{
-
-background:#F8FAFC;
-
-padding:18px;
-
-border-radius:16px;
-
-}
-
-.item h4{
-
-color:#2563EB;
-
-margin-bottom:8px;
-
-font-size:15px;
-
-}
-
-.edit{
-
-margin-top:35px;
-
-}
-
-.edit button{
-
-width:100%;
-
-padding:15px;
-
-border:none;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-color:white;
-
-font-size:16px;
-
-font-weight:600;
-
-border-radius:14px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.edit button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.25);
-
-}
-
+/* ── Bottom nav ── */
 .bottom-nav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;
+  border-top:2px dashed #ffe0a0;
 }
-
-.bottom-nav a{
-
-font-size:24px;
-
-color:#444;
-
-transition:.3s;
-
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:#9ca3af;font-size:10px;font-weight:700;
+  transition:.2s;padding:6px 10px;border-radius:16px;
 }
+.nav-item i{font-size:22px;transition:.25s;}
+.nav-item:hover{color:#e76f51;}
+.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
 
-.bottom-nav a:hover{
-
-color:#2563EB;
-
+/* ── Confetti ── */
+.confetti-dot{
+  position:fixed;border-radius:50%;pointer-events:none;z-index:0;
+  animation:confettiFall linear infinite;
 }
-
-@media(max-width:700px){
-
-.info{
-
-grid-template-columns:1fr;
-
-}
-
-.avatar{
-
-width:100px;
-
-height:100px;
-
-font-size:40px;
-
-}
-
-.name{
-
-font-size:24px;
-
-}
-
+@keyframes confettiFall{
+  0%{transform:translateY(-10vh) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(360deg);opacity:0;}
 }
 
 </style>
-
 </head>
-
 <body>
 
-<div class="container">
+<!-- Floating bubbles -->
+<div class="bg-bubbles">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
 
-<div class="profile-card">
-
+<!-- Header -->
 <div class="header">
+  <div class="logo">🌟 LittleNet</div>
+  <div class="header-icons">
+    <a href="/child/dashboard/" title="Home"><i class="fa-solid fa-house"></i></a>
+    <a href="/logout/" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+  </div>
+</div>
 
-<div class="logo">
+<div class="page">
 
-LittleNet
+  <!-- Avatar + Name -->
+  <div class="avatar-wrap">
+    <div class="avatar">
+      {% if profile.profile_picture %}
+      <img src="/{{ profile.profile_picture }}" alt="Profile">
+      {% else %}
+      🧒
+      {% endif %}
+    </div>
+    <div class="name">{{ profile.full_name }}</div>
+    <div class="bio">{{ profile.bio or 'No bio yet ✏️' }}</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <h3>{{ post_count }}</h3>
+      <p>Posts</p>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <h3><a href="/followers/">{{ followers_count }}</a></h3>
+      <p>Followers</p>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <h3><a href="/following/">{{ following_count }}</a></h3>
+      <p>Following</p>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div class="info-grid">
+    <div class="info-item info-age">
+      <h4>🎂 Age</h4>
+      <p>{{ profile.age if profile.age else '—' }} years</p>
+    </div>
+    <div class="info-item info-school">
+      <h4>🏫 School</h4>
+      <p>{{ profile.school_name or '—' }}</p>
+    </div>
+    <div class="info-item info-loc">
+      <h4>📍 Location</h4>
+      <p>{{ profile.location or '—' }}</p>
+    </div>
+    <div class="info-item info-class">
+      <h4>📚 Class</h4>
+      <p>{{ profile.current_class or '—' }}</p>
+    </div>
+  </div>
+
+  <!-- Edit button -->
+  <a href="/child/edit-profile/" class="edit-btn">
+    ✏️ Edit Profile
+  </a>
 
 </div>
 
-<i class="fa-solid fa-ellipsis-vertical"></i>
-
-</div>
-
-<div class="avatar">
-
-{% if profile.profile_picture %}
-<img src="/{{ profile.profile_picture }}" alt="Profile">
-{% else %}
-<i class="fa-solid fa-user"></i>
-{% endif %}
-
-</div>
-
-<div class="name">
-
-{{ profile.full_name }}
-
-</div>
-
-<div class="bio">
-
-{{ profile.bio }}
-
-</div>
-
-<div class="stats">
-
-<div class="stat">
-
-<h3>
-
-<a href="/followers/">
-
-Followers
-
-</a>
-
-</h3>
-
-<p>Friends</p>
-
-</div>
-
-<div class="stat">
-
-<h3>
-
-<a href="/following/">
-
-Following
-
-</a>
-
-</h3>
-
-<p>Following</p>
-
-</div>
-
-</div>
-
-<div class="info">
-
-<div class="item">
-
-<h4>
-
-🎂 Age
-
-</h4>
-
-{{ profile.age }}
-
-</div>
-
-<div class="item">
-
-<h4>
-
-🏫 School
-
-</h4>
-
-{{ profile.school_name }}
-
-</div>
-
-<div class="item">
-
-<h4>
-
-📍 Location
-
-</h4>
-
-{{ profile.location }}
-
-</div>
-
-<div class="item">
-
-<h4>
-
-📚 Class
-
-</h4>
-
-{{ profile.current_class }}
-
-</div>
-
-</div>
-
-<div class="edit">
-
-<a href="/child/edit-profile/">
-
-<button>
-
-<i class="fa-solid fa-pen"></i>
-
-Edit Profile
-
-</button>
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/feed/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-</div>
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a class="nav-item" href="/feed/">
+    <i class="fa-solid fa-house"></i><span>Home</span>
+  </a>
+  <a class="nav-item" href="/discover/">
+    <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
+  </a>
+  <a class="nav-item" href="/child/upload-post/">
+    <i class="fa-solid fa-square-plus"></i><span>Post</span>
+  </a>
+  <a class="nav-item" href="/messages/">
+    <i class="fa-regular fa-comment-dots"></i><span>Chat</span>
+  </a>
+  <a class="nav-item active" href="/child/profile/">
+    <i class="fa-solid fa-user"></i><span>Me</span>
+  </a>
+</nav>
+
+<script>
+// Stars
+(function(){
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div');
+    s.className='star';
+    var sz=Math.random()*5+3;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
+    document.body.appendChild(s);
+  }
+})();
+
+// Confetti
+(function(){
+  var colors=['#ffd6e0','#c3b1e1','#b5ead7','#ffdac1','#a8d8ea','#ffe066'];
+  for(var i=0;i<8;i++){
+    var d=document.createElement('div');
+    d.className='confetti-dot';
+    var sz=Math.random()*7+4;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;background:'+colors[Math.floor(Math.random()*colors.length)]+';animation-duration:'+(Math.random()*10+8)+'s;animation-delay:'+Math.random()*8+'s;opacity:.5';
+    document.body.appendChild(d);
+  }
+})();
+</script>
 
 </body>
-
 </html>

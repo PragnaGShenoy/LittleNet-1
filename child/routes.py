@@ -5,7 +5,7 @@ from flask import render_template
 from flask import session
 from werkzeug.utils import secure_filename
 
-from child.service import create_child_profile, follow_child, get_followers, get_following, get_post_comments, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, unfollow_child, update_child_profile, update_profile_picture
+from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, unfollow_child, update_child_profile, update_profile_picture
 from child.service import get_child_profile
 from parent.service import get_time_limit
 from quiz.service import get_child_quiz_settings, get_quiz_for_child
@@ -103,13 +103,15 @@ def profile():
     if "user_id" not in session:
         return redirect("/login/")
 
-    profile_data = get_child_profile(
-        session["user_id"]
-    )
+    child_id = session["user_id"]
+    profile_data = get_child_profile(child_id)
 
     return render_template(
         "profile.html",
-        profile=profile_data
+        profile=profile_data,
+        post_count=get_post_count(child_id),
+        followers_count=get_followers_count(child_id),
+        following_count=get_following_count(child_id),
     )
 
 
