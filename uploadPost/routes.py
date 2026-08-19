@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import session
+from flask import jsonify
 from child.service import follow_child, get_child_profile, is_following
 from uploadPost.ml_service import check_image_safety, check_video_safety
 from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments,  like_post, save_post
@@ -69,12 +70,7 @@ def upload_post():
 
                 os.remove(filepath)
 
-                return f"""
-                    Upload Rejected
-
-                Reason:
-                    {moderation['category']}
-                """
+                return jsonify(success=False, category=moderation["category"])
 
             save_post(
                 session["user_id"],
@@ -84,9 +80,7 @@ def upload_post():
                 request.form["content_category"]
              )
 
-            return """
-               Image Uploaded Successfully
-            """
+            return jsonify(success=True)
 
         if extension in video_extensions:
 
@@ -105,13 +99,7 @@ def upload_post():
 
                 os.remove(filepath)
 
-                return f"""
-                    Unsafe Content Detected
-
-                    Category:
-                        {safety_result['category']}
-                    Score:
-                        {safety_result['score']}"""
+                return jsonify(success=False, category=safety_result["category"])
 
             save_post(
                 session["user_id"],
@@ -121,11 +109,7 @@ def upload_post():
                 request.form["content_category"]
             )
 
-            return """
-            <h2>
-                Video Uploaded Successfully
-            </h2>
-            """
+            return jsonify(success=True)
 
         return "Unsupported File Type"
 

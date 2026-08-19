@@ -1,9 +1,14 @@
 import os
 import threading
 import cv2
+import requests
 
 from ultralytics import YOLO
 from nudenet import NudeDetector
+from dotenv import load_dotenv
+
+load_dotenv()
+HF_TOKEN = os.environ.get("HF_TOKEN")
 
 # ── YOLO models ───────────────────────────────────────────────────────────────
 
@@ -53,15 +58,33 @@ VIOLENT_PROMPTS = [
     "people physically fighting or attacking each other",
     "domestic violence or physical abuse",
     "violent bullying or physical assault",
+    "blood and gore in an image",
+    "person being hurt or injured",
+]
+
+DRUG_PROMPTS = [
+    "person smoking cigarettes or drugs",
+    "illegal drugs or drug paraphernalia",
+    "alcohol bottles and people drinking",
+    "marijuana or cannabis",
+]
+
+BULLY_PROMPTS = [
+    "person being humiliated or mocked",
+    "group of people bullying or harassing someone",
+    "cyberbullying or online harassment",
 ]
 
 SAFE_PROMPTS = [
     "a normal portrait of a person",
     "friends in a casual photo",
     "children playing happily",
+    "school classroom learning",
+    "family having a meal together",
+    "kids doing homework or studying",
 ]
 
-_ALL_PROMPTS = VIOLENT_PROMPTS + SAFE_PROMPTS
+_ALL_PROMPTS = VIOLENT_PROMPTS + DRUG_PROMPTS + BULLY_PROMPTS + SAFE_PROMPTS
 
 def _load_clip_background():
     global _clip_pipe, _clip_failed
@@ -123,6 +146,36 @@ def _resize_for_check(image_path, max_side=640):
     return tmp_path, True
 
 
+def _check_hf_nsfw(image_path):
+    """Primary NSFW check via HuggingFace Inference API (AdamCodd ViT — strongest free model)."""
+    if not HF_TOKEN:
+        return None
+    try:
+        with open(image_path, "rb") as f:
+            data = f.read()
+        response = requests.post(
+            "https://api-inference.huggingface.co/models/AdamCodd/vit-base-nsfw-detector",
+            headers={"Authorization": f"Bearer {HF_TOKEN}"},
+            data=data,
+            timeout=20,
+        )
+        if response.status_code != 200:
+            print(f"[ML] HF API status {response.status_code}: {response.text[:120]}")
+            return None
+        results = response.json()
+        if not isinstance(results, list):
+            return None
+        nsfw_score = next(
+            (r["score"] for r in results if r["label"].lower() in ("nsfw", "explicit")), 0.0
+        )
+        if nsfw_score >= 0.65:
+            return {"safe": False, "score": round(nsfw_score * 100, 2)}
+        return {"safe": True, "score": round(nsfw_score * 100, 2)}
+    except Exception as e:
+        print(f"[ML] HF API error: {e}")
+    return None
+
+
 def _check_nsfw_falconsai(image_path):
     """Primary NSFW check using Falconsai fine-tuned classifier."""
     if _falconsai_failed or not _falconsai_ready.is_set():
@@ -136,7 +189,7 @@ def _check_nsfw_falconsai(image_path):
         nsfw_score = next(
             (r["score"] for r in results if r["label"].lower() == "nsfw"), 0.0
         )
-        if nsfw_score >= 0.70:
+        if nsfw_score >= 0.60:
             return {"safe": False, "score": round(nsfw_score * 100, 2)}
         return {"safe": True, "score": round(nsfw_score * 100, 2)}
     except Exception as e:
@@ -161,11 +214,11 @@ def _check_nsfw_nudenet(image_path):
     return {"safe": True, "score": 0.0}
 
 
-def _check_violence_clip(image_path):
+def _check_content_clip(image_path):
     """
-    Zero-shot CLIP violence detection using the transformers pipeline.
-    Flags only when the top violent label scores >= 0.40 AND beats the
-    best safe label by >= 0.08 — eliminates false positives on portraits.
+    Zero-shot CLIP check for violence, drugs, bullying.
+    Returns {"safe": False, "category": ..., "score": ...} or {"safe": True}.
+    Flags only when the bad label beats the best safe label by >= 0.08.
     """
     if _clip_failed or not _clip_ready.is_set():
         return {"safe": True, "score": 0.0}
@@ -174,15 +227,18 @@ def _check_violence_clip(image_path):
         from PIL import Image as PILImage
         image = PILImage.open(image_path).convert("RGB")
         scores = _clip_pipe(image, candidate_labels=_ALL_PROMPTS)
-        # scores is [{label, score}, ...] sorted highest first
 
         label_map = {r["label"]: r["score"] for r in scores}
-
-        max_v = max((label_map.get(p, 0.0) for p in VIOLENT_PROMPTS), default=0.0)
         max_s = max((label_map.get(p, 0.0) for p in SAFE_PROMPTS), default=0.0)
 
-        if max_v >= 0.40 and max_v > max_s + 0.08:
-            return {"safe": False, "score": round(max_v * 100, 2)}
+        checks = [
+            (VIOLENT_PROMPTS, 0.50, "VIOLENCE"),
+            (DRUG_PROMPTS,    0.50, "DRUG"),
+        ]
+        for prompts, threshold, category in checks:
+            max_bad = max((label_map.get(p, 0.0) for p in prompts), default=0.0)
+            if max_bad >= threshold and max_bad > max_s + 0.15:
+                return {"safe": False, "category": category, "score": round(max_bad * 100, 2)}
 
     except Exception as e:
         print(f"[ML] CLIP error on {image_path}: {e}")
@@ -203,19 +259,15 @@ def check_image_safety(image_path):
     small_path, was_resized = _resize_for_check(image_path, max_side=640)
 
     try:
-        # ── 1. Falconsai NSFW (primary) ───────────────────────────────────────
+        # ── 1. NSFW ensemble: Falconsai + NudeNet always run together ─────────
         falconsai = _check_nsfw_falconsai(small_path)
-        if falconsai is not None:
-            if not falconsai["safe"]:
-                result.update(safe=False, category="ADULT", score=falconsai["score"])
-                return result
-            # Falconsai gave a clean bill — skip NudeNet for speed
-        else:
-            # Falconsai not ready yet; use NudeNet as fallback
-            nudenet = _check_nsfw_nudenet(small_path)
-            if not nudenet["safe"]:
-                result.update(safe=False, category="ADULT", score=nudenet["score"])
-                return result
+        nudenet   = _check_nsfw_nudenet(small_path)
+
+        if (falconsai is not None and not falconsai["safe"]) or (not nudenet["safe"]):
+            score = (falconsai["score"] if falconsai and not falconsai["safe"]
+                     else nudenet["score"])
+            result.update(safe=False, category="ADULT", score=score)
+            return result
 
         # ── 2. YOLO COCO — knife ──────────────────────────────────────────────
         try:
@@ -245,10 +297,10 @@ def check_image_safety(image_path):
             except Exception as e:
                 print(f"[ML] OIV7 YOLO error: {e}")
 
-        # ── 4. CLIP — violence, abuse, aggression ─────────────────────────────
-        violence = _check_violence_clip(small_path)
-        if not violence["safe"]:
-            result.update(safe=False, category="VIOLENCE", score=violence["score"])
+        # ── 4. CLIP — violence, drugs, bullying ───────────────────────────────
+        clip = _check_content_clip(small_path)
+        if not clip["safe"]:
+            result.update(safe=False, category=clip["category"], score=clip["score"])
             return result
 
     finally:

@@ -213,6 +213,32 @@ select#content_category{display:none;}
 .upload-text{font-size:18px;font-weight:900;color:#7c3700;}
 .upload-sub{font-size:13px;font-weight:700;color:#9ca3af;}
 
+/* ── Result modal ── */
+.result-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+.result-modal-overlay.show{display:flex;}
+.result-modal{
+  background:white;border-radius:28px;padding:36px 28px;
+  text-align:center;max-width:320px;width:90%;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  animation:popIn .4s ease;
+}
+.result-modal .modal-icon{font-size:64px;margin-bottom:14px;display:block;}
+.result-modal h3{font-size:20px;font-weight:900;color:#1f2937;margin-bottom:8px;}
+.result-modal p{font-size:14px;font-weight:600;color:#6b7280;margin-bottom:22px;line-height:1.5;}
+.modal-btn{
+  display:inline-block;padding:12px 28px;border-radius:50px;
+  font-size:14px;font-weight:900;cursor:pointer;border:none;
+  font-family:'Nunito',sans-serif;transition:.2s;
+}
+.modal-btn-ok{background:linear-gradient(135deg,#ffecd2,#fcb69f);color:#7c3700;}
+.modal-btn-ok:hover{transform:scale(1.05);}
+.modal-btn-go{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;margin-left:10px;}
+.modal-btn-go:hover{transform:scale(1.05);}
+
 /* ── Bottom nav ── */
 .bottom-nav{
   position:fixed;bottom:0;left:0;width:100%;z-index:998;
@@ -328,6 +354,17 @@ select#content_category{display:none;}
   </div>
 </div>
 
+<!-- Result modal -->
+<div class="result-modal-overlay" id="resultModal">
+  <div class="result-modal">
+    <span class="modal-icon" id="modalIcon"></span>
+    <h3 id="modalTitle"></h3>
+    <p id="modalMsg"></p>
+    <button class="modal-btn modal-btn-ok" onclick="closeModal()">Try Again</button>
+    <a href="/my-posts/" class="modal-btn modal-btn-go" id="modalGoBtn" style="display:none">View My Posts</a>
+  </div>
+</div>
+
 <!-- Bottom nav -->
 <nav class="bottom-nav">
   <a class="nav-item" href="/feed/">
@@ -417,18 +454,70 @@ chips.forEach(function(chip){
   });
 });
 
-// ── Show uploading overlay on submit ──
+// ── Submit via fetch → show modal ──
 document.getElementById('postForm').addEventListener('submit', function(e){
-  // Basic validation
+  e.preventDefault();
   var file = document.getElementById('media').files[0];
-  if (!file) { e.preventDefault(); return; }
-  if (!select.value) {
-    e.preventDefault();
-    alert('Please pick a category! 🎯');
-    return;
-  }
+  if (!file) return;
+  if (!select.value) { alert('Please pick a category! 🎯'); return; }
+
   document.getElementById('uploadingOverlay').classList.add('show');
+
+  var fd = new FormData(this);
+  fetch(this.action || window.location.pathname, {
+    method: 'POST',
+    body: fd
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    document.getElementById('uploadingOverlay').classList.remove('show');
+    if (data.success) {
+      showModal(true, data.category);
+    } else {
+      showModal(false, data.category);
+    }
+  })
+  .catch(function(){
+    document.getElementById('uploadingOverlay').classList.remove('show');
+    showModal(false, 'UNKNOWN');
+  });
 });
+
+function showModal(success, category){
+  var icon   = document.getElementById('modalIcon');
+  var title  = document.getElementById('modalTitle');
+  var msg    = document.getElementById('modalMsg');
+  var okBtn  = document.querySelector('.modal-btn-ok');
+  var goBtn  = document.getElementById('modalGoBtn');
+
+  if (success) {
+    icon.textContent  = '🎉';
+    title.textContent = 'Post Uploaded!';
+    msg.textContent   = 'Your post was uploaded successfully and is now live! 🌟';
+    okBtn.style.display = 'none';
+    goBtn.style.display = 'inline-block';
+  } else {
+    var labels = {
+      ADULT:    { emoji:'🚫', text:'This image contains adult content and cannot be posted on LittleNet.' },
+      VIOLENCE: { emoji:'⚠️', text:'This content appears to contain violent imagery. Please choose something friendly!' },
+      WEAPON:   { emoji:'🛡️', text:'Weapons were detected in this content. Please upload something safe.' },
+      DRUG:     { emoji:'🚷', text:'This content appears to show drugs or alcohol. That is not allowed on LittleNet!' },
+      BULLYING: { emoji:'💔', text:'This content looks like it may show bullying or harassment. Be kind to each other!' },
+      UNKNOWN:  { emoji:'😕', text:'Something went wrong while checking your content. Please try again.' }
+    };
+    var info = labels[category] || labels['UNKNOWN'];
+    icon.textContent  = info.emoji;
+    title.textContent = 'Upload Rejected';
+    msg.textContent   = info.text;
+    okBtn.style.display = 'inline-block';
+    goBtn.style.display = 'none';
+  }
+  document.getElementById('resultModal').classList.add('show');
+}
+
+function closeModal(){
+  document.getElementById('resultModal').classList.remove('show');
+}
 </script>
 
 </body>
