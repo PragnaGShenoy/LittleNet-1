@@ -7,199 +7,207 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
 a{text-decoration:none;color:inherit;}
-
-body{background:#fdf6ee;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+body{background:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 
 /* ── Header ── */
 .chat-header{
   display:flex;align-items:center;gap:12px;
-  padding:12px 18px;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
-  border-bottom:2px dashed #ffe0a0;
-  flex-shrink:0;
+  padding:10px 14px;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid #dbdbdb;
+  flex-shrink:0;max-width:100%;
 }
-.back-btn{
-  width:38px;height:38px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#fde8d0;color:#c2430a;font-size:17px;transition:.25s;flex-shrink:0;
+.ig-back{
+  font-size:21px;color:#262626;cursor:pointer;flex-shrink:0;
+  width:32px;display:flex;align-items:center;
 }
-.back-btn:hover{background:#fcb69f;transform:scale(1.1) rotate(-8deg);}
+.ig-back:hover{color:#e76f51;}
 
 .peer-avatar{
-  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#ffecd2,#fcb69f);
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:#7c3700;
-  border:2px solid white;
-  box-shadow:0 3px 10px rgba(249,132,74,.22);
+  font-size:15px;font-weight:900;color:#7c3700;overflow:hidden;
+  cursor:pointer;
 }
-.peer-info{flex:1;min-width:0;}
-.peer-name{font-size:16px;font-weight:900;color:#1f2937;}
-.peer-status{font-size:12px;color:#f59e0b;font-weight:700;margin-top:1px;}
+.peer-avatar img{width:100%;height:100%;object-fit:cover;}
+
+.peer-info{flex:1;min-width:0;cursor:pointer;}
+.peer-name{font-size:15px;font-weight:900;color:#262626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.peer-sub{font-size:12px;color:#8e8e8e;font-weight:600;}
+
+.header-actions{display:flex;gap:18px;align-items:center;flex-shrink:0;}
+.header-actions button{background:none;border:none;font-size:21px;color:#262626;cursor:pointer;}
+.header-actions button:hover{color:#e76f51;}
 
 /* ── Messages area ── */
 .messages-area{
-  flex:1;overflow-y:auto;padding:16px 14px;
-  display:flex;flex-direction:column;gap:8px;
-  background:
-    radial-gradient(circle at 10% 20%, rgba(255,236,210,.4) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(181,234,215,.3) 0%, transparent 50%),
-    #fdf6ee;
+  flex:1;overflow-y:auto;padding:12px 14px;
+  display:flex;flex-direction:column;gap:4px;
+  background:#fff;
 }
-.messages-area::-webkit-scrollbar{width:4px;}
-.messages-area::-webkit-scrollbar-thumb{background:#fde8d0;border-radius:4px;}
+.messages-area::-webkit-scrollbar{width:3px;}
+.messages-area::-webkit-scrollbar-thumb{background:#efefef;border-radius:3px;}
+
+/* Date divider */
+.date-sep{
+  text-align:center;font-size:12px;font-weight:700;color:#8e8e8e;
+  margin:10px 0 6px;
+}
 
 /* Empty state */
 .empty-chat{
   flex:1;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  color:#d1d5db;text-align:center;gap:10px;padding:40px;
+  text-align:center;gap:12px;padding:40px;
 }
-.empty-chat .empty-icon{font-size:56px;animation:iconFloat 3s ease-in-out infinite;}
-@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.empty-chat p{font-size:15px;font-weight:700;color:#c3b1a0;}
+.empty-chat .e-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;color:#7c3700;margin-bottom:4px;
+}
+.empty-chat h4{font-size:17px;font-weight:900;color:#262626;}
+.empty-chat p{font-size:13px;color:#8e8e8e;font-weight:600;}
 
 /* ── Bubbles ── */
-.msg-row{display:flex;margin-bottom:2px;}
+.msg-row{display:flex;align-items:flex-end;gap:6px;margin-bottom:2px;}
 .msg-row.sent{justify-content:flex-end;}
 .msg-row.received{justify-content:flex-start;}
 
-.bubble{
-  max-width:74%;padding:10px 14px;border-radius:20px;
-  word-break:break-word;font-size:14px;line-height:1.55;font-weight:600;
-  position:relative;animation:bubblePop .2s ease;
-}
-@keyframes bubblePop{0%{transform:scale(.85);}70%{transform:scale(1.04);}100%{transform:scale(1);}}
-
-.bubble.sent{
+/* Small avatar on received messages */
+.msg-av{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  color:#7c3700;
-  border-bottom-right-radius:5px;
-  box-shadow:0 3px 12px rgba(249,132,74,.22);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:900;color:#7c3700;overflow:hidden;
 }
+.msg-av img{width:100%;height:100%;object-fit:cover;}
+.msg-av.hidden{visibility:hidden;}
+
+.bubble{
+  max-width:72%;padding:10px 14px;
+  word-break:break-word;font-size:14px;line-height:1.5;font-weight:600;
+  position:relative;
+}
+
+/* Sent — Instagram blue-purple gradient */
+.bubble.sent{
+  background:#0095f6;color:white;
+  border-radius:22px 22px 4px 22px;
+}
+.bubble.sent .time{color:rgba(255,255,255,.6);}
+
+/* Received — light grey */
 .bubble.received{
-  background:white;color:#1f2937;
-  border-bottom-left-radius:5px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-  border:1.5px solid #fff0d8;
+  background:#efefef;color:#262626;
+  border-radius:22px 22px 22px 4px;
 }
+.bubble.received .time{color:#8e8e8e;}
+
 .bubble .time{
-  display:block;font-size:10px;margin-top:5px;
-  opacity:.6;text-align:right;font-weight:700;
+  display:block;font-size:10px;margin-top:4px;font-weight:700;text-align:right;
 }
 .bubble.received .time{text-align:left;}
 
-/* Media in bubble */
-.bubble img{max-width:100%;border-radius:12px;display:block;margin-bottom:4px;cursor:pointer;}
-.bubble video,.bubble audio{max-width:100%;border-radius:12px;display:block;margin-bottom:4px;}
+/* Media inside bubble */
+.bubble img{max-width:100%;border-radius:14px;display:block;margin-bottom:4px;cursor:pointer;}
+.bubble video,.bubble audio{max-width:100%;border-radius:14px;display:block;margin-bottom:4px;}
 .file-link{
   display:flex;align-items:center;gap:8px;
-  background:rgba(124,55,0,.1);border-radius:12px;
-  padding:8px 12px;color:#7c3700;font-size:13px;font-weight:800;
+  padding:8px 12px;border-radius:12px;
+  background:rgba(255,255,255,.2);color:white;
+  font-size:13px;font-weight:800;
 }
-.bubble.received .file-link{background:#fdf6ee;color:#e76f51;}
+.bubble.received .file-link{background:rgba(0,0,0,.06);color:#262626;}
 
 /* ── Input bar ── */
 .input-bar{
-  background:rgba(255,255,255,.97);
-  border-top:2px dashed #ffe0a0;
-  padding:10px 14px;flex-shrink:0;
+  background:#fff;border-top:1px solid #dbdbdb;
+  padding:8px 12px;flex-shrink:0;
 }
 
-/* Attachment menu */
+/* Attachment tray */
 .attach-menu{
-  display:none;flex-wrap:wrap;gap:10px;padding:10px 0 12px;
+  display:none;flex-wrap:wrap;gap:12px;
+  padding:10px 4px 14px;
 }
 .attach-menu.open{display:flex;}
 .attach-opt{
   display:flex;flex-direction:column;align-items:center;gap:5px;
-  cursor:pointer;font-size:11px;color:#374151;font-weight:800;
+  cursor:pointer;font-size:11px;font-weight:800;color:#262626;
 }
 .attach-opt .icon-circle{
-  width:52px;height:52px;border-radius:50%;
+  width:50px;height:50px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-size:22px;color:white;transition:.2s;
-  box-shadow:0 4px 12px rgba(0,0,0,.12);
 }
-.attach-opt:hover .icon-circle{transform:scale(1.1) rotate(-5deg);}
-.opt-image  .icon-circle{background:linear-gradient(135deg,#6ee7b7,#10b981);}
-.opt-camera .icon-circle{background:linear-gradient(135deg,#fca5a5,#ef4444);}
-.opt-video  .icon-circle{background:linear-gradient(135deg,#fde68a,#f59e0b);}
-.opt-audio  .icon-circle{background:linear-gradient(135deg,#c4b5fd,#8b5cf6);}
-.opt-file   .icon-circle{background:linear-gradient(135deg,#93c5fd,#3b82f6);}
+.attach-opt:hover .icon-circle{transform:scale(1.1);}
+.opt-image  .icon-circle{background:#0095f6;}
+.opt-camera .icon-circle{background:#ef4444;}
+.opt-video  .icon-circle{background:#f59e0b;}
+.opt-audio  .icon-circle{background:#8b5cf6;}
+.opt-file   .icon-circle{background:#10b981;}
 
-/* Text row */
-.text-row{display:flex;align-items:center;gap:8px;}
-
-.attach-toggle{
-  width:40px;height:40px;border:none;
-  background:#fde8d0;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;color:#e76f51;cursor:pointer;flex-shrink:0;transition:.2s;
-}
-.attach-toggle:hover,.attach-toggle.active{background:#fcb69f;transform:rotate(45deg);}
-
-.text-input{
-  flex:1;border:2px solid #f0e8d8;border-radius:25px;
-  padding:10px 16px;font-size:14px;font-weight:700;outline:none;
-  background:#fafafa;transition:.2s;resize:none;
-  max-height:100px;line-height:1.4;
-  font-family:'Nunito',sans-serif;color:#374151;
-}
-.text-input:focus{border-color:#fbbf24;background:white;}
-.text-input::placeholder{color:#d1d5db;}
-
-.voice-btn{
-  width:40px;height:40px;border:none;border-radius:50%;
-  background:#fde8d0;color:#e76f51;font-size:17px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:.2s;
-}
-.voice-btn:hover{background:#fecaca;color:#ef4444;}
-.voice-btn.recording{background:#ef4444;color:white;animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
-
-.send-btn{
-  width:40px;height:40px;border:none;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  color:#7c3700;font-size:16px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:.2s;
-  box-shadow:0 4px 12px rgba(249,132,74,.3);
-}
-.send-btn:hover{transform:scale(1.1);box-shadow:0 6px 18px rgba(249,132,74,.4);}
-
-/* Hidden file inputs */
-input[type=file].hidden-input{display:none;}
-
-/* Recording indicator */
+/* Recording bar */
 .recording-bar{
   display:none;align-items:center;gap:10px;
-  padding:8px 12px;background:#fff0f0;border-radius:14px;
-  margin-bottom:8px;font-size:13px;color:#b91c1c;font-weight:800;
+  padding:8px 12px;background:#fff0f0;border-radius:12px;margin-bottom:8px;
+  font-size:13px;color:#b91c1c;font-weight:800;
 }
 .recording-bar.show{display:flex;}
 .rec-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite;}
 .rec-timer{flex:1;}
 .rec-cancel{background:none;border:none;color:#b91c1c;cursor:pointer;font-size:18px;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
 
 /* Upload indicator */
-.upload-indicator{
-  display:none;font-size:12px;font-weight:700;color:#e76f51;
-  padding:4px 12px;text-align:center;
-}
+.upload-indicator{display:none;font-size:12px;font-weight:700;color:#0095f6;padding:4px 12px;text-align:center;}
 .upload-indicator.show{display:block;}
 
-/* ── Image lightbox ── */
+/* Text row */
+.text-row{display:flex;align-items:center;gap:8px;}
+
+.attach-toggle{
+  width:36px;height:36px;border:none;background:none;
+  font-size:22px;color:#262626;cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.attach-toggle:hover,.attach-toggle.active{color:#0095f6;transform:rotate(45deg);}
+
+.text-input{
+  flex:1;border:1.5px solid #dbdbdb;border-radius:22px;
+  padding:9px 16px;font-size:14px;font-weight:600;outline:none;
+  background:#fafafa;transition:.2s;resize:none;
+  max-height:100px;line-height:1.4;
+  font-family:'Nunito',sans-serif;color:#262626;
+}
+.text-input:focus{border-color:#0095f6;background:#fff;}
+.text-input::placeholder{color:#8e8e8e;}
+
+.voice-btn{
+  width:36px;height:36px;border:none;background:none;
+  color:#262626;font-size:20px;cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.voice-btn:hover{color:#0095f6;}
+.voice-btn.recording{color:#ef4444;animation:pulse 1s infinite;}
+
+.send-btn{
+  width:36px;height:36px;border:none;background:none;
+  color:#0095f6;font-size:22px;cursor:pointer;flex-shrink:0;transition:.2s;
+}
+.send-btn:hover{transform:scale(1.15);}
+
+input[type=file].hidden-input{display:none;}
+
+/* ── Lightbox ── */
 #lightbox{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
   z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;
 }
 #lightbox.open{display:flex;}
-#lightboxImg{max-width:95%;max-height:90vh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+#lightboxImg{max-width:95%;max-height:90vh;border-radius:14px;}
 
 /* ── Camera modal ── */
 .cam-modal{
@@ -207,39 +215,40 @@ input[type=file].hidden-input{display:none;}
   z-index:9000;flex-direction:column;align-items:center;justify-content:center;gap:18px;
 }
 .cam-modal.open{display:flex;}
-#camPreview{
-  width:min(420px,95vw);border-radius:20px;
-  background:#000;aspect-ratio:4/3;object-fit:cover;
-}
+#camPreview{width:min(420px,95vw);border-radius:20px;background:#000;aspect-ratio:4/3;object-fit:cover;}
 .cam-controls{display:flex;gap:20px;align-items:center;}
 .cam-snap{
-  width:70px;height:70px;border-radius:50%;
-  border:4px solid white;background:rgba(255,255,255,.18);
-  font-size:28px;color:white;cursor:pointer;
+  width:68px;height:68px;border-radius:50%;border:4px solid white;
+  background:rgba(255,255,255,.18);font-size:28px;color:white;cursor:pointer;
   display:flex;align-items:center;justify-content:center;transition:.2s;
 }
 .cam-snap:hover{background:rgba(255,255,255,.35);}
 .cam-close-btn{
-  width:46px;height:46px;border-radius:50%;border:none;
+  width:44px;height:44px;border-radius:50%;border:none;
   background:rgba(255,255,255,.18);color:white;font-size:18px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;
 }
 .cam-close-btn:hover{background:rgba(255,255,255,.35);}
 #camCanvas{display:none;}
 
-@media(max-width:600px){.bubble{max-width:86%;}}
-
+@media(max-width:600px){.bubble{max-width:82%;}}
 </style>
 </head>
 <body>
 
-<!-- Chat header -->
+<!-- Header -->
 <div class="chat-header">
-  <a href="/messages/" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-  <div class="peer-avatar" id="peerInitial">?</div>
-  <div class="peer-info">
+  <a class="ig-back" href="/messages/"><i class="fa-solid fa-arrow-left"></i></a>
+
+  <div class="peer-avatar" id="peerAvatarEl" onclick="goProfile()">?</div>
+
+  <div class="peer-info" onclick="goProfile()">
     <div class="peer-name" id="peerName">{{ receiver_name }}</div>
-    <div class="peer-status">🟢 LittleNet</div>
+    <div class="peer-sub">LittleNet</div>
+  </div>
+
+  <div class="header-actions">
+    <button onclick="goProfile()" title="Profile"><i class="fa-solid fa-circle-info"></i></button>
   </div>
 </div>
 
@@ -251,16 +260,15 @@ input[type=file].hidden-input{display:none;}
       {% if message.sender_child_id == current_child_id %}
         <div class="msg-row sent">
           <div class="bubble sent">
-            {% if message.message_type == "TEXT" %}
-              {{ message.message_text }}
+            {% if message.message_type == "TEXT" %}{{ message.message_text }}
             {% elif message.message_type == "IMAGE" %}
-              <img src="/{{ message.media_path }}" alt="image" onclick="openImg(this.src)">
+              <img src="/{{ message.media_path | replace('\\', '/') }}" alt="image" onclick="openImg(this.src)">
             {% elif message.message_type == "VIDEO" %}
-              <video controls><source src="/{{ message.media_path }}"></video>
+              <video controls><source src="/{{ message.media_path | replace('\\', '/') }}"></video>
             {% elif message.message_type == "VOICE" %}
-              <audio controls><source src="/{{ message.media_path }}"></audio>
+              <audio controls><source src="/{{ message.media_path | replace('\\', '/') }}"></audio>
             {% elif message.message_type == "FILE" %}
-              <a class="file-link" href="/{{ message.media_path }}" target="_blank">
+              <a class="file-link" href="/{{ message.media_path | replace('\\', '/') }}" target="_blank">
                 <i class="fa-regular fa-file"></i> Download file
               </a>
             {% endif %}
@@ -269,17 +277,17 @@ input[type=file].hidden-input{display:none;}
         </div>
       {% else %}
         <div class="msg-row received">
+          <div class="msg-av" id="peerMsgAv">?</div>
           <div class="bubble received">
-            {% if message.message_type == "TEXT" %}
-              {{ message.message_text }}
+            {% if message.message_type == "TEXT" %}{{ message.message_text }}
             {% elif message.message_type == "IMAGE" %}
-              <img src="/{{ message.media_path }}" alt="image" onclick="openImg(this.src)">
+              <img src="/{{ message.media_path | replace('\\', '/') }}" alt="image" onclick="openImg(this.src)">
             {% elif message.message_type == "VIDEO" %}
-              <video controls><source src="/{{ message.media_path }}"></video>
+              <video controls><source src="/{{ message.media_path | replace('\\', '/') }}"></video>
             {% elif message.message_type == "VOICE" %}
-              <audio controls><source src="/{{ message.media_path }}"></audio>
+              <audio controls><source src="/{{ message.media_path | replace('\\', '/') }}"></audio>
             {% elif message.message_type == "FILE" %}
-              <a class="file-link" href="/{{ message.media_path }}" target="_blank">
+              <a class="file-link" href="/{{ message.media_path | replace('\\', '/') }}" target="_blank">
                 <i class="fa-regular fa-file"></i> Download file
               </a>
             {% endif %}
@@ -288,11 +296,11 @@ input[type=file].hidden-input{display:none;}
         </div>
       {% endif %}
     {% endfor %}
-
   {% else %}
     <div class="empty-chat">
-      <div class="empty-icon">👋</div>
-      <p>Say hello to {{ receiver_name }}!<br>Start the conversation 🌟</p>
+      <div class="e-avatar" id="emptyAvatar">?</div>
+      <h4 id="emptyName">{{ receiver_name }}</h4>
+      <p>Say hello and start the conversation! 👋</p>
     </div>
   {% endif %}
 
@@ -308,33 +316,28 @@ input[type=file].hidden-input{display:none;}
     <button class="rec-cancel" onclick="cancelRecording()"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
-  <div class="upload-indicator" id="uploadIndicator">Uploading… ✨</div>
+  <div class="upload-indicator" id="uploadIndicator">Sending… ✨</div>
 
   <!-- Attachment tray -->
   <div class="attach-menu" id="attachMenu">
     <div class="attach-opt opt-image" onclick="document.getElementById('fileImage').click()">
-      <div class="icon-circle"><i class="fa-regular fa-image"></i></div>
-      <span>Photo</span>
+      <div class="icon-circle"><i class="fa-regular fa-image"></i></div><span>Photo</span>
     </div>
     <div class="attach-opt opt-camera" onclick="openCamera()">
-      <div class="icon-circle"><i class="fa-solid fa-camera"></i></div>
-      <span>Camera</span>
+      <div class="icon-circle"><i class="fa-solid fa-camera"></i></div><span>Camera</span>
     </div>
     <div class="attach-opt opt-video" onclick="document.getElementById('fileVideo').click()">
-      <div class="icon-circle"><i class="fa-solid fa-video"></i></div>
-      <span>Video</span>
+      <div class="icon-circle"><i class="fa-solid fa-video"></i></div><span>Video</span>
     </div>
     <div class="attach-opt opt-audio" onclick="document.getElementById('fileAudio').click()">
-      <div class="icon-circle"><i class="fa-solid fa-music"></i></div>
-      <span>Audio</span>
+      <div class="icon-circle"><i class="fa-solid fa-music"></i></div><span>Audio</span>
     </div>
     <div class="attach-opt opt-file" onclick="document.getElementById('fileDoc').click()">
-      <div class="icon-circle"><i class="fa-regular fa-file"></i></div>
-      <span>File</span>
+      <div class="icon-circle"><i class="fa-regular fa-file"></i></div><span>File</span>
     </div>
   </div>
 
-  <!-- Hidden inputs -->
+  <!-- Hidden file inputs -->
   <input type="file" id="fileImage"        class="hidden-input" accept="image/*"              onchange="sendFile(this)">
   <input type="file" id="fileCameraMobile" class="hidden-input" accept="image/*" capture="environment" onchange="sendFile(this)">
   <input type="file" id="fileVideo"        class="hidden-input" accept="video/*"              onchange="sendFile(this)">
@@ -344,10 +347,10 @@ input[type=file].hidden-input{display:none;}
   <!-- Text row -->
   <div class="text-row">
     <button class="attach-toggle" id="attachToggle" onclick="toggleAttach()">
-      <i class="fa-solid fa-paperclip"></i>
+      <i class="fa-solid fa-circle-plus"></i>
     </button>
 
-    <textarea class="text-input" id="textInput" placeholder="Message… 🌟" rows="1"
+    <textarea class="text-input" id="textInput" placeholder="Message…" rows="1"
       onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
 
     <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
@@ -358,7 +361,6 @@ input[type=file].hidden-input{display:none;}
       <i class="fa-solid fa-paper-plane"></i>
     </button>
   </div>
-
 </div>
 
 <!-- Lightbox -->
@@ -372,37 +374,41 @@ input[type=file].hidden-input{display:none;}
   <canvas id="camCanvas"></canvas>
   <div class="cam-controls">
     <button class="cam-close-btn" onclick="closeCamera()"><i class="fa-solid fa-xmark"></i></button>
-    <button class="cam-snap"      onclick="snapPhoto()">  <i class="fa-solid fa-camera"></i></button>
-    <button class="cam-close-btn" onclick="flipCamera()"> <i class="fa-solid fa-rotate"></i></button>
+    <button class="cam-snap" onclick="snapPhoto()"><i class="fa-solid fa-camera"></i></button>
+    <button class="cam-close-btn" onclick="flipCamera()"><i class="fa-solid fa-rotate"></i></button>
   </div>
 </div>
 
 <script>
 const RECEIVER_ID = {{ receiver_child_id }};
-const mediaArea   = document.getElementById('messagesArea');
+const RECEIVER_PROFILE_ID = {{ receiver_child_id }};
+const mediaArea = document.getElementById('messagesArea');
+
+// Set peer avatar initial
+var peerNameStr = document.getElementById('peerName').textContent.trim();
+var peerInit = peerNameStr[0] ? peerNameStr[0].toUpperCase() : '?';
+document.getElementById('peerAvatarEl').textContent = peerInit;
+var msgAvEls = document.querySelectorAll('#peerMsgAv');
+msgAvEls.forEach(function(el){ el.textContent = peerInit; });
+var emptyAv = document.getElementById('emptyAvatar');
+if(emptyAv) emptyAv.textContent = peerInit;
 
 mediaArea.scrollTop = mediaArea.scrollHeight;
 
-// Peer initial
-const peerName = document.getElementById('peerName').textContent.trim();
-document.getElementById('peerInitial').textContent = peerName[0] ? peerName[0].toUpperCase() : '?';
+function goProfile(){ window.location.href = '/child/view-profile/'+RECEIVER_PROFILE_ID+'/'; }
 
-// ── Auto-resize textarea ──
 function autoResize(el){
   el.style.height='auto';
   el.style.height=Math.min(el.scrollHeight,100)+'px';
 }
 
-// ── Enter to send ──
 function handleKey(e){
   if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendText();}
 }
 
-// ── Send text ──
 function sendText(){
   var input=document.getElementById('textInput');
-  var text=input.value.trim();
-  if(!text)return;
+  var text=input.value.trim(); if(!text)return;
   var form=document.createElement('form');
   form.method='POST';form.action='/send-message/'+RECEIVER_ID+'/';
   var field=document.createElement('input');
@@ -413,7 +419,6 @@ function sendText(){
   document.body.appendChild(form);form.submit();
 }
 
-// ── Toggle attach tray ──
 function toggleAttach(){
   var menu=document.getElementById('attachMenu');
   var btn=document.getElementById('attachToggle');
@@ -421,12 +426,11 @@ function toggleAttach(){
   btn.classList.toggle('active',open);
 }
 
-// ── Send picked file ──
 function sendFile(input){
-  var file=input.files[0];if(!file)return;
+  var file=input.files[0]; if(!file)return;
   document.getElementById('attachMenu').classList.remove('open');
   document.getElementById('attachToggle').classList.remove('active');
-  var fd=new FormData();fd.append('media',file);
+  var fd=new FormData(); fd.append('media',file);
   setUploading(true);
   fetch('/send-media/'+RECEIVER_ID+'/',{method:'POST',credentials:'same-origin',body:fd})
     .then(function(r){return r.json();})
@@ -443,33 +447,29 @@ function setUploading(on){
   document.getElementById('uploadIndicator').className=on?'upload-indicator show':'upload-indicator';
 }
 
-// ── Voice recording ──
+// ── Voice ──
 var mediaRecorder=null,audioChunks=[],recInterval=null,recSeconds=0;
-
 function toggleVoice(){
-  if(mediaRecorder&&mediaRecorder.state==='recording') stopRecording();
-  else startRecording();
+  if(mediaRecorder&&mediaRecorder.state==='recording') stopRecording(); else startRecording();
 }
 function startRecording(){
   if(!navigator.mediaDevices){alert('Voice not supported.');return;}
-  navigator.mediaDevices.getUserMedia({audio:true})
-    .then(function(stream){
-      audioChunks=[];
-      mediaRecorder=new MediaRecorder(stream);
-      mediaRecorder.ondataavailable=function(e){if(e.data.size>0)audioChunks.push(e.data);};
-      mediaRecorder.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});uploadVoice();};
-      mediaRecorder.start();
-      document.getElementById('recBar').classList.add('show');
-      document.getElementById('voiceBtn').classList.add('recording');
-      document.getElementById('voiceBtn').querySelector('i').className='fa-solid fa-stop';
-      recSeconds=0;
-      recInterval=setInterval(function(){
-        recSeconds++;
-        var m=Math.floor(recSeconds/60),s=String(recSeconds%60).padStart(2,'0');
-        document.getElementById('recTimer').textContent=m+':'+s;
-      },1000);
-    })
-    .catch(function(){alert('Could not access microphone.');});
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    audioChunks=[];
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=function(e){if(e.data.size>0)audioChunks.push(e.data);};
+    mediaRecorder.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});uploadVoice();};
+    mediaRecorder.start();
+    document.getElementById('recBar').classList.add('show');
+    document.getElementById('voiceBtn').classList.add('recording');
+    document.getElementById('voiceBtn').querySelector('i').className='fa-solid fa-stop';
+    recSeconds=0;
+    recInterval=setInterval(function(){
+      recSeconds++;
+      var m=Math.floor(recSeconds/60),s=String(recSeconds%60).padStart(2,'0');
+      document.getElementById('recTimer').textContent=m+':'+s;
+    },1000);
+  }).catch(function(){alert('Could not access microphone.');});
 }
 function stopRecording(){
   if(mediaRecorder)mediaRecorder.stop();
@@ -498,7 +498,6 @@ function uploadVoice(){
     .catch(function(){setUploading(false);});
 }
 
-// ── Append bubble ──
 function appendBubble(type,mediaSrc,text){
   var now=new Date();
   var timeStr=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
@@ -511,7 +510,6 @@ function appendBubble(type,mediaSrc,text){
   var row=document.createElement('div');
   row.className='msg-row sent';
   row.innerHTML='<div class="bubble sent">'+inner+'<span class="time">'+timeStr+'</span></div>';
-  // Remove empty state if present
   var empty=mediaArea.querySelector('.empty-chat');
   if(empty)empty.remove();
   mediaArea.appendChild(row);
@@ -522,7 +520,6 @@ function escHtml(str){
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Lightbox ──
 function openImg(src){
   document.getElementById('lightboxImg').src=src;
   document.getElementById('lightbox').classList.add('open');
@@ -530,7 +527,6 @@ function openImg(src){
 
 // ── Camera ──
 var camStream=null,facingMode='environment';
-
 function openCamera(){
   document.getElementById('attachMenu').classList.remove('open');
   document.getElementById('attachToggle').classList.remove('active');
@@ -547,8 +543,7 @@ function startCamStream(){
       camStream=stream;
       document.getElementById('camPreview').srcObject=stream;
       document.getElementById('camModal').classList.add('open');
-    })
-    .catch(function(e){alert('Could not access camera: '+e.message);});
+    }).catch(function(e){alert('Could not access camera: '+e.message);});
 }
 function flipCamera(){facingMode=facingMode==='environment'?'user':'environment';startCamStream();}
 function closeCamera(){
@@ -573,6 +568,5 @@ function snapPhoto(){
   },'image/jpeg',0.88);
 }
 </script>
-
 </body>
 </html>

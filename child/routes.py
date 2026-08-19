@@ -5,7 +5,7 @@ from flask import render_template
 from flask import session
 from werkzeug.utils import secure_filename
 
-from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, unfollow_child, update_child_profile, update_profile_picture
+from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, unfollow_child, update_child_profile, update_profile_picture, get_following_stories, get_my_active_story, get_my_posts_for_profile
 from child.service import get_child_profile
 from parent.service import get_time_limit
 from quiz.service import get_child_quiz_settings, get_quiz_for_child
@@ -48,6 +48,43 @@ def api_time_remaining():
     })
 
 
+@child_bp.route("/api/following/")
+def api_following():
+    if "user_id" not in session:
+        return jsonify([]), 401
+    friends = get_following(session["user_id"])
+    return jsonify([{"user_id": f["user_id"], "full_name": f["full_name"]} for f in friends])
+
+
+@child_bp.route("/api/share-post/", methods=["POST"])
+def api_share_post():
+    if "user_id" not in session:
+        return jsonify({"error": "not logged in"}), 401
+    from childMessage.service import get_conversation, create_conversation, send_text_message, send_media_message
+    data = request.get_json(silent=True) or {}
+    receiver_id = data.get("receiver_id")
+    media_path  = data.get("media_path", "")
+    poster_name = data.get("poster_name", "")
+    caption     = data.get("caption", "")
+    content_type = data.get("content_type", "IMAGE")
+    if not receiver_id:
+        return jsonify({"error": "missing receiver"}), 400
+    sender_id = session["user_id"]
+    # Normalize Windows backslashes → forward slashes for URL compatibility
+    media_path = media_path.replace("\\", "/")
+    conv = get_conversation(sender_id, receiver_id)
+    conv_id = conv["conversation_id"] if conv else create_conversation(sender_id, receiver_id)
+    # Send a header text then the actual post media
+    header = f"📸 {session.get('full_name','Someone')} shared a post by {poster_name}"
+    if caption:
+        header += f": {caption[:80]}"
+    send_text_message(conv_id, sender_id, receiver_id, header)
+    if media_path:
+        msg_type = "VIDEO" if content_type == "VIDEO" else "IMAGE"
+        send_media_message(conv_id, sender_id, receiver_id, msg_type, media_path)
+    return jsonify({"ok": True})
+
+
 @child_bp.route("/child/dashboard/")
 def dashboard():
 
@@ -64,11 +101,18 @@ def dashboard():
     if strict and remaining_seconds is not None and remaining_seconds <= 0:
         return render_template("time_limit_reached.html")
 
+    following_stories  = get_following_stories(session["user_id"])
+    my_story           = get_my_active_story(session["user_id"])
+    profile            = get_child_profile(session["user_id"])
+
     return render_template(
         "child_dashboard.html",
         full_name=session["full_name"],
         remaining_seconds=remaining_seconds,
-        strict_mode=strict
+        strict_mode=strict,
+        following_stories=following_stories,
+        my_story=my_story,
+        profile=profile,
     )
 
 @child_bp.route(
@@ -112,6 +156,7 @@ def profile():
         post_count=get_post_count(child_id),
         followers_count=get_followers_count(child_id),
         following_count=get_following_count(child_id),
+        posts=get_my_posts_for_profile(child_id),
     )
 
 
@@ -328,6 +373,25 @@ def upload_profile_picture():
     update_profile_picture(session["user_id"], filepath)
 
     return jsonify({"ok": True, "path": "/" + filepath})
+
+
+@child_bp.route("/child/view-profile/<int:user_id>/")
+def view_profile(user_id):
+    if "user_id" not in session:
+        return redirect("/login/")
+    profile_data   = get_child_profile(user_id)
+    posts          = get_my_posts_for_profile(user_id)
+    following      = is_following(session["user_id"], user_id)
+    return render_template(
+        "view_profile.html",
+        profile=profile_data,
+        posts=posts,
+        post_count=get_post_count(user_id),
+        followers_count=get_followers_count(user_id),
+        following_count=get_following_count(user_id),
+        is_following=following,
+        target_user_id=user_id,
+    )
 
 
 @child_bp.route("/discover/")

@@ -3,181 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recommended | LittleNet</title>
+<title>For You | LittleNet</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
 a{text-decoration:none;color:inherit;}
-
-body{background:#fdf6ee;padding-bottom:90px;overflow-x:hidden;}
-
-/* ── Floating bubbles ── */
-.bg-bubbles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-.bg-bubbles span{position:absolute;display:block;border-radius:50%;animation:floatUp linear infinite;opacity:.13;}
-.bg-bubbles span:nth-child(1){left:5%;width:45px;height:45px;background:#a8d8ea;animation-duration:14s;animation-delay:0s;}
-.bg-bubbles span:nth-child(2){left:24%;width:26px;height:26px;background:#ffb347;animation-duration:11s;animation-delay:2s;}
-.bg-bubbles span:nth-child(3){left:46%;width:58px;height:58px;background:#b5ead7;animation-duration:17s;animation-delay:4s;}
-.bg-bubbles span:nth-child(4){left:64%;width:35px;height:35px;background:#ffd6e0;animation-duration:13s;animation-delay:1s;}
-.bg-bubbles span:nth-child(5){left:83%;width:48px;height:48px;background:#c3b1e1;animation-duration:15s;animation-delay:3s;}
-@keyframes floatUp{0%{transform:translateY(110vh) scale(.8);}100%{transform:translateY(-20vh) scale(1.2);}}
-
-/* Stars */
-.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
-@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:.8;transform:scale(1.5);}}
+body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
 
 /* ── Header ── */
-.header{
+.ig-header{
   position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 20px;border-bottom:2px dashed #ffe0a0;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid #dbdbdb;
 }
-.logo{
-  font-size:24px;font-weight:900;
-  background:linear-gradient(135deg,#f9844a,#f4a261,#e76f51);
+.ig-header-inner{
+  max-width:470px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 16px;
+}
+.ig-logo{
+  font-size:22px;font-weight:900;
+  background:linear-gradient(135deg,#f9844a,#e76f51);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:logoBounce 3s ease-in-out infinite;
 }
-@keyframes logoBounce{0%,100%{letter-spacing:0px;}50%{letter-spacing:2px;}}
-.header-icons{display:flex;gap:12px;}
-.header-icons a{
-  width:38px;height:38px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#fde8d0;color:#c2430a;font-size:17px;transition:.25s;
-}
-.header-icons a:hover{background:#fcb69f;transform:scale(1.12) rotate(-8deg);}
+.ig-header-right{display:flex;gap:20px;align-items:center;}
+.ig-header-right a{font-size:22px;color:#262626;transition:.2s;}
+.ig-header-right a:hover{color:#e76f51;}
 
-/* ── Container ── */
-.container{max-width:600px;margin:18px auto;padding:0 14px;position:relative;z-index:1;}
-
-/* ── Post card ── */
-.post-card{
-  background:white;border-radius:28px;overflow:hidden;
-  margin-bottom:20px;
-  box-shadow:0 6px 24px rgba(0,0,0,.08);
-  border:2px solid #fff0d8;
-  animation:popIn .45s ease both;
-}
-.post-card:nth-child(1){animation-delay:.04s;}
-.post-card:nth-child(2){animation-delay:.08s;}
-.post-card:nth-child(3){animation-delay:.12s;}
-.post-card:nth-child(4){animation-delay:.16s;}
-.post-card:nth-child(5){animation-delay:.20s;}
-@keyframes popIn{
-  0%{opacity:0;transform:scale(.9) translateY(14px);}
-  70%{transform:scale(1.02) translateY(-3px);}
-  100%{opacity:1;transform:scale(1) translateY(0);}
+/* ── Feed card (Instagram style) ── */
+.feed-card{
+  background:white;
+  border-bottom:1px solid #dbdbdb;
+  max-width:470px;margin:0 auto;
 }
 
-/* Post header */
-.post-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 16px;
+/* Card header */
+.feed-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
 }
-.user-row{display:flex;align-items:center;gap:12px;}
-.avatar{
-  width:46px;height:46px;border-radius:50%;flex-shrink:0;
+.feed-user{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.feed-avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#ffecd2,#fcb69f);
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:#7c3700;
-  border:2px solid white;box-shadow:0 3px 10px rgba(249,132,74,.22);
-  overflow:hidden;
+  font-size:14px;font-weight:900;color:#7c3700;overflow:hidden;
 }
-.avatar img{width:100%;height:100%;object-fit:cover;}
-.username{font-size:15px;font-weight:900;color:#1f2937;}
-.category{font-size:12px;font-weight:700;color:#f59e0b;margin-top:2px;}
+.feed-avatar img{width:100%;height:100%;object-fit:cover;}
+.feed-username{font-size:14px;font-weight:900;color:#262626;}
+.feed-category{font-size:12px;color:#8e8e8e;font-weight:600;margin-top:1px;}
+.feed-more{font-size:18px;color:#262626;cursor:pointer;letter-spacing:1px;}
 
 /* Media */
-.post-media{width:100%;display:block;max-height:480px;object-fit:cover;}
+.feed-media{width:100%;aspect-ratio:1/1;background:#fafafa;overflow:hidden;}
+.feed-media img,.feed-media video{width:100%;height:100%;object-fit:cover;display:block;}
 
-/* ── Actions ── */
-.post-actions{padding:12px 16px 6px;}
-.action-row{display:flex;align-items:center;gap:16px;margin-bottom:10px;}
-
-.like-btn{
+/* Actions row */
+.feed-actions{
+  display:flex;align-items:center;padding:8px 14px 4px;gap:14px;
+}
+.act-btn{
   background:none;border:none;cursor:pointer;
-  font-size:26px;color:#d1d5db;padding:0;line-height:1;
-  transition:transform .15s, color .15s;
+  font-size:24px;color:#262626;padding:2px;transition:.2s;
+  display:flex;align-items:center;
 }
-.like-btn:active{transform:scale(1.4);}
-.like-btn.liked{color:#e0245e;}
-.like-btn.liked i{animation:heartPop .3s ease;}
-@keyframes heartPop{0%{transform:scale(1);}50%{transform:scale(1.5);}100%{transform:scale(1);}}
+.act-btn:hover{transform:scale(1.12);}
+.act-save{margin-left:auto;}
 
-.comment-toggle-btn{
-  background:none;border:none;cursor:pointer;
-  font-size:24px;color:#d1d5db;padding:0;line-height:1;transition:.2s;
-}
-.comment-toggle-btn:hover{color:#f59e0b;}
+.liked-heart{color:#e0245e;}
+@keyframes heartPop{0%{transform:scale(1);}40%{transform:scale(1.5);}100%{transform:scale(1);}}
+.heart-pop{animation:heartPop .35s ease;}
 
-.like-count{font-size:14px;font-weight:800;color:#374151;margin-bottom:8px;}
+/* Likes & caption */
+.feed-likes{font-size:14px;font-weight:800;color:#262626;padding:4px 14px 2px;}
+.feed-caption{font-size:14px;color:#262626;padding:2px 14px 6px;line-height:1.5;}
+.feed-caption .uname{font-weight:900;margin-right:5px;}
+.feed-view-comments{font-size:14px;color:#8e8e8e;font-weight:600;padding:0 14px 6px;display:block;cursor:pointer;}
 
-.caption-row{font-size:14px;font-weight:600;color:#374151;line-height:1.65;margin-bottom:10px;}
-.caption-row strong{font-weight:900;color:#1f2937;margin-right:6px;}
-
-/* ── Comments (hidden by default) ── */
-.comments-toggle{
-  display:flex;align-items:center;justify-content:space-between;
-  cursor:pointer;padding:6px 0 8px;
-  font-size:13px;font-weight:800;color:#e76f51;
-  border-top:1px dashed #f5ead0;margin:0 16px;
-  user-select:none;
-}
-.comments-toggle i{transition:transform .3s;}
-.comments-toggle.open i{transform:rotate(180deg);}
-
-.comments-wrap{
-  display:none;padding:4px 16px 8px;
-}
-.comments-wrap.open{display:block;animation:slideDown .25s ease;}
-@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-
-.comment-item{
-  display:flex;gap:9px;margin-bottom:8px;align-items:flex-start;
-}
-.comment-avatar{
-  width:30px;height:30px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:900;color:#7c3700;
-}
-.comment-bubble{
-  background:#fdf6ee;border-radius:14px;padding:7px 12px;
-  font-size:13px;font-weight:600;color:#374151;
-  border:1px solid #f5ead0;
-}
-.comment-bubble strong{display:block;margin-bottom:2px;font-size:11px;font-weight:900;color:#e76f51;}
-
-/* Comment input */
-.comment-form{
+/* Comments section */
+.comments-section{display:none;padding:0 14px 10px;}
+.comments-section.open{display:block;}
+.comments-list{margin-bottom:8px;}
+.comment-item{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
+.ci-name{font-weight:900;color:#262626;margin-right:4px;}
+.ci-text{color:#262626;font-weight:600;}
+.comment-input-row{
   display:flex;align-items:center;gap:8px;
-  padding:10px 16px 14px;border-top:1px dashed #f5ead0;
+  border-top:1px solid #efefef;padding-top:8px;
 }
-.comment-form input{
-  flex:1;border:2px solid #f0e8d8;border-radius:25px;
-  padding:9px 14px;font-size:13px;font-weight:700;outline:none;
-  background:#fafafa;transition:.2s;font-family:'Nunito',sans-serif;
+.comment-input-row input{
+  flex:1;border:none;outline:none;font-size:14px;font-weight:600;
+  background:transparent;font-family:'Nunito',sans-serif;color:#262626;
 }
-.comment-form input:focus{border-color:#fbbf24;background:white;}
-.comment-form input::placeholder{color:#d1d5db;}
-.comment-send-btn{
-  width:36px;height:36px;border:none;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  color:#7c3700;font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:.2s;
-  box-shadow:0 3px 10px rgba(249,132,74,.25);
+.comment-input-row input::placeholder{color:#8e8e8e;}
+.ci-send{
+  background:none;border:none;color:#0095f6;font-size:13px;
+  font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;
 }
-.comment-send-btn:hover{transform:scale(1.1);}
+.ci-send:hover{color:#0081d6;}
 
 /* ── Quiz card ── */
 .quiz-card{
-  background:white;border-radius:28px;padding:22px;
-  margin-bottom:20px;
-  box-shadow:0 6px 24px rgba(0,0,0,.08);
-  border:2px solid #fff0d8;
-  animation:popIn .45s ease;
+  background:white;max-width:470px;margin:0 auto 0;
+  border-bottom:1px solid #dbdbdb;
+  padding:20px 16px;
 }
 .quiz-badge{
   display:inline-flex;align-items:center;gap:6px;
@@ -185,340 +115,431 @@ body{background:#fdf6ee;padding-bottom:90px;overflow-x:hidden;}
   font-size:13px;font-weight:900;
   padding:5px 14px;border-radius:50px;margin-bottom:14px;
 }
-.quiz-question{font-size:16px;font-weight:800;color:#1f2937;margin-bottom:16px;line-height:1.55;}
+.quiz-question{font-size:15px;font-weight:800;color:#262626;margin-bottom:14px;line-height:1.55;}
 .quiz-option{
   display:flex;align-items:center;gap:10px;
-  padding:12px 14px;border:2px solid #f0e8d8;
-  border-radius:16px;margin-bottom:10px;cursor:pointer;
-  transition:.2s;font-size:14px;font-weight:700;color:#374151;
+  padding:11px 14px;border:1.5px solid #dbdbdb;
+  border-radius:12px;margin-bottom:9px;cursor:pointer;
+  transition:.2s;font-size:14px;font-weight:700;color:#262626;
 }
-.quiz-option:hover{border-color:#fbbf24;background:#fef3c7;}
-.quiz-option input{accent-color:#f59e0b;}
+.quiz-option:hover{border-color:#0095f6;background:#f0f9ff;}
+.quiz-option input{accent-color:#0095f6;}
 .quiz-submit{
-  width:100%;padding:14px;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  border:none;border-radius:16px;
-  color:#7c3700;font-size:15px;font-weight:900;
+  width:100%;padding:13px;
+  background:#0095f6;border:none;border-radius:12px;
+  color:white;font-size:14px;font-weight:900;
   cursor:pointer;margin-top:4px;transition:.2s;
-  box-shadow:0 4px 14px rgba(249,132,74,.25);
   font-family:'Nunito',sans-serif;
 }
-.quiz-submit:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(249,132,74,.35);}
+.quiz-submit:hover{background:#0081d6;}
 .quiz-result{
-  margin-top:14px;padding:14px;border-radius:16px;font-size:14px;font-weight:800;
+  margin-top:12px;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:800;
 }
 .quiz-result.correct{background:#d1fae5;color:#065f46;}
 .quiz-result.wrong{background:#fee2e2;color:#991b1b;}
 .skip-link{
-  display:block;text-align:center;margin-top:12px;
-  color:#f59e0b;font-size:14px;font-weight:800;
+  display:block;text-align:center;margin-top:10px;
+  color:#0095f6;font-size:14px;font-weight:800;
 }
 
 /* ── Load more ── */
 .load-more{
-  display:block;text-align:center;margin:10px auto 30px;
-  padding:14px 30px;background:white;border-radius:50px;
-  box-shadow:0 6px 20px rgba(0,0,0,.08);
-  color:#e76f51;font-weight:900;font-size:15px;
-  border:2px solid #fff0d8;transition:.25s;
+  display:block;text-align:center;margin:18px auto 30px;
+  max-width:470px;padding:13px;background:white;
+  border:1.5px solid #dbdbdb;border-radius:10px;
+  color:#262626;font-weight:800;font-size:14px;transition:.2s;
 }
-.load-more:hover{background:linear-gradient(135deg,#ffecd2,#fcb69f);color:#7c3700;transform:translateY(-3px);}
+.load-more:hover{background:#efefef;}
+
+/* ── Empty state ── */
+.empty-feed{
+  max-width:470px;margin:60px auto;text-align:center;padding:0 20px;
+}
+.empty-feed .icon{font-size:52px;margin-bottom:12px;}
+.empty-feed p{font-size:14px;font-weight:700;color:#8e8e8e;margin-bottom:16px;}
+.empty-btn{
+  display:inline-block;padding:11px 24px;
+  background:#0095f6;color:white;border-radius:10px;
+  font-size:14px;font-weight:900;
+}
+
+/* ── Share modal ── */
+.share-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:8000;align-items:flex-end;justify-content:center;
+}
+.share-overlay.show{display:flex;}
+.share-sheet{
+  background:white;width:100%;max-width:470px;
+  border-radius:24px 24px 0 0;padding:0 0 28px;
+  animation:slideUp .28s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.share-handle{width:40px;height:4px;border-radius:4px;background:#dbdbdb;margin:12px auto 14px;}
+.share-title{font-size:16px;font-weight:900;color:#262626;text-align:center;padding-bottom:14px;border-bottom:1px solid #efefef;}
+.share-row{
+  display:flex;gap:18px;overflow-x:auto;padding:16px 16px 0;
+  scrollbar-width:none;
+}
+.share-row::-webkit-scrollbar{display:none;}
+.share-friend{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  cursor:pointer;flex-shrink:0;
+}
+.sf-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#7c3700;transition:.2s;
+}
+.sf-avatar.sent{background:#d1fae5;color:#065f46;}
+.sf-name{font-size:12px;font-weight:700;color:#262626;max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.share-actions{display:flex;gap:10px;padding:14px 16px 0;}
+.share-action-btn{
+  flex:1;padding:12px;border-radius:12px;border:1.5px solid #dbdbdb;
+  background:white;font-size:13px;font-weight:800;cursor:pointer;
+  color:#262626;font-family:'Nunito',sans-serif;transition:.2s;
+}
+.share-action-btn:hover{background:#efefef;}
+.share-cancel{
+  display:block;width:calc(100% - 32px);margin:10px 16px 0;
+  padding:12px;border-radius:12px;border:none;
+  background:#efefef;color:#262626;font-size:14px;font-weight:900;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+.copy-toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:#262626;color:white;padding:10px 20px;border-radius:10px;
+  font-size:13px;font-weight:800;pointer-events:none;
+  opacity:0;transition:opacity .3s;z-index:9999;
+}
+.copy-toast.show{opacity:1;}
 
 /* ── Bottom nav ── */
 .bottom-nav{
   position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(14px);
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-top:1px solid #dbdbdb;
   display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;border-top:2px dashed #ffe0a0;
+  padding:10px 0 14px;
 }
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  color:#9ca3af;font-size:10px;font-weight:700;
-  transition:.2s;padding:6px 10px;border-radius:16px;
-}
-.nav-item i{font-size:22px;transition:.25s;}
-.nav-item:hover{color:#e76f51;}
-.nav-item:hover i{transform:scale(1.25) rotate(-8deg);}
-.nav-item.active{color:#e76f51;}
-
+.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
+.nav-item i{font-size:24px;transition:.2s;}
+.nav-item.active i{color:#e76f51;}
+.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
 </style>
 </head>
 <body>
 
-<div class="bg-bubbles">
-  <span></span><span></span><span></span><span></span><span></span>
-</div>
-
 <!-- Header -->
-<div class="header">
-  <div class="logo">🌟 LittleNet</div>
-  <div class="header-icons">
-    <a href="/logout/" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+<div class="ig-header">
+  <div class="ig-header-inner">
+    <div class="ig-logo">✨ For You</div>
+    <div class="ig-header-right">
+      <a href="/messages/"><i class="fa-regular fa-paper-plane"></i></a>
+    </div>
   </div>
 </div>
 
-<div class="container">
-
+<!-- Feed items -->
+{% if feed_items %}
   {% for item in feed_items %}
 
-  <!-- ── POST ── -->
   {% if item.type == "POST" %}
   {% set post = item.data %}
+  <div class="feed-card" id="post-{{ post.post_id }}" data-post-id="{{ post.post_id }}">
 
-  <div class="post-card" id="post-{{ post.post_id }}">
-
-    <!-- Header with real DP -->
-    <div class="post-header">
-      <div class="user-row">
-        <div class="avatar">
+    <!-- Header: avatar + name clickable to profile -->
+    <div class="feed-head">
+      <div class="feed-user" onclick="window.location.href='/child/view-profile/{{ post.child_id }}/'">
+        <div class="feed-avatar">
           {% if post.profile_picture %}
-            <img src="/{{ post.profile_picture }}" alt="dp">
+            <img src="/{{ post.profile_picture | replace('\\', '/') }}" alt="dp">
           {% else %}
             {{ post.full_name[0]|upper if post.full_name else '?' }}
           {% endif %}
         </div>
         <div>
-          <div class="username">{{ post.full_name }}</div>
-          <div class="category">{% if post.content_category %}🏷️ {{ post.content_category }}{% endif %}</div>
+          <div class="feed-username">{{ post.full_name }}</div>
+          {% if post.content_category %}
+          <div class="feed-category">{{ post.content_category }}</div>
+          {% endif %}
         </div>
       </div>
+      <div class="feed-more">···</div>
     </div>
 
     <!-- Media -->
-    {% if post.media_type == "IMAGE" %}
-      <img class="post-media" src="/{{ post.media_path }}" alt="post">
-    {% elif post.media_type == "VIDEO" %}
-      <video class="post-media" autoplay muted loop playsinline
-             onmouseenter="this.muted=false" onmouseleave="this.muted=true">
-        <source src="/{{ post.media_path }}" type="video/mp4">
-      </video>
-    {% endif %}
-
-    <!-- Actions -->
-    <div class="post-actions">
-      <div class="action-row">
-        <button class="like-btn" data-post-id="{{ post.post_id }}" onclick="toggleLike(this)">
-          <i class="fa-regular fa-heart"></i>
-        </button>
-        <button class="comment-toggle-btn"
-                onclick="toggleComments({{ post.post_id }})" title="Comments">
-          <i class="fa-regular fa-comment"></i>
-        </button>
-      </div>
-
-      <div class="like-count" id="likes-{{ post.post_id }}">
-        ❤️ {{ post.likes }} {{ 'like' if post.likes == 1 else 'likes' }}
-      </div>
-
-      {% if post.caption %}
-      <div class="caption-row">
-        <strong>{{ post.full_name }}</strong>{{ post.caption }}
-      </div>
+    <div class="feed-media">
+      {% if post.media_type == "IMAGE" %}
+        <img src="/{{ post.media_path | replace('\\', '/') }}" alt="post" loading="lazy">
+      {% elif post.media_type == "VIDEO" %}
+        <video src="/{{ post.media_path | replace('\\', '/') }}" muted loop playsinline></video>
       {% endif %}
     </div>
 
-    <!-- Comments toggle -->
-    <div class="comments-toggle" id="ctoggle-{{ post.post_id }}"
-         onclick="toggleComments({{ post.post_id }})">
-      <span>💬 View Comments ({{ post.comments | length }})</span>
-      <i class="fa-solid fa-chevron-down"></i>
+    <!-- Actions -->
+    <div class="feed-actions">
+      <button class="act-btn like-btn" title="Like">
+        <i class="fa-regular fa-heart" id="heart-{{ post.post_id }}"></i>
+      </button>
+      <button class="act-btn comment-toggle-btn" title="Comment">
+        <i class="fa-regular fa-comment"></i>
+      </button>
+      <button class="act-btn share-btn" title="Share"
+              data-pid="{{ post.post_id }}"
+              data-name="{{ post.full_name | e }}"
+              data-path="{{ post.media_path | replace('\\', '/') }}"
+              data-mtype="{{ post.media_type }}"
+              data-caption="{{ (post.caption or '') | truncate(80, True, '…') | e }}">
+        <i class="fa-regular fa-paper-plane"></i>
+      </button>
+      <button class="act-btn act-save"><i class="fa-regular fa-bookmark"></i></button>
     </div>
 
-    <!-- Comments list (hidden) -->
-    <div class="comments-wrap" id="cwrap-{{ post.post_id }}">
-      <div id="comments-{{ post.post_id }}">
-        {% for comment in post.comments %}
+    <div class="feed-likes" id="likes-{{ post.post_id }}">
+      {{ post.likes }} like{{ 's' if post.likes != 1 else '' }}
+    </div>
+
+    {% if post.caption %}
+    <div class="feed-caption">
+      <span class="uname" style="cursor:pointer;" onclick="window.location.href='/child/view-profile/{{ post.child_id }}/'">{{ post.full_name }}</span>{{ post.caption }}
+    </div>
+    {% endif %}
+
+    {% if post.comments %}
+    <span class="feed-view-comments comment-toggle-btn">View {{ post.comments | length }} comment{{ 's' if post.comments | length != 1 else '' }}</span>
+    {% endif %}
+
+    <!-- Comments section (AJAX) -->
+    <div class="comments-section" id="cmt-{{ post.post_id }}">
+      <div class="comments-list" id="clist-{{ post.post_id }}">
+        {% for c in post.comments %}
         <div class="comment-item">
-          <div class="comment-avatar">{{ comment.full_name[0]|upper if comment.full_name else '?' }}</div>
-          <div class="comment-bubble">
-            <strong>{{ comment.full_name }}</strong>
-            {{ comment.comment_text }}
-          </div>
+          <span class="ci-name">{{ c.full_name }}</span>
+          <span class="ci-text">{{ c.comment_text }}</span>
         </div>
         {% endfor %}
-        {% if not post.comments %}
-        <p style="font-size:13px;font-weight:700;color:#d1d5db;text-align:center;padding:8px 0;">
-          No comments yet 🌟
-        </p>
-        {% endif %}
+      </div>
+      <div class="comment-input-row">
+        <input type="text" placeholder="Add a comment…" id="cinput-{{ post.post_id }}">
+        <button class="ci-send" data-pid="{{ post.post_id }}">Post</button>
       </div>
     </div>
 
-    <!-- Comment input -->
-    <div class="comment-form">
-      <input
-        type="text"
-        id="input-{{ post.post_id }}"
-        placeholder="Add a comment… ✨"
-        onkeydown="if(event.key==='Enter') submitComment('{{ post.post_id }}', this)">
-      <button class="comment-send-btn"
-              onclick="submitComment('{{ post.post_id }}', document.getElementById('input-{{ post.post_id }}'))">
-        <i class="fa-solid fa-paper-plane"></i>
-      </button>
-    </div>
-
   </div>
-
   {% endif %}
 
-  <!-- ── QUIZ ── -->
   {% if item.type == "QUIZ" %}
   {% set quiz = item.data %}
-
   <div class="quiz-card">
     <div class="quiz-badge">🧠 Quiz Time!</div>
     <div class="quiz-question">{{ quiz.question }}</div>
-
     <form method="POST" action="/quiz/submit/">
       <input type="hidden" name="quiz_id" value="{{ quiz.quiz_id }}">
-
       {% for opt_label in [quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d] %}
       <label class="quiz-option">
         <input type="radio" name="answer" value="{{ opt_label }}" required>
         {{ opt_label }}
       </label>
       {% endfor %}
-
       <button class="quiz-submit" type="submit">✅ Submit Answer</button>
     </form>
-
     {% if quiz_result %}
     <div class="quiz-result {{ 'correct' if quiz_result.is_correct else 'wrong' }}">
-      {% if quiz_result.is_correct %}
-      🎉 Correct Answer! Well done!
-      {% else %}
-      ❌ Wrong! Correct answer: <strong>{{ quiz_result.correct_answer }}</strong>
-      {% endif %}
+      {% if quiz_result.is_correct %}🎉 Correct! Well done!
+      {% else %}❌ Wrong! Correct answer: <strong>{{ quiz_result.correct_answer }}</strong>{% endif %}
     </div>
     {% endif %}
-
     {% if not settings["mandatory_quiz"] %}
     <a class="skip-link" href="/recommended/?page={{ page + 1 }}">Skip Quiz →</a>
     {% endif %}
   </div>
-
   {% endif %}
 
   {% endfor %}
+{% else %}
+  <div class="empty-feed">
+    <div class="icon">📭</div>
+    <p>No posts yet.<br>Follow friends and explore content!</p>
+    <a class="empty-btn" href="/discover/">Find Friends</a>
+  </div>
+{% endif %}
 
-  <a class="load-more" href="/recommended/?page={{ page + 1 }}">
-    🔄 Load More
-  </a>
+<a class="load-more" href="/recommended/?page={{ page + 1 }}">Load more</a>
 
+<!-- Share modal -->
+<div class="share-overlay" id="shareOverlay" onclick="closeShare(event)">
+  <div class="share-sheet" onclick="event.stopPropagation()">
+    <div class="share-handle"></div>
+    <div class="share-title">Share Post</div>
+    <div class="share-row" id="friendsRow">
+      <div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Loading friends…</div>
+    </div>
+    <div class="share-actions">
+      <button class="share-action-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Link</button>
+      <button class="share-action-btn" onclick="shareNative()"><i class="fa-solid fa-share-nodes"></i> More</button>
+    </div>
+    <button class="share-cancel" onclick="closeShare()">Cancel</button>
+  </div>
 </div>
+<div class="copy-toast" id="copyToast">🔗 Link copied!</div>
 
 <!-- Bottom nav -->
 <nav class="bottom-nav">
-  <a class="nav-item" href="/feed/"><i class="fa-solid fa-house"></i><span>Home</span></a>
-  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></a>
-  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i><span>Post</span></a>
-  <a class="nav-item active" href="/recommended/"><i class="fa-solid fa-heart"></i><span>For You</span></a>
-  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i><span>Me</span></a>
+  <a class="nav-item" href="/child/dashboard/"><i class="fa-solid fa-house"></i></a>
+  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
+  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
+  <a class="nav-item active" href="/recommended/"><i class="fa-regular fa-heart"></i></a>
+  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i></a>
 </nav>
 
 <script>
-// ── Stars ──
-(function(){
-  for(var i=0;i<10;i++){
-    var s=document.createElement('div');s.className='star';
-    var sz=Math.random()*5+3;
-    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';
-    document.body.appendChild(s);
+// Wire up each post card
+document.querySelectorAll('.feed-card').forEach(function(card){
+  var postId = parseInt(card.dataset.postId);
+
+  // Like state from server (liked class already set below if applicable)
+  var liked = card.querySelector('#heart-'+postId).classList.contains('fa-solid');
+
+  // Like button
+  card.querySelector('.like-btn').addEventListener('click', function(){
+    fetch('/api/like/'+postId+'/', {method:'POST', credentials:'same-origin'})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        liked = d.liked;
+        var heartEl = document.getElementById('heart-'+postId);
+        heartEl.className = 'fa-heart ' + (d.liked ? 'fa-solid liked-heart' : 'fa-regular');
+        heartEl.classList.add('heart-pop');
+        setTimeout(function(){heartEl.classList.remove('heart-pop');}, 400);
+        var lEl = document.getElementById('likes-'+postId);
+        if(lEl) lEl.textContent = d.count + ' like' + (d.count!==1?'s':'');
+      }).catch(function(){});
+  });
+
+  // Comment toggle
+  card.querySelectorAll('.comment-toggle-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var sec = document.getElementById('cmt-'+postId);
+      sec.classList.toggle('open');
+    });
+  });
+
+  // Submit comment
+  var sendBtn = card.querySelector('.ci-send');
+  if(sendBtn){
+    sendBtn.addEventListener('click', function(){ submitComment(postId); });
   }
-})();
+  var inp = document.getElementById('cinput-'+postId);
+  if(inp){
+    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submitComment(postId); });
+  }
 
-// ── Auto-play videos when scrolled into view ──
+  // Share button
+  var shareBtn = card.querySelector('.share-btn');
+  if(shareBtn){
+    shareBtn.addEventListener('click', function(){
+      openShare(
+        shareBtn.dataset.pid,
+        shareBtn.dataset.name,
+        shareBtn.dataset.path,
+        shareBtn.dataset.mtype,
+        shareBtn.dataset.caption
+      );
+    });
+  }
+});
+
+function submitComment(postId){
+  var inp = document.getElementById('cinput-'+postId);
+  var text = (inp.value||'').trim(); if(!text) return;
+  inp.value = '';
+  fetch('/api/comment/'+postId+'/', {
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({text:text})
+  })
+  .then(function(r){return r.json();})
+  .then(function(d){
+    if(!d.ok) return;
+    var list = document.getElementById('clist-'+postId);
+    var item = document.createElement('div'); item.className='comment-item';
+    item.innerHTML='<span class="ci-name">'+escHtml(d.full_name||'You')+'</span><span class="ci-text">'+escHtml(d.text)+'</span>';
+    list.appendChild(item);
+    var sec = document.getElementById('cmt-'+postId);
+    sec.classList.add('open');
+  }).catch(function(){});
+}
+
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Video autoplay on scroll
 (function(){
-  var videos = document.querySelectorAll('video.post-media');
-  if (!videos.length) return;
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        e.target.muted = true;
-        e.target.play().catch(function(){});
-      } else {
-        e.target.pause();
-        e.target.muted = true;
-      }
-    });
-  }, {threshold: 0.55});
-  videos.forEach(function(v){ obs.observe(v); });
+  var vids = document.querySelectorAll('.feed-media video');
+  if(!vids.length || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting) e.target.play(); else e.target.pause(); });
+  }, {threshold:.5});
+  vids.forEach(function(v){ io.observe(v); });
 })();
 
-// ── Like ──
-function toggleLike(btn) {
-  var postId = btn.dataset.postId;
-  var icon = btn.querySelector('i');
-  var countEl = document.getElementById('likes-' + postId);
-  var isLiked = btn.classList.contains('liked');
-
-  btn.classList.toggle('liked');
-  icon.className = isLiked ? 'fa-regular fa-heart' : 'fa-solid fa-heart';
-
-  var current = parseInt(countEl.textContent) || 0;
-  var next = isLiked ? current - 1 : current + 1;
-  countEl.textContent = '❤️ ' + next + (next === 1 ? ' like' : ' likes');
-
-  fetch('/like/' + postId + '/', {method:'GET', credentials:'same-origin'})
-    .catch(function(){
-      btn.classList.toggle('liked');
-      icon.className = isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart';
-      countEl.textContent = '❤️ ' + current + (current === 1 ? ' like' : ' likes');
-    });
+// ── Share modal ──
+var _sharePostId=null, _friends=null;
+function openShare(postId, name, path, mtype, caption){
+  _sharePostId=postId;
+  document.getElementById('shareOverlay').classList.add('show');
+  if(_friends===null) loadShareFriends();
 }
-
-// ── Toggle comments ──
-function toggleComments(postId) {
-  var wrap   = document.getElementById('cwrap-'   + postId);
-  var toggle = document.getElementById('ctoggle-' + postId);
-  var isOpen = wrap.classList.toggle('open');
-  toggle.classList.toggle('open', isOpen);
-  var label = toggle.querySelector('span');
-  var count = wrap.querySelectorAll('.comment-item').length;
-  label.textContent = isOpen ? '💬 Hide Comments' : '💬 View Comments (' + count + ')';
+function closeShare(e){
+  if(!e || e.target===document.getElementById('shareOverlay') || !e.target){
+    document.getElementById('shareOverlay').classList.remove('show');
+  }
 }
-
-// ── Submit comment ──
-function submitComment(postId, input) {
-  var text = input.value.trim();
-  if(!text) return;
-  var fd = new FormData();
-  fd.append('comment', text);
-
-  fetch('/comment/' + postId + '/', {method:'POST', credentials:'same-origin', body:fd})
-    .then(function(){
-      var container = document.getElementById('comments-' + postId);
-      // Remove "no comments" placeholder if present
-      var placeholder = container.querySelector('p');
-      if(placeholder) placeholder.remove();
-
-      var item = document.createElement('div');
-      item.className = 'comment-item';
-      item.innerHTML =
-        '<div class="comment-avatar">🧒</div>' +
-        '<div class="comment-bubble"><strong>You</strong>' + escHtml(text) + '</div>';
-      container.appendChild(item);
-
-      // Open comments wrap so the new comment is visible
-      var wrap = document.getElementById('cwrap-' + postId);
-      var toggle = document.getElementById('ctoggle-' + postId);
-      wrap.classList.add('open');
-      toggle.classList.add('open');
-      var label = toggle.querySelector('span');
-      var count = wrap.querySelectorAll('.comment-item').length;
-      label.textContent = '💬 Hide Comments';
-
-      input.value = '';
-    })
-    .catch(function(){ alert('Could not post comment. Try again!'); });
+function loadShareFriends(){
+  fetch('/api/following/', {credentials:'same-origin'})
+    .then(function(r){return r.json();})
+    .then(function(data){_friends=data; renderShareFriends();})
+    .catch(function(){});
 }
-
-function escHtml(str){
-  return String(str)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function renderShareFriends(){
+  var row = document.getElementById('friendsRow');
+  if(!_friends||!_friends.length){
+    row.innerHTML='<div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Follow friends to share with them!</div>';
+    return;
+  }
+  row.innerHTML='';
+  _friends.forEach(function(f){
+    var div=document.createElement('div'); div.className='share-friend';
+    div.innerHTML='<div class="sf-avatar" id="sf-'+f.user_id+'">'+f.full_name[0].toUpperCase()+'</div><span class="sf-name">'+escHtml(f.full_name)+'</span>';
+    div.onclick=function(){sendToFriend(f.user_id, f.full_name, div.querySelector('.sf-avatar'));};
+    row.appendChild(div);
+  });
+}
+function sendToFriend(userId, name, el){
+  if(el.classList.contains('sent')) return;
+  fetch('/api/share-post/', {
+    method:'POST', credentials:'same-origin',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({receiver_id:userId, post_id:_sharePostId})
+  }).then(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');})
+    .catch(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');});
+}
+function copyLink(){
+  var url = window.location.origin+'/recommended/?from='+(_sharePostId||'');
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){showToast('🔗 Link copied!');});
+  else { var t=document.createElement('textarea');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('🔗 Link copied!'); }
+  closeShare();
+}
+function shareNative(){
+  var url=window.location.origin+'/recommended/?from='+(_sharePostId||'');
+  if(navigator.share) navigator.share({title:'LittleNet',url:url}).catch(function(){});
+  else copyLink();
+}
+function showToast(msg){
+  var t=document.getElementById('copyToast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');}, 2500);
 }
 </script>
-
 </body>
 </html>

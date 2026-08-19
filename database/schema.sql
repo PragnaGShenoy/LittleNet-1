@@ -383,3 +383,6 @@ ALTER TABLE public.child_messages
 
 ALTER TABLE public.child_messages
     ADD COLUMN IF NOT EXISTS seen_at timestamp without time zone;
+
+
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_story BOOLEAN DEFAULT FALSE;

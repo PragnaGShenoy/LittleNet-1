@@ -6,8 +6,7 @@ from flask import session
 from flask import jsonify
 from child.service import follow_child, get_child_profile, is_following
 from uploadPost.ml_service import check_image_safety, check_video_safety
-from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments,  like_post, save_post
-from uploadPost.service import get_all_posts
+from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments, like_post, save_post, get_all_posts, is_liked, unlike_post, get_like_count, get_random_posts
 
 import os
 
@@ -194,4 +193,136 @@ def comment(post_id):
 
     return redirect("/recommended/")
 
+
+# ── AJAX: toggle like ─────────────────────────────────────────────────────────
+@upload_bp.route("/api/like/<int:post_id>/", methods=["POST"])
+def api_like(post_id):
+    if "user_id" not in session:
+        return jsonify(error="not logged in"), 401
+    uid = session["user_id"]
+    if is_liked(post_id, uid):
+        unlike_post(post_id, uid)
+        liked = False
+    else:
+        like_post(post_id, uid)
+        liked = True
+    return jsonify(liked=liked, count=get_like_count(post_id))
+
+
+# ── AJAX: submit comment ──────────────────────────────────────────────────────
+@upload_bp.route("/api/comment/<int:post_id>/", methods=["POST"])
+def api_comment(post_id):
+    if "user_id" not in session:
+        return jsonify(error="not logged in"), 401
+    data = request.get_json(silent=True) or {}
+    text = (data.get("text") or "").strip()
+    if not text:
+        return jsonify(error="empty comment"), 400
+    add_comment(post_id, session["user_id"], text)
+    return jsonify(ok=True, full_name=session.get("full_name","You"), text=text)
+
+
+# ── AJAX: get comments ────────────────────────────────────────────────────────
+@upload_bp.route("/api/comments/<int:post_id>/")
+def api_comments(post_id):
+    if "user_id" not in session:
+        return jsonify([]), 401
+    comments = get_post_comments(post_id)
+    return jsonify([{"full_name": c["full_name"], "text": c["comment_text"]} for c in comments])
+
+
+# ── AJAX: single post detail (for profile lightbox) ──────────────────────────
+@upload_bp.route("/api/post-detail/<int:post_id>/")
+def api_post_detail(post_id):
+    if "user_id" not in session:
+        return jsonify(error="not logged in"), 401
+    uid = session["user_id"]
+    from database.connection import get_db_connection
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.*, u.full_name,
+               (SELECT COUNT(*) FROM likes l WHERE l.post_id=p.post_id) AS likes
+        FROM posts p JOIN users u ON p.child_id=u.user_id
+        WHERE p.post_id=%s
+    """, (post_id,))
+    p = cur.fetchone()
+    comments = get_post_comments(post_id)
+    cur.close(); conn.close()
+    if not p:
+        return jsonify(error="not found"), 404
+    return jsonify(
+        post_id=p["post_id"],
+        full_name=p["full_name"],
+        media_type=p["media_type"],
+        media_path=(p["media_path"] or "").replace("\\","/"),
+        caption=p["caption"] or "",
+        likes=p["likes"],
+        liked=is_liked(post_id, uid),
+        comments=[{"full_name": c["full_name"], "comment_text": c["comment_text"]} for c in comments],
+    )
+
+
+# ── AJAX: random feed posts ───────────────────────────────────────────────────
+@upload_bp.route("/api/random-posts/")
+def api_random_posts():
+    if "user_id" not in session:
+        return jsonify([]), 401
+    uid = session["user_id"]
+    posts = get_random_posts(uid, limit=6)
+    result = []
+    for p in posts:
+        result.append({
+            "post_id":         p["post_id"],
+            "full_name":       p["full_name"],
+            "media_type":      p["media_type"],
+            "media_path":      (p["media_path"] or "").replace("\\","/"),
+            "caption":         p["caption"] or "",
+            "content_category":p["content_category"] or "",
+            "likes":           p["likes"],
+            "comments_count":  p["comments_count"],
+            "profile_picture": (p["profile_picture"] or "").replace("\\","/"),
+            "liked":           is_liked(p["post_id"], uid),
+        })
+    return jsonify(result)
+
+
+# ── Story upload (POST only, AJAX) ──────────────────────────────────────────
+@upload_bp.route("/upload-story/", methods=["POST"])
+def upload_story():
+    if "user_id" not in session:
+        return jsonify(success=False, error="not logged in"), 401
+
+    media = request.files.get("media")
+    if not media or media.filename == "":
+        return jsonify(success=False, error="no file")
+
+    filename = secure_filename(media.filename)
+    ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    image_extensions = {"jpg", "jpeg", "png", "gif", "webp", "bmp"}
+    video_extensions = {"mp4", "mov", "avi", "mkv", "webm"}
+
+    if ext in image_extensions:
+        filepath = os.path.join("uploads/images", filename).replace("\\", "/")
+        media.save(filepath)
+        moderation = check_image_safety(filepath)
+        if not moderation["safe"]:
+            os.remove(filepath)
+            return jsonify(success=False, category=moderation["category"])
+        save_post(session["user_id"], "IMAGE", filepath,
+                  request.form.get("caption", ""), "Story", is_story=True)
+        return jsonify(success=True)
+
+    if ext in video_extensions:
+        filepath = os.path.join("uploads/videos", filename).replace("\\", "/")
+        media.save(filepath)
+        safety = check_video_safety(filepath)
+        if not safety["safe"]:
+            os.remove(filepath)
+            return jsonify(success=False, category=safety["category"])
+        save_post(session["user_id"], "VIDEO", filepath,
+                  request.form.get("caption", ""), "Story", is_story=True)
+        return jsonify(success=True)
+
+    return jsonify(success=False, error="unsupported file type")
 

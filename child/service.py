@@ -359,12 +359,10 @@ def get_followers(child_id):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT
-            u.user_id,
-            u.full_name
+        SELECT u.user_id, u.full_name, cp.profile_picture
         FROM followers f
-        JOIN users u
-        ON f.child_id = u.user_id
+        JOIN users u ON f.child_id = u.user_id
+        LEFT JOIN child_profiles cp ON u.user_id = cp.child_id
         WHERE f.following_child_id = %s
     """, (child_id,))
 
@@ -381,12 +379,10 @@ def get_following(child_id):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT
-            u.user_id,
-            u.full_name
+        SELECT u.user_id, u.full_name, cp.profile_picture
         FROM followers f
-        JOIN users u
-        ON f.following_child_id = u.user_id
+        JOIN users u ON f.following_child_id = u.user_id
+        LEFT JOIN child_profiles cp ON u.user_id = cp.child_id
         WHERE f.child_id = %s
     """, (child_id,))
 
@@ -533,6 +529,69 @@ def get_random_children(current_child_id):
     conn.close()
 
     return children
+
+
+def get_my_posts_for_profile(child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.post_id, p.media_type, p.media_path, p.caption,
+               (SELECT COUNT(*) FROM likes l WHERE l.post_id=p.post_id) AS likes,
+               (SELECT COUNT(*) FROM comments c WHERE c.post_id=p.post_id) AS comments_count
+        FROM posts p
+        WHERE p.child_id=%s AND (p.is_story IS NULL OR p.is_story=FALSE)
+        ORDER BY p.created_at DESC
+    """, (child_id,))
+    posts = cur.fetchall()
+    cur.close(); conn.close()
+    return posts
+
+
+def get_following_stories(child_id):
+    """Stories from people this child follows, posted in the last 24 h, grouped by poster."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT DISTINCT ON (p.child_id)
+            p.post_id, p.child_id, p.media_type, p.media_path, p.caption, p.created_at,
+            u.full_name,
+            cp.profile_picture,
+            EXTRACT(EPOCH FROM (NOW() - p.created_at)) AS age_seconds
+        FROM posts p
+        JOIN users u ON p.child_id = u.user_id
+        LEFT JOIN child_profiles cp ON p.child_id = cp.child_id
+        WHERE p.is_story = TRUE
+          AND p.created_at > NOW() - INTERVAL '24 hours'
+          AND p.child_id IN (
+              SELECT following_child_id FROM followers WHERE child_id = %s
+          )
+        ORDER BY p.child_id, p.created_at DESC
+    """, (child_id,))
+    stories = cur.fetchall()
+    cur.close()
+    conn.close()
+    return stories
+
+
+def get_my_active_story(child_id):
+    """Latest story posted by this child in the last 24 h."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.*, cp.profile_picture,
+               EXTRACT(EPOCH FROM (NOW() - p.created_at)) AS age_seconds
+        FROM posts p
+        LEFT JOIN child_profiles cp ON p.child_id = cp.child_id
+        WHERE p.is_story = TRUE
+          AND p.child_id = %s
+          AND p.created_at > NOW() - INTERVAL '24 hours'
+        ORDER BY p.created_at DESC
+        LIMIT 1
+    """, (child_id,))
+    story = cur.fetchone()
+    cur.close()
+    conn.close()
+    return story
 
 
 from parent.service import get_time_limit

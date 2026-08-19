@@ -1,11 +1,36 @@
 from database.connection import get_db_connection
 
+def get_random_posts(child_id, limit=6):
+    """Random approved posts from other children — refreshes on each load."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT
+            p.*,
+            u.full_name,
+            cp.profile_picture,
+            (SELECT COUNT(*) FROM likes  l WHERE l.post_id = p.post_id) AS likes,
+            (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.post_id) AS comments_count
+        FROM posts p
+        JOIN users u ON p.child_id = u.user_id
+        LEFT JOIN child_profiles cp ON p.child_id = cp.child_id
+        WHERE p.is_safe = TRUE
+          AND (p.is_story IS NULL OR p.is_story = FALSE)
+          AND p.child_id != %s
+        ORDER BY RANDOM()
+        LIMIT %s
+    """, (child_id, limit))
+    posts = cur.fetchall()
+    cur.close(); conn.close()
+    return posts
+
 def save_post(
     child_id,
     media_type,
     media_path,
     caption,
-    content_category
+    content_category,
+    is_story=False
 ):
 
     conn = get_db_connection()
@@ -17,16 +42,18 @@ def save_post(
             media_type,
             media_path,
             caption,
-            content_category
+            content_category,
+            is_story
         )
-        VALUES(%s,%s,%s,%s,%s)
+        VALUES(%s,%s,%s,%s,%s,%s)
     """,
     (
         child_id,
         media_type,
         media_path,
         caption,
-        content_category
+        content_category,
+        is_story
     ))
 
     conn.commit()
@@ -132,6 +159,20 @@ def like_post(post_id, child_id):
 
     cur.close()
     conn.close()
+
+def is_liked(post_id, child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT 1 FROM likes WHERE post_id=%s AND child_id=%s", (post_id, child_id))
+    result = cur.fetchone()
+    cur.close(); conn.close()
+    return result is not None
+
+def unlike_post(post_id, child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM likes WHERE post_id=%s AND child_id=%s", (post_id, child_id))
+    conn.commit(); cur.close(); conn.close()
 
 def get_like_count(post_id):
 

@@ -1,289 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Followers | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
+a{text-decoration:none;color:inherit;}
+body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
+.ig-header{
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid #dbdbdb;
 }
-
-body{
-
-background:#fafafa;
-
+.ig-header-inner{
+  max-width:470px;margin:0 auto;
+  display:flex;align-items:center;gap:14px;
+  padding:12px 16px;
 }
+.ig-back{font-size:21px;color:#262626;cursor:pointer;flex-shrink:0;}
+.ig-back:hover{color:#e76f51;}
+.ig-title{font-size:17px;font-weight:900;color:#262626;}
 
-.header{
-
-position:sticky;
-top:0;
-background:white;
-padding:16px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-
+/* tabs */
+.tabs{
+  max-width:470px;margin:0 auto;
+  display:flex;border-bottom:1px solid #dbdbdb;
 }
-
-.logo{
-
-font-size:28px;
-font-weight:700;
-color:#2563EB;
-
+.tab{
+  flex:1;text-align:center;padding:13px 0;
+  font-size:14px;font-weight:800;color:#8e8e8e;
+  border-bottom:2px solid transparent;cursor:pointer;transition:.2s;
 }
+.tab.active{color:#262626;border-bottom-color:#262626;}
 
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
+/* list */
+.page{max-width:470px;margin:0 auto;}
+.person-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;transition:.15s;
 }
+.person-row:hover{background:#f9f9f9;}
 
-.container{
-
-max-width:650px;
-margin:25px auto;
-padding:0 15px;
-
+.p-avatar{
+  width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#ffecd2,#fcb69f);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;color:#7c3700;overflow:hidden;
 }
+.p-avatar img{width:100%;height:100%;object-fit:cover;}
+.p-info{flex:1;min-width:0;}
+.p-name{font-size:14px;font-weight:800;color:#262626;}
+.p-sub{font-size:12px;color:#8e8e8e;font-weight:600;margin-top:1px;}
 
-.title{
+.empty-state{text-align:center;padding:60px 20px;}
+.empty-state .icon{font-size:52px;margin-bottom:10px;}
+.empty-state p{font-size:14px;font-weight:700;color:#9ca3af;}
 
-font-size:28px;
-font-weight:700;
-margin-bottom:20px;
-
+/* bottom nav */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;width:100%;z-index:998;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-top:1px solid #dbdbdb;
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 14px;
 }
-
-.card{
-
-background:white;
-border-radius:18px;
-padding:16px;
-margin-bottom:15px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.user{
-
-display:flex;
-align-items:center;
-gap:15px;
-
-}
-
-.avatar{
-
-width:60px;
-height:60px;
-border-radius:50%;
-
-background:linear-gradient(135deg,#ff6b6b,#7c3aed);
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-color:white;
-font-size:24px;
-
-}
-
-.name{
-
-font-size:18px;
-font-weight:600;
-
-}
-
-.badge{
-
-background:#EEF4FF;
-color:#2563EB;
-
-padding:8px 15px;
-
-border-radius:25px;
-
-font-size:14px;
-font-weight:600;
-
-}
-
-.empty{
-
-background:white;
-padding:60px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.empty i{
-
-font-size:70px;
-color:#ccc;
-margin-bottom:20px;
-
-}
-
-.empty h2{
-
-margin-bottom:10px;
-
-}
-
-.empty p{
-
-color:#777;
-
-}
-
-@media(max-width:768px){
-
-.logo{
-
-font-size:24px;
-
-}
-
-.title{
-
-font-size:24px;
-
-}
-
-.avatar{
-
-width:50px;
-height:50px;
-
-}
-
-.name{
-
-font-size:16px;
-
-}
-
-}
-
+.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
+.nav-item i{font-size:24px;transition:.2s;}
+.nav-item.active i{color:#e76f51;}
+.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
 </style>
-
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
+<div class="ig-header">
+  <div class="ig-header-inner">
+    <a class="ig-back" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></a>
+    <div class="ig-title">Followers</div>
+  </div>
 </div>
 
-<a href="/child/profile/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Profile
-
-</a>
-
+<!-- Tabs linking to both lists -->
+<div class="tabs">
+  <a class="tab active" href="/followers/">Followers</a>
+  <a class="tab" href="/following/">Following</a>
 </div>
 
-<div class="container">
-
-<div class="title">
-
-Followers
-
+<div class="page">
+  {% if followers %}
+    {% for user in followers %}
+    <a class="person-row" href="/child/view-profile/{{ user.user_id }}/">
+      <div class="p-avatar">
+        {% if user.profile_picture is defined and user.profile_picture %}
+          <img src="/{{ user.profile_picture|replace('\\','/') }}" alt="dp">
+        {% else %}
+          {{ user.full_name[0]|upper if user.full_name else '?' }}
+        {% endif %}
+      </div>
+      <div class="p-info">
+        <div class="p-name">{{ user.full_name }}</div>
+        <div class="p-sub">Follows you</div>
+      </div>
+    </a>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">👥</div>
+      <p>No followers yet.<br>Share your posts to get noticed!</p>
+    </div>
+  {% endif %}
 </div>
 
-{% if followers %}
-
-{% for user in followers %}
-
-<div class="card">
-
-<div class="user">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div class="name">
-
-{{ user.full_name }}
-
-</div>
-
-</div>
-
-<div class="badge">
-
-Follower
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-solid fa-user-group"></i>
-
-<h2>
-
-No Followers Yet
-
-</h2>
-
-<p>
-
-Share your posts and interact with others to gain followers.
-
-</p>
-
-</div>
-
-{% endif %}
-
-</div>
-
+<nav class="bottom-nav">
+  <a class="nav-item" href="/child/dashboard/"><i class="fa-solid fa-house"></i></a>
+  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
+  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
+  <a class="nav-item" href="/messages/"><i class="fa-regular fa-comment-dots"></i></a>
+  <a class="nav-item active" href="/child/profile/"><i class="fa-solid fa-user"></i></a>
+</nav>
 </body>
-
 </html>
