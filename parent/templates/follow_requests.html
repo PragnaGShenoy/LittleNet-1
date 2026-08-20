@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Follow Requests — LittleNet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:#f5f7fb;color:#222;min-height:100vh;}
+.header{position:sticky;top:0;background:white;padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #e5e7eb;z-index:10;}
+.back-btn{width:36px;height:36px;border-radius:50%;border:none;background:#f3f4f6;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.header h1{font-size:18px;font-weight:700;color:#111;}
+.badge{background:#ef4444;color:white;border-radius:12px;padding:2px 8px;font-size:12px;font-weight:700;margin-left:6px;}
+.container{max-width:600px;margin:24px auto;padding:0 16px;}
+.empty{text-align:center;padding:60px 20px;color:#9ca3af;}
+.empty i{font-size:48px;margin-bottom:16px;display:block;}
+.empty p{font-size:16px;font-weight:500;}
+.card{background:white;border-radius:16px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f9844a,#e76f51);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:white;flex-shrink:0;}
+.info{flex:1;}
+.info .name{font-size:15px;font-weight:700;color:#111;}
+.info .desc{font-size:13px;color:#6b7280;margin-top:2px;}
+.info .desc strong{color:#374151;}
+.actions{display:flex;gap:8px;flex-shrink:0;}
+.btn-approve{padding:8px 18px;border-radius:10px;border:none;background:#10b981;color:white;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-approve:hover{background:#059669;}
+.btn-reject{padding:8px 18px;border-radius:10px;border:1.5px solid #e5e7eb;background:white;color:#374151;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
+.btn-reject:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626;}
+.done-row{display:flex;align-items:center;gap:8px;color:#10b981;font-size:13px;font-weight:600;}
+.done-row i{font-size:18px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+  <h1>Follow Requests <span class="badge" id="countBadge">{{ pending|length }}</span></h1>
+</div>
+
+<div class="container">
+  {% if not pending %}
+  <div class="empty">
+    <i class="fa-solid fa-user-check"></i>
+    <p>No pending follow requests</p>
+  </div>
+  {% else %}
+    {% for req in pending %}
+    <div class="card" id="req-{{ req.requester_id }}-{{ req.target_id }}">
+      <div class="avatar">{{ req.requester_name[0]|upper }}</div>
+      <div class="info">
+        <div class="name">{{ req.requester_name }}</div>
+        <div class="desc">wants to follow <strong>{{ req.target_name }}</strong></div>
+      </div>
+      <div class="actions" id="actions-{{ req.requester_id }}-{{ req.target_id }}">
+        <button class="btn-approve"
+          onclick="handleFollow('approve', {{ req.requester_id }}, {{ req.target_id }}, this)">
+          Approve
+        </button>
+        <button class="btn-reject"
+          onclick="handleFollow('reject', {{ req.requester_id }}, {{ req.target_id }}, this)">
+          Reject
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<script>
+var remaining = {{ pending|length }};
+
+function handleFollow(action, childId, targetId, btn) {
+  btn.disabled = true;
+  var url = action === 'approve' ? '/parent/approve-follow/' : '/parent/reject-follow/';
+  fetch(url, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({child_id: childId, target_id: targetId})
+  }).then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        var actionsDiv = document.getElementById('actions-' + childId + '-' + targetId);
+        actionsDiv.innerHTML = '<div class="done-row"><i class="fa-solid fa-circle-check"></i>'
+          + (action === 'approve' ? 'Approved' : 'Rejected') + '</div>';
+        remaining--;
+        document.getElementById('countBadge').textContent = remaining;
+        if (remaining === 0) document.getElementById('countBadge').style.display = 'none';
+      }
+    }).catch(function(){ btn.disabled = false; });
+}
+</script>
+</body>
+</html>

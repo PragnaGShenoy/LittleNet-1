@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, request
 from flask import render_template
 from flask import session
 
+from flask import jsonify
 from parent.service import (
     get_child_content_for_approval,
     get_child_followers,
@@ -10,6 +11,9 @@ from parent.service import (
     get_deleted_posts,
     get_parent_child,
     get_parent_children,
+    get_pending_follow_requests,
+    approve_follow,
+    reject_follow,
     get_time_limit,
     get_weekly_usage,
     save_child_content_approval,
@@ -188,12 +192,37 @@ def child_connections():
         child_id
     )
 
+    pending = get_pending_follow_requests(session["user_id"])
+
     return render_template(
-
         "child_connections.html",
-
         followers=followers,
-
-        following=following
-
+        following=following,
+        pending=pending,
     )
+
+
+@parent_bp.route("/parent/follow-requests/")
+def follow_requests():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
+    pending = get_pending_follow_requests(session["user_id"])
+    return render_template("follow_requests.html", pending=pending)
+
+
+@parent_bp.route("/parent/approve-follow/", methods=["POST"])
+def approve_follow_route():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return jsonify(ok=False), 401
+    data = request.get_json(silent=True) or {}
+    approve_follow(data["child_id"], data["target_id"])
+    return jsonify(ok=True)
+
+
+@parent_bp.route("/parent/reject-follow/", methods=["POST"])
+def reject_follow_route():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return jsonify(ok=False), 401
+    data = request.get_json(silent=True) or {}
+    reject_follow(data["child_id"], data["target_id"])
+    return jsonify(ok=True)

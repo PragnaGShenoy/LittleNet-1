@@ -71,6 +71,8 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
   cursor:pointer;font-family:'Nunito',sans-serif;text-align:center;transition:.2s;
 }
 .btn-unfollow:hover{background:#f3f4f6;}
+.btn-pending{flex:1;padding:9px;border-radius:10px;border:1.5px solid #ffc107;background:#fff3cd;color:#856404;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;text-align:center;transition:.2s;}
+.btn-pending:hover{background:#ffe69c;}
 .btn-message{
   width:42px;height:38px;border-radius:10px;border:1.5px solid #dbdbdb;
   background:white;font-size:16px;color:#e76f51;
@@ -202,9 +204,11 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
 
     <div class="profile-actions">
       {% if is_following %}
-        <a href="/unfollow/{{ target_user_id }}/" class="btn-unfollow">Following</a>
+        <button id="followBtn" class="btn-unfollow" onclick="toggleFollow({{ target_user_id }})">Following</button>
+      {% elif is_pending %}
+        <button id="followBtn" class="btn-pending" onclick="toggleFollow({{ target_user_id }})">Pending…</button>
       {% else %}
-        <a href="/follow/{{ target_user_id }}/" class="btn-follow">Follow</a>
+        <button id="followBtn" class="btn-follow" onclick="toggleFollow({{ target_user_id }})">Follow</button>
       {% endif %}
       <a href="/messages/" class="btn-message" title="Message"><i class="fa-regular fa-paper-plane"></i></a>
     </div>
@@ -345,6 +349,26 @@ function lbSubmitComment(){
 document.getElementById('lbCmtInput').addEventListener('keydown',function(e){if(e.key==='Enter')lbSubmitComment();});
 
 function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function toggleFollow(userId){
+  var btn=document.getElementById('followBtn');
+  btn.disabled=true;
+  fetch('/follow/'+userId+'/',{method:'POST',credentials:'same-origin'})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      btn.disabled=false;
+      if(d.status==='pending'){
+        btn.textContent='Pending…';
+        btn.className='btn-pending';
+      } else if(d.status==='cancelled'||d.status==='unfollowed'){
+        btn.textContent='Follow';
+        btn.className='btn-follow';
+      } else if(d.status==='following'){
+        btn.textContent='Following';
+        btn.className='btn-unfollow';
+      }
+    }).catch(function(){ btn.disabled=false; });
+}
 </script>
 </body>
 </html>

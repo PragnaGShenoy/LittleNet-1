@@ -332,32 +332,63 @@ def get_child_posts(child_id):
     return posts
 
 
-def get_child_followers(child_id):
-
+def get_pending_follow_requests(parent_id):
+    """Return all unapproved follow requests made BY any child of this parent."""
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("""
-
         SELECT
-            u.user_id,
-            u.full_name
-
+            f.child_id      AS requester_id,
+            u1.full_name    AS requester_name,
+            f.following_child_id AS target_id,
+            u2.full_name    AS target_name
         FROM followers f
+        JOIN users u1 ON f.child_id = u1.user_id
+        JOIN users u2 ON f.following_child_id = u2.user_id
+        WHERE f.approved = FALSE
+          AND f.child_id IN (
+              SELECT child_id FROM parent_child_map WHERE parent_id = %s
+          )
+        ORDER BY f.child_id
+    """, (parent_id,))
+    rows = cur.fetchall()
+    cur.close(); conn.close()
+    return rows
 
-        JOIN users u
-        ON f.child_id = u.user_id
 
-        WHERE f.following_child_id = %s
+def approve_follow(child_id, following_child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE followers SET approved = TRUE
+        WHERE child_id = %s AND following_child_id = %s
+    """, (child_id, following_child_id))
+    conn.commit()
+    cur.close(); conn.close()
 
-    """,
-    (child_id,))
 
+def reject_follow(child_id, following_child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM followers
+        WHERE child_id = %s AND following_child_id = %s AND approved = FALSE
+    """, (child_id, following_child_id))
+    conn.commit()
+    cur.close(); conn.close()
+
+
+def get_child_followers(child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT u.user_id, u.full_name
+        FROM followers f
+        JOIN users u ON f.child_id = u.user_id
+        WHERE f.following_child_id = %s AND f.approved = TRUE
+    """, (child_id,))
     followers = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
+    cur.close(); conn.close()
     return followers
 
 def get_child_following(child_id):
@@ -376,7 +407,7 @@ def get_child_following(child_id):
         JOIN users u
         ON f.following_child_id = u.user_id
 
-        WHERE f.child_id = %s
+        WHERE f.child_id = %s AND f.approved = TRUE
 
     """,
     (child_id,))

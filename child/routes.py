@@ -5,7 +5,7 @@ from flask import render_template
 from flask import session
 from werkzeug.utils import secure_filename
 
-from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, unfollow_child, update_child_profile, update_profile_picture, get_following_stories, get_my_active_story, get_my_posts_for_profile
+from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, is_follow_pending, unfollow_child, update_child_profile, update_profile_picture, get_following_stories, get_my_active_story, get_my_active_stories, get_my_posts_for_profile, delete_story, update_story_caption
 from child.service import get_child_profile
 from parent.service import get_time_limit
 from quiz.service import get_child_quiz_settings, get_quiz_for_child
@@ -102,7 +102,8 @@ def dashboard():
         return render_template("time_limit_reached.html")
 
     following_stories  = get_following_stories(session["user_id"])
-    my_story           = get_my_active_story(session["user_id"])
+    my_stories         = get_my_active_stories(session["user_id"])
+    my_story           = my_stories[0] if my_stories else None
     profile            = get_child_profile(session["user_id"])
 
     return render_template(
@@ -111,6 +112,7 @@ def dashboard():
         remaining_seconds=remaining_seconds,
         strict_mode=strict,
         following_stories=following_stories,
+        my_stories=my_stories,
         my_story=my_story,
         profile=profile,
     )
@@ -187,35 +189,22 @@ def edit_profile():
         profile=profile_data
     )
 
-@child_bp.route(
-    "/follow/<int:child_id>/"
-)
+@child_bp.route("/follow/<int:child_id>/", methods=["GET", "POST"])
 def follow(child_id):
-
     current_user = session["user_id"]
-
-    # Don't follow yourself
     if current_user == child_id:
-        return redirect("/feed/")
+        return jsonify(status="self")
 
-    if is_following(
-        current_user,
-        child_id
-    ):
-
-        unfollow_child(
-            current_user,
-            child_id
-        )
-
+    if is_following(current_user, child_id):
+        unfollow_child(current_user, child_id)
+        return jsonify(status="unfollowed")
+    elif is_follow_pending(current_user, child_id):
+        # Cancel the pending request
+        unfollow_child(current_user, child_id)
+        return jsonify(status="cancelled")
     else:
-
-        follow_child(
-            current_user,
-            child_id
-        )
-
-    return redirect("/discover/")
+        follow_child(current_user, child_id)
+        return jsonify(status="pending")
 
 @child_bp.route("/followers/")
 def followers():
@@ -381,7 +370,9 @@ def view_profile(user_id):
         return redirect("/login/")
     profile_data   = get_child_profile(user_id)
     posts          = get_my_posts_for_profile(user_id)
-    following      = is_following(session["user_id"], user_id)
+    uid            = session["user_id"]
+    following      = is_following(uid, user_id)
+    pending        = is_follow_pending(uid, user_id)
     return render_template(
         "view_profile.html",
         profile=profile_data,
@@ -390,6 +381,7 @@ def view_profile(user_id):
         followers_count=get_followers_count(user_id),
         following_count=get_following_count(user_id),
         is_following=following,
+        is_pending=pending,
         target_user_id=user_id,
     )
 
@@ -402,11 +394,8 @@ def discover():
     )
 
     for child in children:
-
-        child["is_following"] = is_following(
-            session["user_id"],
-            child["user_id"]
-        )
+        child["is_following"] = is_following(session["user_id"], child["user_id"])
+        child["is_pending"]   = is_follow_pending(session["user_id"], child["user_id"])
 
     return render_template(
         "discover.html",

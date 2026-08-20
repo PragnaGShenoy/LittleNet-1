@@ -73,6 +73,8 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
 .p-btn-follow:hover{background:#0081d6;}
 .p-btn-following{background:#efefef;color:#262626;}
 .p-btn-following:hover{background:#e0e0e0;}
+.p-btn-pending{background:#fff3cd;color:#856404;border:1.5px solid #ffc107;}
+.p-btn-pending:hover{background:#ffe69c;}
 
 /* ── Search results grid (shown when typing) ── */
 .search-results{display:none;flex-direction:column;}
@@ -146,9 +148,11 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
             </div>
           </a>
           {% if child.is_following %}
-            <a href="/unfollow/{{ child.user_id }}/" class="p-btn p-btn-following">Following</a>
+            <button class="p-btn p-btn-following" onclick="toggleFollow(this, {{ child.user_id }})">Following</button>
+          {% elif child.is_pending %}
+            <button class="p-btn p-btn-pending" onclick="toggleFollow(this, {{ child.user_id }})">Pending</button>
           {% else %}
-            <a href="/follow/{{ child.user_id }}/" class="p-btn p-btn-follow">Follow</a>
+            <button class="p-btn p-btn-follow" onclick="toggleFollow(this, {{ child.user_id }})">Follow</button>
           {% endif %}
         </div>
         {% endfor %}
@@ -246,6 +250,25 @@ function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 
 // Auto-focus search on load
 document.getElementById('searchInput').focus();
+
+function toggleFollow(btn, userId){
+  btn.disabled=true;
+  fetch('/follow/'+userId+'/',{method:'POST',credentials:'same-origin'})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      btn.disabled=false;
+      if(d.status==='pending'){
+        btn.textContent='Pending';
+        btn.className='p-btn p-btn-pending';
+      } else if(d.status==='cancelled'||d.status==='unfollowed'){
+        btn.textContent='Follow';
+        btn.className='p-btn p-btn-follow';
+      } else if(d.status==='following'){
+        btn.textContent='Following';
+        btn.className='p-btn p-btn-following';
+      }
+    }).catch(function(){ btn.disabled=false; });
+}
 </script>
 </body>
 </html>

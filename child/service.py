@@ -235,98 +235,66 @@ def update_profile_picture(child_id, filepath):
 
 
 
-def follow_child(
-    child_id,
-    following_child_id
-):
-
+def follow_child(child_id, following_child_id):
+    """Insert a pending follow request (approved=FALSE). Parent must approve."""
     conn = get_db_connection()
     cur = conn.cursor()
-
     try:
-
         cur.execute("""
-            INSERT INTO followers(
-                child_id,
-                following_child_id
-            )
-            VALUES(%s,%s)
-        """,
-        (
-            child_id,
-            following_child_id
-        ))
-
+            INSERT INTO followers(child_id, following_child_id, approved)
+            VALUES(%s, %s, FALSE)
+            ON CONFLICT DO NOTHING
+        """, (child_id, following_child_id))
         conn.commit()
-
     except:
         conn.rollback()
-
     cur.close()
     conn.close()
 
-def get_followers_count(child_id):
 
+def is_follow_pending(child_id, following_child_id):
+    """True if a follow request exists but is NOT yet approved."""
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("""
-        SELECT COUNT(*)
-        AS total
-        FROM followers
-        WHERE following_child_id = %s
+        SELECT 1 FROM followers
+        WHERE child_id=%s AND following_child_id=%s AND approved=FALSE
+    """, (child_id, following_child_id))
+    result = cur.fetchone()
+    cur.close(); conn.close()
+    return result is not None
+
+def get_followers_count(child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT COUNT(*) AS total FROM followers
+        WHERE following_child_id=%s AND approved=TRUE
     """, (child_id,))
-
     total = cur.fetchone()["total"]
-
-    cur.close()
-    conn.close()
-
+    cur.close(); conn.close()
     return total
 
 def get_following_count(child_id):
-
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("""
-        SELECT COUNT(*)
-        AS total
-        FROM followers
-        WHERE child_id = %s
+        SELECT COUNT(*) AS total FROM followers
+        WHERE child_id=%s AND approved=TRUE
     """, (child_id,))
-
     total = cur.fetchone()["total"]
-
-    cur.close()
-    conn.close()
-
+    cur.close(); conn.close()
     return total
 
-def is_following(
-    child_id,
-    following_child_id
-):
-
+def is_following(child_id, following_child_id):
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("""
-        SELECT *
-        FROM followers
-        WHERE child_id = %s
-        AND following_child_id = %s
-    """,
-    (
-        child_id,
-        following_child_id
-    ))
-
+        SELECT 1 FROM followers
+        WHERE child_id=%s AND following_child_id=%s AND approved=TRUE
+    """, (child_id, following_child_id))
     result = cur.fetchone()
-
-    cur.close()
-    conn.close()
-
+    cur.close(); conn.close()
     return result is not None
 
 
@@ -363,7 +331,7 @@ def get_followers(child_id):
         FROM followers f
         JOIN users u ON f.child_id = u.user_id
         LEFT JOIN child_profiles cp ON u.user_id = cp.child_id
-        WHERE f.following_child_id = %s
+        WHERE f.following_child_id = %s AND f.approved = TRUE
     """, (child_id,))
 
     followers = cur.fetchall()
@@ -383,7 +351,7 @@ def get_following(child_id):
         FROM followers f
         JOIN users u ON f.following_child_id = u.user_id
         LEFT JOIN child_profiles cp ON u.user_id = cp.child_id
-        WHERE f.child_id = %s
+        WHERE f.child_id = %s AND f.approved = TRUE
     """, (child_id,))
 
     following = cur.fetchall()
@@ -574,7 +542,13 @@ def get_following_stories(child_id):
 
 
 def get_my_active_story(child_id):
-    """Latest story posted by this child in the last 24 h."""
+    """Latest story posted by this child in the last 24 h (single, for backwards compat)."""
+    stories = get_my_active_stories(child_id)
+    return stories[0] if stories else None
+
+
+def get_my_active_stories(child_id):
+    """All stories posted by this child in the last 24 h, newest first."""
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -585,13 +559,38 @@ def get_my_active_story(child_id):
         WHERE p.is_story = TRUE
           AND p.child_id = %s
           AND p.created_at > NOW() - INTERVAL '24 hours'
-        ORDER BY p.created_at DESC
-        LIMIT 1
+        ORDER BY p.created_at ASC
     """, (child_id,))
-    story = cur.fetchone()
+    stories = cur.fetchall()
     cur.close()
     conn.close()
-    return story
+    return stories
+
+
+def delete_story(post_id, child_id):
+    """Delete a story owned by child_id."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        DELETE FROM posts
+        WHERE post_id = %s AND child_id = %s AND is_story = TRUE
+    """, (post_id, child_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def update_story_caption(post_id, child_id, caption):
+    """Update caption of own story."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE posts SET caption = %s
+        WHERE post_id = %s AND child_id = %s AND is_story = TRUE
+    """, (caption, post_id, child_id))
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 from parent.service import get_time_limit
