@@ -8,7 +8,12 @@ from werkzeug.utils import secure_filename
 from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, is_follow_pending, unfollow_child, update_child_profile, update_profile_picture, get_following_stories, get_my_active_story, get_my_active_stories, get_my_posts_for_profile, delete_story, update_story_caption
 from child.service import get_child_profile
 from parent.service import get_time_limit
-from quiz.service import get_child_quiz_settings, get_quiz_for_child
+from quiz.service import (
+    get_child_quiz_settings,
+    get_quiz_for_child,
+    get_child_age,
+    get_child_age_group
+)
 
 child_bp = Blueprint(
     "child",
@@ -247,6 +252,10 @@ def recommended():
     if "user_id" not in session:
         return redirect("/login/")
 
+    # --------------------------------------------------
+    # Pagination
+    # --------------------------------------------------
+
     page = int(
         request.args.get(
             "page",
@@ -260,11 +269,19 @@ def recommended():
         page - 1
     ) * limit
 
+    # --------------------------------------------------
+    # Get recommended posts
+    # --------------------------------------------------
+
     posts = get_recommended_posts(
         session["user_id"],
         limit,
         offset
     )
+
+    # --------------------------------------------------
+    # Get comments for each post
+    # --------------------------------------------------
 
     for post in posts:
 
@@ -272,70 +289,65 @@ def recommended():
             post["post_id"]
         )
 
+    # --------------------------------------------------
+    # Get quiz settings
+    # --------------------------------------------------
+
     settings = get_child_quiz_settings(
         session["user_id"]
     )
 
+    age = get_child_age(
+        session["user_id"]
+    )
+
+    age_group = get_child_age_group(
+        session["user_id"]
+    )
+    quiz = get_quiz_for_child(
+    session["user_id"]
+)
+
     feed_items = []
-
-    if settings:
-
-       frequency = settings[
-          "quiz_frequency"
-       ]
-
-    else:
-
-        frequency = 999999
-
-
-    global_position = offset
 
     for post in posts:
 
-        global_position += 1
-
         feed_items.append({
 
-        "type": "POST",
+            "type": "POST",
 
-        "data": post
+            "data": post
 
-       })
+        })
 
-    if global_position % frequency == 0:
-
-        quiz = get_quiz_for_child(
-            session["user_id"]
-        )
-
-        if quiz:
-
-            feed_items.append({
-
-                "type": "QUIZ",
-
-                "data": quiz
-
-            })
+    # --------------------------------------------------
+    # Get quiz result
+    # --------------------------------------------------
 
     quiz_result = session.pop(
-    "quiz_result",
+        "quiz_result",
         None
     )
 
+    # --------------------------------------------------
+    # Send data to recommended.html
+    # --------------------------------------------------
+
     return render_template(
 
-    "recommended.html",
+        "recommended.html",
 
-    feed_items=feed_items,
+        feed_items=feed_items,
 
-    settings=settings,
+        settings=settings,
 
-    quiz_result=quiz_result,
+        quiz=quiz,
 
-    page=page
-)
+        quiz_result=quiz_result,
+
+        page=page
+
+    )
 
 @child_bp.route("/child/upload-profile-picture/", methods=["POST"])
 def upload_profile_picture():

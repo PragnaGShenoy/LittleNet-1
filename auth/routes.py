@@ -82,6 +82,13 @@ def login():
             session["full_name"] = user["full_name"]
             session["login_time"] = datetime.now().isoformat()
 
+            print("========== LOGIN DEBUG ==========")
+            print("USER ID:", user["user_id"])
+            print("ROLE:", user["role"])
+            print("FULL NAME:", user["full_name"])
+            print("SESSION:", dict(session))
+            print("=================================")
+
             if not profile_exists(user["user_id"]):
                 return redirect("/child/create-profile/")
 

@@ -437,7 +437,7 @@ function sendFile(input){
     .then(function(data){
       setUploading(false);
       if(data.ok) appendBubble(data.message_type,'/'+data.media_path,null);
-      else alert('Upload failed: '+(data.error||''));
+      else alertshowUploadError(data.error);
     })
     .catch(function(){setUploading(false);alert('Upload failed. Try again.');});
   input.value='';

@@ -340,11 +340,32 @@ select#content_category{display:none;}
 
 <!-- Bottom nav -->
 <nav class="bottom-nav">
-  <a class="nav-item" href="/child/dashboard/"><i class="fa-solid fa-house"></i></a>
-  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
-  <a class="nav-item active" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
-  <a class="nav-item" href="/messages/"><i class="fa-regular fa-comment-dots"></i></a>
-  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i></a>
+
+    <!-- Home -->
+    <a class="nav-item active" href="/child/dashboard/">
+        🏠
+    </a>
+
+    <!-- Discover -->
+    <a class="nav-item" href="/discover/">
+        🔍
+    </a>
+
+    <!-- Create Post -->
+    <a class="nav-item nav-post" href="/child/upload-post/">
+        ➕
+    </a>
+
+    <!-- Quiz -->
+    <a class="nav-item" href="/quiz/start/">
+        🧠
+    </a>
+
+    <!-- Profile -->
+    <a class="nav-item" href="/child/profile/">
+        👤
+    </a>
+
 </nav>
 
 <script>
@@ -442,45 +463,188 @@ function usePhoto(){
 
 // ── Submit ──
 function submitPost(){
+
   var file = document.getElementById('media').files[0];
-  if(!file && !_capturedBlob){ alert('Please pick or take a photo/video!'); return; }
-  if(!_selectedCategory){ alert('Please select a category!'); return; }
+
+  if(!file && !_capturedBlob){
+    alert('Please pick or take a photo/video!');
+    return;
+  }
+
+  if(!_selectedCategory){
+    alert('Please select a category!');
+    return;
+  }
+
 
   document.getElementById('uploadingOverlay').classList.add('show');
   document.getElementById('shareBtn').disabled = true;
 
-  var fd = new FormData();
-  if(_capturedBlob){
-    fd.append('media', _capturedBlob, 'camera_photo.jpg');
-  } else {
-    fd.append('media', file, file.name);
-  }
-  fd.append('caption', document.getElementById('captionInput').value);
-  fd.append('content_category', _selectedCategory);
 
-  fetch(window.location.pathname, {method:'POST', body:fd})
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      document.getElementById('uploadingOverlay').classList.remove('show');
-      document.getElementById('shareBtn').disabled = false;
-      showModal(data.success, data.category);
-    })
-    .catch(function(){
-      document.getElementById('uploadingOverlay').classList.remove('show');
-      document.getElementById('shareBtn').disabled = false;
-      showModal(false, 'UNKNOWN');
-    });
+  var fd = new FormData();
+
+
+  if(_capturedBlob){
+
+    fd.append(
+      'media',
+      _capturedBlob,
+      'camera_photo.jpg'
+    );
+
+  } else {
+
+    fd.append(
+      'media',
+      file,
+      file.name
+    );
+
+  }
+
+
+  fd.append(
+    'caption',
+    document.getElementById('captionInput').value
+  );
+
+  fd.append(
+    'content_category',
+    _selectedCategory
+  );
+
+
+  fetch(
+    window.location.pathname,
+    {
+      method: 'POST',
+      body: fd
+    }
+  )
+
+  .then(function(response){
+
+    /*
+     * IMPORTANT:
+     * Even if Flask returns 400 because
+     * content is blocked, we still read
+     * the JSON response.
+     */
+
+    return response.json();
+
+  })
+
+  .then(function(data){
+
+    document.getElementById(
+      'uploadingOverlay'
+    ).classList.remove('show');
+
+    document.getElementById(
+      'shareBtn'
+    ).disabled = false;
+
+
+    /*
+     * Backend says content is blocked
+     */
+
+    if(data.success === false){
+
+      showModal(
+        false,
+        data.category || 'INAPPROPRIATE'
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Backend says post was successfully shared
+     */
+
+    showModal(
+      true,
+      data.category
+    );
+
+  })
+
+  .catch(function(error){
+
+    console.error(
+      'Upload error:',
+      error
+    );
+
+
+    document.getElementById(
+      'uploadingOverlay'
+    ).classList.remove('show');
+
+    document.getElementById(
+      'shareBtn'
+    ).disabled = false;
+
+
+    showModal(
+      false,
+      'UNKNOWN'
+    );
+
+  });
+
 }
 
 function showModal(success, category){
-  var labels = {
-    ADULT:    {emoji:'🚫', title:'Content Not Allowed', text:'This image contains adult content and cannot be posted on LittleNet.'},
-    VIOLENCE: {emoji:'⚠️', title:'Violent Content',     text:'This content appears to contain violent imagery. Please choose something friendly!'},
-    WEAPON:   {emoji:'🛡️', title:'Weapons Detected',    text:'Weapons were detected in this content. Please upload something safe.'},
-    DRUG:     {emoji:'🚷', title:'Not Allowed',          text:'This content appears to show drugs or alcohol. That is not allowed on LittleNet!'},
-    BULLYING: {emoji:'💔', title:'Be Kind',              text:'This content may show bullying or harassment. Be kind to each other!'},
-    UNKNOWN:  {emoji:'😕', title:'Something went wrong', text:'An error occurred while checking your content. Please try again.'}
-  };
+ var labels = {
+
+  ADULT: {
+    emoji: '🚫',
+    title: 'Content Not Allowed',
+    text: 'This content contains adult material and cannot be posted on LittleNet.'
+  },
+
+  INAPPROPRIATE: {
+    emoji: '🚫',
+    title: 'Content Not Allowed',
+    text: 'This content is not suitable for children and cannot be posted on LittleNet.'
+  },
+
+  VIOLENCE: {
+    emoji: '⚠️',
+    title: 'Violent Content',
+    text: 'This content appears to contain violent imagery. Please choose something friendly!'
+  },
+
+  WEAPON: {
+    emoji: '🛡️',
+    title: 'Weapons Detected',
+    text: 'Weapons were detected in this content. Please upload something safe.'
+  },
+
+  DRUG: {
+    emoji: '🚷',
+    title: 'Not Allowed',
+    text: 'This content appears to show drugs or alcohol. That is not allowed on LittleNet!'
+  },
+
+  BULLYING: {
+    emoji: '💔',
+    title: 'Be Kind',
+    text: 'This content may show bullying or harassment. Be kind to each other!'
+  },
+
+  UNKNOWN: {
+    emoji: '😕',
+    title: 'Something went wrong',
+    text: 'An unexpected error occurred while checking your content. Please try again.'
+  }
+
+};
   if(success){
     document.getElementById('modalIcon').textContent  = '🎉';
     document.getElementById('modalTitle').textContent = 'Post Shared!';

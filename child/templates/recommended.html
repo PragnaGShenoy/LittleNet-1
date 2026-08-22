@@ -330,32 +330,7 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
   </div>
   {% endif %}
 
-  {% if item.type == "QUIZ" %}
-  {% set quiz = item.data %}
-  <div class="quiz-card">
-    <div class="quiz-badge">🧠 Quiz Time!</div>
-    <div class="quiz-question">{{ quiz.question }}</div>
-    <form method="POST" action="/quiz/submit/">
-      <input type="hidden" name="quiz_id" value="{{ quiz.quiz_id }}">
-      {% for opt_label in [quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d] %}
-      <label class="quiz-option">
-        <input type="radio" name="answer" value="{{ opt_label }}" required>
-        {{ opt_label }}
-      </label>
-      {% endfor %}
-      <button class="quiz-submit" type="submit">✅ Submit Answer</button>
-    </form>
-    {% if quiz_result %}
-    <div class="quiz-result {{ 'correct' if quiz_result.is_correct else 'wrong' }}">
-      {% if quiz_result.is_correct %}🎉 Correct! Well done!
-      {% else %}❌ Wrong! Correct answer: <strong>{{ quiz_result.correct_answer }}</strong>{% endif %}
-    </div>
-    {% endif %}
-    {% if not settings["mandatory_quiz"] %}
-    <a class="skip-link" href="/recommended/?page={{ page + 1 }}">Skip Quiz →</a>
-    {% endif %}
-  </div>
-  {% endif %}
+  
 
   {% endfor %}
 {% else %}
@@ -366,7 +341,82 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
   </div>
 {% endif %}
 
-<a class="load-more" href="/recommended/?page={{ page + 1 }}">Load more</a>
+<!-- ================= QUIZ ================= -->
+
+{% if quiz %}
+  <div class="quiz-card">
+
+    <div class="quiz-badge">
+      🧠 Quiz Time!
+    </div>
+
+    <div class="quiz-question">
+      {{ quiz.question }}
+    </div>
+
+    <form action="/quiz/submit/" method="POST">
+
+      <input
+        type="hidden"
+        name="quiz_id"
+        value="{{ quiz.quiz_id }}"
+      >
+
+      <label class="quiz-option">
+        <input
+          type="radio"
+          name="answer"
+          value="{{ quiz.option_a }}"
+          required
+        >
+        {{ quiz.option_a }}
+      </label>
+
+      <label class="quiz-option">
+        <input
+          type="radio"
+          name="answer"
+          value="{{ quiz.option_b }}"
+        >
+        {{ quiz.option_b }}
+      </label>
+
+      <label class="quiz-option">
+        <input
+          type="radio"
+          name="answer"
+          value="{{ quiz.option_c }}"
+        >
+        {{ quiz.option_c }}
+      </label>
+
+      <label class="quiz-option">
+        <input
+          type="radio"
+          name="answer"
+          value="{{ quiz.option_d }}"
+        >
+        {{ quiz.option_d }}
+      </label>
+
+      <button
+        type="submit"
+        class="quiz-submit"
+      >
+        ✅ Submit Answer
+      </button>
+
+    </form>
+
+  </div>
+{% endif %}
+
+<a
+  class="load-more"
+  href="/recommended/?page={{ page + 1 }}"
+>
+  Load more
+</a>
 
 <!-- Share modal -->
 <div class="share-overlay" id="shareOverlay" onclick="closeShare(event)">
@@ -387,11 +437,66 @@ body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
 
 <!-- Bottom nav -->
 <nav class="bottom-nav">
-  <a class="nav-item" href="/child/dashboard/"><i class="fa-solid fa-house"></i></a>
-  <a class="nav-item" href="/discover/"><i class="fa-solid fa-magnifying-glass"></i></a>
-  <a class="nav-item" href="/child/upload-post/"><i class="fa-solid fa-square-plus"></i></a>
-  <a class="nav-item active" href="/recommended/"><i class="fa-regular fa-heart"></i></a>
-  <a class="nav-item" href="/child/profile/"><i class="fa-solid fa-user"></i></a>
+
+    <!-- Home -->
+    <a class="nav-item active" href="/child/dashboard/">
+        🏠
+    </a>
+
+    <!-- Discover -->
+    <a class="nav-item" href="/discover/">
+        🔍
+    </a>
+
+    <!-- Create Post -->
+    <a class="nav-item nav-post" href="/child/upload-post/">
+        ➕
+    </a>
+
+    <!-- Quiz -->
+    <a class="nav-item" href="/quiz/start/">
+        🧠
+    </a>
+
+    <!-- Profile -->
+    <a class="nav-item" href="/child/profile/">
+        👤
+    </a>
+
+</nav>
+
+  <!-- Home -->
+  <a class="nav-item" href="/child/dashboard/">
+    <i class="fa-solid fa-house"></i>
+  </a>
+
+  <!-- Discover -->
+  <a class="nav-item" href="/discover/">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </a>
+
+  <!-- Create Post -->
+  <a class="nav-item" href="/child/upload-post/">
+    <i class="fa-solid fa-square-plus"></i>
+  </a>
+
+  <!-- Quiz -->
+  <a href="/quiz/start/"
+   onclick="window.location.href='/quiz/start/'; return false;"
+   style="cursor:pointer;">
+    <i class="fa-solid fa-graduation-cap"></i>
+  </a>
+
+  <!-- For You -->
+  <a class="nav-item active" href="/recommended/">
+    <i class="fa-regular fa-brain"></i>
+  </a>
+
+  <!-- Profile -->
+  <a class="nav-item" href="/child/profile/">
+    <i class="fa-solid fa-user"></i>
+  </a>
+
 </nav>
 
 <script>

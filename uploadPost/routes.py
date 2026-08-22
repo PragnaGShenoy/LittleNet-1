@@ -4,6 +4,7 @@ from flask import request
 from flask import redirect
 from flask import session
 from flask import jsonify
+from database.connection import get_db_connection
 from child.service import follow_child, get_child_profile, is_following, delete_story, update_story_caption
 from uploadPost.ml_service import check_image_safety, check_video_safety
 from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments, like_post, save_post, get_all_posts, is_liked, unlike_post, get_like_count, get_random_posts
@@ -22,99 +23,271 @@ upload_bp = Blueprint(
     "/child/upload-post/",
     methods=["GET", "POST"]
 )
+
 def upload_post():
+
+    # ---------------------------------------------
+    # CHECK LOGIN
+    # ---------------------------------------------
 
     if "user_id" not in session:
         return redirect("/login/")
 
-    if request.method == "POST":
 
-        media = request.files["media"]
+    # ---------------------------------------------
+    # CHECK CHILD ROLE
+    # ---------------------------------------------
 
-        filename = secure_filename(
-            media.filename
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        SELECT role
+        FROM users
+        WHERE user_id = %s
+        """,
+        (session["user_id"],)
+    )
+
+    user = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if not user or user["role"] != "CHILD":
+        return jsonify(
+            success=False,
+            error="Only child users can create posts."
+        ), 403
+
+
+    # ---------------------------------------------
+    # GET REQUEST
+    # ---------------------------------------------
+
+    if request.method == "GET":
+        return render_template(
+            "upload_post.html"
         )
 
-        extension = filename.split(".")[-1].lower()
 
-        image_extensions = [
-            "jpg",
-            "jpeg",
-            "png",
-            "gif",
-            "webp"
-        ]
+    # ---------------------------------------------
+    # GET MEDIA
+    # ---------------------------------------------
 
-        video_extensions = [
-            "mp4",
-            "mov",
-            "avi",
-            "mkv"
-        ]
+    media = request.files.get("media")
 
-        
+    if not media or not media.filename:
+        return jsonify(
+            success=False,
+            error="Please select an image or video."
+        ), 400
 
-        if extension in image_extensions:
 
-            filepath = os.path.join(
-                "uploads/images",
-                filename
+    # ---------------------------------------------
+    # FILE NAME + EXTENSION
+    # ---------------------------------------------
+
+    filename = secure_filename(
+        media.filename
+    )
+
+    if not filename:
+        return jsonify(
+            success=False,
+            error="Invalid file name."
+        ), 400
+
+    extension = filename.rsplit(
+        ".",
+        1
+    )[-1].lower()
+
+
+    # ---------------------------------------------
+    # ALLOWED EXTENSIONS
+    # ---------------------------------------------
+
+    image_extensions = [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "webp"
+    ]
+
+    video_extensions = [
+        "mp4",
+        "mov",
+        "avi",
+        "mkv"
+    ]
+
+
+    # ---------------------------------------------
+    # FORM DATA
+    # ---------------------------------------------
+
+    caption = request.form.get(
+        "caption",
+        ""
+    )
+
+    content_category = request.form.get(
+        "content_category",
+        "Other"
+    )
+
+
+    # =================================================
+    # IMAGE
+    # =================================================
+
+    if extension in image_extensions:
+
+        filepath = os.path.join(
+            "uploads/images",
+            filename
+        )
+
+        media.save(filepath)
+
+        try:
+
+            moderation = check_image_safety(
+                filepath
             )
 
-            media.save(filepath)
+        except Exception as e:
 
-            moderation = check_image_safety(filepath)
+            print(
+                "[UPLOAD ERROR] Image moderation error:",
+                e
+            )
 
-            if not moderation["safe"]:
-
+            if os.path.exists(filepath):
                 os.remove(filepath)
 
-                return jsonify(success=False, category=moderation["category"])
+            return jsonify(
+                success=False,
+                error="An unexpected error occurred while checking your content."
+            ), 400
 
-            save_post(
-                session["user_id"],
-                "IMAGE",
-                filepath,
-                request.form["caption"],
-                request.form["content_category"]
-             )
 
-            return jsonify(success=True)
+        if not moderation["safe"]:
 
-        if extension in video_extensions:
+            if os.path.exists(filepath):
+                os.remove(filepath)
 
-            filepath = os.path.join(
-                    "uploads/videos",
-                    filename
-                )
+            return jsonify(
+                success=False,
+                blocked=True,
+                category=moderation.get(
+                    "category",
+                    "INAPPROPRIATE"
+                ),
+                score=moderation.get(
+                    "score",
+                    0
+                ),
+                message="This image contains inappropriate content and cannot be posted."
+            ), 400
 
-            media.save(filepath)
+
+        # IMAGE IS SAFE → SAVE
+
+        save_post(
+            session["user_id"],
+            "IMAGE",
+            filepath,
+            caption,
+            content_category
+        )
+
+        return jsonify(
+            success=True
+        )
+
+
+    # =================================================
+    # VIDEO
+    # =================================================
+
+    if extension in video_extensions:
+
+        filepath = os.path.join(
+            "uploads/videos",
+            filename
+        )
+
+        media.save(filepath)
+
+        try:
 
             safety_result = check_video_safety(
-                    filepath
-                )
-
-            if not safety_result["safe"]:
-
-                os.remove(filepath)
-
-                return jsonify(success=False, category=safety_result["category"])
-
-            save_post(
-                session["user_id"],
-                "VIDEO",
-                filepath,
-                request.form["caption"],
-                request.form["content_category"]
+                filepath
             )
 
-            return jsonify(success=True)
+        except Exception as e:
 
-        return "Unsupported File Type"
+            print(
+                "[UPLOAD ERROR] Video moderation error:",
+                e
+            )
 
-    return render_template(
-        "upload_post.html"
-    )
+            if os.path.exists(filepath):
+                os.remove(filepath)
+
+            return jsonify(
+                success=False,
+                error="An unexpected error occurred while checking your content."
+            ), 400
+
+
+        if not safety_result["safe"]:
+
+            if os.path.exists(filepath):
+                os.remove(filepath)
+
+            return jsonify(
+                success=False,
+                blocked=True,
+                category=safety_result.get(
+                    "category",
+                    "INAPPROPRIATE"
+                ),
+                score=safety_result.get(
+                    "score",
+                    0
+                ),
+                message="This video contains inappropriate content and cannot be posted."
+            ), 400
+
+
+        # VIDEO IS SAFE → SAVE
+
+        save_post(
+            session["user_id"],
+            "VIDEO",
+            filepath,
+            caption,
+            content_category
+        )
+
+        return jsonify(
+            success=True
+        )
+
+
+    # ---------------------------------------------
+    # UNSUPPORTED FILE
+    # ---------------------------------------------
+
+    return jsonify(
+        success=False,
+        error="Unsupported file type."
+    ), 400
 
 @upload_bp.route("/feed/")
 def feed():

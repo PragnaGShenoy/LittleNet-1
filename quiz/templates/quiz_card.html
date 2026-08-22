@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz Time | LittleNet</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .quiz-container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .quiz-header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .quiz-header p {
+            margin-top: 8px;
+            color: #777;
+        }
+
+        .progress {
+            height: 10px;
+            background: #e8e8e8;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #ff7a59;
+            width: {{ (question_number / total_questions) * 100 }}%;
+            transition: width 0.3s ease;
+        }
+
+        .question-number {
+            font-weight: bold;
+            color: #ff7043;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            border: 2px solid #ddd;
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 17px;
+        }
+
+        .option:hover {
+            border-color: #ff7043;
+            background: #fff7f3;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: #1597e5;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #087fc7;
+        }
+
+        .submit-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .age-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background: #fff0c7;
+            color: #7a4d00;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 700px) {
+
+            .quiz-container {
+                margin: 15px;
+                padding: 22px;
+            }
+
+            .question {
+                font-size: 19px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="quiz-container">
+
+
+    <!-- HEADER -->
+
+    <div class="quiz-header">
+
+        <h1>🧠 Quiz Time!</h1>
+
+        <p>
+            Let's learn something new!
+        </p>
+
+        <div class="age-badge">
+
+            Age {{ age }} ·
+            {{ age_group }}
+
+        </div>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress">
+
+        <div class="progress-bar"></div>
+
+    </div>
+
+
+    <!-- QUESTION NUMBER -->
+
+    <div class="question-number">
+
+        Question {{ question_number }}
+        of {{ total_questions }}
+
+    </div>
+
+
+    <!-- QUESTION -->
+
+    <div class="question">
+
+        {{ quiz["question"] }}
+
+    </div>
+
+
+    <!-- ANSWER FORM -->
+
+    <form
+        method="POST"
+        action="/quiz/submit/"
+        id="quizForm"
+    >
+
+        <input
+            type="hidden"
+            name="quiz_id"
+            value="{{ quiz['quiz_id'] }}"
+        >
+
+
+        <div class="options">
+
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="{{ quiz['option_a'] }}"
+                    required
+                >
+
+                {{ quiz["option_a"] }}
+
+            </label>
+
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="{{ quiz['option_b'] }}"
+                    required
+                >
+
+                {{ quiz["option_b"] }}
+
+            </label>
+
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="{{ quiz['option_c'] }}"
+                    required
+                >
+
+                {{ quiz["option_c"] }}
+
+            </label>
+
+
+            <label class="option">
+
+                <input
+                    type="radio"
+                    name="answer"
+                    value="{{ quiz['option_d'] }}"
+                    required
+                >
+
+                {{ quiz["option_d"] }}
+
+            </label>
+
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="submit-btn"
+            id="submitButton"
+        >
+
+            ✅ Submit Answer
+
+        </button>
+
+
+    </form>
+
+
+</div>
+
+
+<script>
+
+    const form =
+        document.getElementById("quizForm");
+
+    const button =
+        document.getElementById("submitButton");
+
+
+    form.addEventListener(
+        "submit",
+        function() {
+
+            button.disabled = true;
+
+            button.innerHTML =
+                "Checking Answer...";
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

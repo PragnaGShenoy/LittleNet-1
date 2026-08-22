@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz Result | LittleNet</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .result-container {
+            max-width: 600px;
+            margin: 70px auto;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 22px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .emoji {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            color: #777;
+            font-size: 17px;
+            margin-bottom: 25px;
+        }
+
+        .score {
+            font-size: 42px;
+            font-weight: bold;
+            color: #ff7043;
+            margin: 20px 0;
+        }
+
+        .age {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            text-decoration: none;
+            background: #1597e5;
+            color: white;
+            padding: 15px 28px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .home-btn:hover {
+            background: #087fc7;
+        }
+
+        .error {
+            color: #d9534f;
+            font-size: 18px;
+            line-height: 1.5;
+            margin: 25px 0;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="result-container">
+
+
+    {% if error %}
+
+        <div class="emoji">
+            😕
+        </div>
+
+        <h1>
+            Quiz Unavailable
+        </h1>
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        <a
+            href="/child/dashboard/"
+            class="home-btn"
+        >
+            Back to LittleNet
+        </a>
+
+
+    {% else %}
+
+
+        {% if score >= 4 %}
+
+            <div class="emoji">
+                🎉
+            </div>
+
+            <h1>
+                Excellent Work!
+            </h1>
+
+            <div class="message">
+                You're doing a great job!
+            </div>
+
+        {% elif score >= 3 %}
+
+            <div class="emoji">
+                😊
+            </div>
+
+            <h1>
+                Good Job!
+            </h1>
+
+            <div class="message">
+                Keep learning and improving!
+            </div>
+
+        {% else %}
+
+            <div class="emoji">
+                💪
+            </div>
+
+            <h1>
+                Keep Practicing!
+            </h1>
+
+            <div class="message">
+                Every question helps you learn something new.
+            </div>
+
+        {% endif %}
+
+
+        <div class="score">
+
+            {{ score }} / {{ total }}
+
+        </div>
+
+
+        <div class="age">
+
+            Age {{ age }} ·
+            Level {{ age_group }}
+
+        </div>
+
+
+        <a
+            href="/child/dashboard/"
+            class="home-btn"
+        >
+            Continue to LittleNet
+        </a>
+
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

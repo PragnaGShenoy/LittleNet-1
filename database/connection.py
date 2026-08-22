@@ -7,7 +7,7 @@ def get_db_connection():
             host="localhost",
             database="safeconnect_db",
             user="postgres",
-            password="chethansm@123",
+            password="littlenet",
             port="5432",
             cursor_factory=RealDictCursor
         )
