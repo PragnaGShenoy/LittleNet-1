@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Story Archive | LittleNet</title>
+
+  <meta name="theme-color" content="#7950F2">
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/static/css/littlenet.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .archive-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 62px;
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .archive-header a {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827;
+      text-decoration: none;
+    }
+
+    .archive-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    /* =========================
+       NOTICE
+    ========================= */
+
+    .archive-notice {
+      margin: 12px 14px 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f1efff;
+      color: #5b21b6;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .archive-notice i {
+      margin-right: 5px;
+    }
+
+    /* =========================
+       GRID
+    ========================= */
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 14px 10px 100px;
+    }
+
+    .archive-card {
+      position: relative;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      border-radius: 13px;
+      background: #111827;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    }
+
+    .archive-card img,
+    .archive-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .archive-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+          rgba(0, 0, 0, .35),
+          transparent 30%,
+          transparent 65%,
+          rgba(0, 0, 0, .45));
+      pointer-events: none;
+    }
+
+    .archive-date-badge {
+      position: absolute;
+      z-index: 2;
+      top: 7px;
+      left: 7px;
+      padding: 4px 7px;
+      border-radius: 7px;
+      background: rgba(0, 0, 0, .55);
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .video-badge {
+      position: absolute;
+      z-index: 3;
+      right: 8px;
+      top: 8px;
+      color: white;
+      font-size: 13px;
+    }
+
+    .archive-bottom {
+      position: absolute;
+      z-index: 4;
+      left: 7px;
+      right: 7px;
+      bottom: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .archive-pin-btn,
+    .archive-more-btn {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(255, 255, 255, .9);
+      color: #6d28d9;
+      box-shadow: 0 2px 7px rgba(0, 0, 0, .2);
+    }
+
+    .archive-pin-btn.pinned {
+      background: #7950F2;
+      color: white;
+    }
+
+    /* =========================
+       EMPTY STATE
+    ========================= */
+
+    .empty-state {
+      text-align: center;
+      padding: 90px 20px 120px;
+      color: #64748b;
+    }
+
+    .empty-state i {
+      font-size: 48px;
+      color: #cbd5e1;
+      margin-bottom: 14px;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 5px;
+      color: #111827;
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* =========================
+       STORY PREVIEW
+    ========================= */
+
+    .story-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, .94);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .story-modal.show {
+      display: flex;
+    }
+
+    .story-viewer {
+      position: relative;
+      width: min(430px, 100vw);
+      height: min(760px, 100vh);
+      background: #000;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .story-media {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .story-top {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(rgba(0, 0, 0, .55),
+          transparent);
+    }
+
+    .story-date {
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .story-close {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .5);
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .story-caption {
+      position: absolute;
+      z-index: 5;
+      left: 14px;
+      right: 14px;
+      bottom: 80px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, .5);
+      backdrop-filter: blur(6px);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .story-caption.visible {
+      display: block;
+    }
+
+    .story-actions {
+      position: absolute;
+      z-index: 10;
+      bottom: 15px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .story-action {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .92);
+      color: #111827;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .25);
+    }
+
+    .story-action.highlighted {
+      background: #7950F2;
+      color: white;
+    }
+
+    .story-action.delete {
+      color: #dc2626;
+    }
+
+    .story-prev,
+    .story-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .story-prev {
+      left: 12px;
+    }
+
+    .story-next {
+      right: 12px;
+    }
+
+    /* =========================
+       BOTTOM NAV
+    ========================= */
+
+    .ln-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+      .archive-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .archive-card {
+        border-radius: 9px;
+      }
+
+      .archive-date-badge {
+        font-size: 8px;
+        padding: 3px 5px;
+      }
+
+      .archive-pin-btn,
+      .archive-more-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+      }
+
+      .story-viewer {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .story-prev,
+      .story-next {
+        width: 35px;
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="ln-app-wrap">
+
+    <!-- =========================
+       HEADER
+  ========================= -->
+
+    <header class="archive-header">
+
+      <a href="/child/profile/" aria-label="Back">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+
+      <h2>Story Archive</h2>
+
+      <div style="width:38px;"></div>
+
+    </header>
+
+
+    <!-- =========================
+       NOTICE
+  ========================= -->
+
+    <div class="archive-notice">
+      <i class="fa-solid fa-lock"></i>
+      Only you can see your archived stories unless you share them to Highlights.
+    </div>
+
+
+    <!-- =========================
+       STORIES
+  ========================= -->
+
+    {% if stories %}
+
+    <main class="archive-grid" id="archiveGrid">
+
+      {% for story in stories %}
+
+      <div class="archive-card" data-index="{{ loop.index0 }}" data-src="/{{ story.media_path|replace('\\','/') }}"
+        data-type="{{ story.media_type }}" data-caption="{{ story.caption or '' }}"
+        data-date="{{ story.formatted_date }}" data-post-id="{{ story.post_id }}"
+        data-highlight="{{ 'true' if story.is_highlight else 'false' }}" onclick="openStoryPreview({{ loop.index0 }})">
+
+        {% if story.media_type == 'VIDEO' %}
+
+        <video src="/{{ story.media_path|replace('\\','/') }}" preload="metadata" muted></video>
+
+        <span class="video-badge">
+          <i class="fa-solid fa-video"></i>
+        </span>
+
+        {% else %}
+
+        <img src="/{{ story.media_path|replace('\\','/') }}" alt="Archived Story" loading="lazy">
+
+        {% endif %}
+
+
+        <div class="archive-date-badge">
+          {{ story.formatted_date }}
+        </div>
+
+
+        <div class="archive-bottom">
+
+          <button type="button" class="archive-pin-btn {% if story.is_highlight %}pinned{% endif %}"
+            title="Toggle Highlight" onclick="event.stopPropagation(); toggleHighlight({{ story.post_id }}, this)">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+
+          <button type="button" class="archive-more-btn" title="Open Story"
+            onclick="event.stopPropagation(); openStoryPreview({{ loop.index0 }})">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      {% endfor %}
+
+    </main>
+
+    {% else %}
+
+    <div class="empty-state">
+
+      <i class="fa-solid fa-clock-rotate-left"></i>
+
+      <h3>No Archived Stories</h3>
+
+      <p>
+        Stories you post will automatically be saved in your archive
+        after 24 hours.
+      </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+       STORY PREVIEW MODAL
+  ========================= -->
+
+    <div class="story-modal" id="storyModal" onclick="closeStoryOutside(event)">
+
+      <div class="story-viewer">
+
+        <div class="story-top">
+
+          <span class="story-date" id="storyDate"></span>
+
+          <button class="story-close" type="button" onclick="closeStoryPreview()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
+        </div>
+
+
+        <button class="story-prev" type="button" onclick="previousStory()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+
+        <img id="storyImage" class="story-media" style="display:none;" alt="Story">
+
+
+        <video id="storyVideo" class="story-media" style="display:none;" controls playsinline></video>
+
+
+        <button class="story-next" type="button" onclick="nextStory()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+
+        <div class="story-caption" id="storyCaption"></div>
+
+
+        <div class="story-actions">
+
+          <button class="story-action" type="button" title="Show caption" onclick="toggleCaption()">
+            <i class="fa-solid fa-comment"></i>
+          </button>
+
+
+          <button class="story-action" id="modalHighlightButton" type="button" title="Add to Highlights"
+            onclick="toggleCurrentHighlight()">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+
+
+          <button class="story-action" type="button" title="Save" onclick="downloadCurrentStory()">
+            <i class="fa-solid fa-download"></i>
+          </button>
+
+
+          <button class="story-action delete" type="button" title="Delete Story" onclick="deleteCurrentStory()">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+       BOTTOM NAV
+  ========================= -->
+
+    <nav class="ln-bottom-nav">
+
+      <div class="ln-nav-inner">
+
+        <a href="/child/dashboard/" class="ln-nav-item">
+          <i class="fa-solid fa-house"></i>
+          <span>Home</span>
+        </a>
+
+        <a href="/discover/" class="ln-nav-item">
+          <i class="fa-solid fa-compass"></i>
+          <span>Explore</span>
+        </a>
+
+        <a href="/child/upload-post/" class="ln-nav-create-btn" title="Create">
+          <i class="fa-solid fa-plus"></i>
+        </a>
+
+        <a href="/recommended/" class="ln-nav-item">
+          <i class="fa-solid fa-brain"></i>
+          <span>Quiz</span>
+        </a>
+
+        <a href="/child/profile/" class="ln-nav-item active">
+          <i class="fa-solid fa-user"></i>
+          <span>Profile</span>
+        </a>
+
+      </div>
+
+    </nav>
+
+  </div>
+
+
+  <script>
+
+    let stories = [];
+    let currentStoryIndex = 0;
+
+
+    /* =========================================
+       LOAD STORIES FROM HTML
+    ========================================= */
+
+    document.querySelectorAll('.archive-card').forEach(card => {
+
+      stories.push({
+        index: Number(card.dataset.index),
+        src: card.dataset.src,
+        type: card.dataset.type,
+        caption: card.dataset.caption,
+        date: card.dataset.date,
+        postId: card.dataset.postId,
+        highlight: card.dataset.highlight === 'true'
+      });
+
+    });
+
+
+    /* =========================================
+       OPEN STORY
+    ========================================= */
+
+    function openStoryPreview(index) {
+
+      if (!stories.length) return;
+
+      currentStoryIndex = index;
+
+      renderStory();
+
+      document
+        .getElementById('storyModal')
+        .classList.add('show');
+
+    }
+
+
+    /* =========================================
+       RENDER CURRENT STORY
+    ========================================= */
+
+    function renderStory() {
+
+      const story = stories[currentStoryIndex];
+
+      const image = document.getElementById('storyImage');
+      const video = document.getElementById('storyVideo');
+      const caption = document.getElementById('storyCaption');
+      const date = document.getElementById('storyDate');
+      const highlightButton =
+        document.getElementById('modalHighlightButton');
+
+
+      image.style.display = 'none';
+      video.style.display = 'none';
+
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+
+
+      if (story.type === 'VIDEO') {
+
+        video.src = story.src;
+        video.style.display = 'block';
+
+      } else {
+
+        image.src = story.src;
+        image.style.display = 'block';
+
+      }
+
+
+      date.textContent = story.date || 'Archived Story';
+
+
+      caption.textContent = story.caption || '';
+      caption.classList.remove('visible');
+
+
+      if (story.highlight) {
+
+        highlightButton.classList.add('highlighted');
+
+      } else {
+
+        highlightButton.classList.remove('highlighted');
+
+      }
+
+    }
+
+
+    /* =========================================
+       CLOSE STORY
+    ========================================= */
+
+    function closeStoryPreview() {
+
+      const modal = document.getElementById('storyModal');
+
+      modal.classList.remove('show');
+
+      const video = document.getElementById('storyVideo');
+
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+
+    }
+
+
+    function closeStoryOutside(event) {
+
+      if (event.target.id === 'storyModal') {
+
+        closeStoryPreview();
+
+      }
+
+    }
+
+
+    /* =========================================
+       NEXT / PREVIOUS
+    ========================================= */
+
+    function nextStory() {
+
+      if (!stories.length) return;
+
+      currentStoryIndex =
+        (currentStoryIndex + 1) % stories.length;
+
+      renderStory();
+
+    }
+
+
+    function previousStory() {
+
+      if (!stories.length) return;
+
+      currentStoryIndex =
+        (currentStoryIndex - 1 + stories.length) %
+        stories.length;
+
+      renderStory();
+
+    }
+
+
+    /* =========================================
+       CAPTION
+    ========================================= */
+
+    function toggleCaption() {
+
+      document
+        .getElementById('storyCaption')
+        .classList.toggle('visible');
+
+    }
+
+
+    /* =========================================
+       HIGHLIGHT
+    ========================================= */
+
+    function toggleHighlight(postId, btn) {
+
+      fetch(`/api/toggle-highlight/${postId}/`, {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        credentials: 'same-origin',
+
+        body: JSON.stringify({
+          title: 'Moments'
+        })
+
+      })
+
+        .then(response => {
+
+          if (!response.ok) {
+            throw new Error('Highlight request failed');
+          }
+
+          return response.json();
+
+        })
+
+        .then(data => {
+
+          const isHighlight = Boolean(data.is_highlight);
+
+          btn.classList.toggle(
+            'pinned',
+            isHighlight
+          );
+
+          const story = stories.find(
+            s => String(s.postId) === String(postId)
+          );
+
+          if (story) {
+            story.highlight = isHighlight;
+          }
+
+        })
+
+        .catch(error => {
+
+          console.error(error);
+
+          alert('Unable to update highlight right now.');
+
+        });
+
+    }
+
+
+    /* =========================================
+       CURRENT STORY HIGHLIGHT
+    ========================================= */
+
+    function toggleCurrentHighlight() {
+
+      const story = stories[currentStoryIndex];
+
+      if (!story) return;
+
+      fetch(`/api/toggle-highlight/${story.postId}/`, {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        credentials: 'same-origin',
+
+        body: JSON.stringify({
+          title: 'Moments'
+        })
+
+      })
+
+        .then(response => {
+
+          if (!response.ok) {
+            throw new Error('Highlight request failed');
+          }
+
+          return response.json();
+
+        })
+
+        .then(data => {
+
+          story.highlight = Boolean(data.is_highlight);
+
+          const button =
+            document.getElementById('modalHighlightButton');
+
+          button.classList.toggle(
+            'highlighted',
+            story.highlight
+          );
+
+
+          const card =
+            document.querySelector(
+              `.archive-card[data-index="${story.index}"]`
+            );
+
+          if (card) {
+
+            const cardButton =
+              card.querySelector('.archive-pin-btn');
+
+            if (cardButton) {
+
+              cardButton.classList.toggle(
+                'pinned',
+                story.highlight
+              );
+
+            }
+
+          }
+
+        })
+
+        .catch(error => {
+
+          console.error(error);
+
+          alert('Unable to update highlight.');
+
+        });
+
+    }
+
+
+    /* =========================================
+       DOWNLOAD / SAVE
+    ========================================= */
+
+    function downloadCurrentStory() {
+
+      const story = stories[currentStoryIndex];
+
+      if (!story) return;
+
+      const link = document.createElement('a');
+
+      link.href = story.src;
+      link.download = 'littlenet-story';
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+    }
+
+
+    /* =========================================
+       DELETE STORY
+    ========================================= */
+
+    function deleteCurrentStory() {
+
+      const story = stories[currentStoryIndex];
+
+      if (!story) return;
+
+
+      const confirmed = confirm(
+        'Are you sure you want to delete this story?'
+      );
+
+      if (!confirmed) return;
+
+
+      /*
+        IMPORTANT:
+        This endpoint must exist in your Flask backend.
+    
+        Example:
+        POST /child/story/delete/<post_id>/
+      */
+
+      fetch(`/child/story/delete/${story.postId}/`, {
+
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        credentials: 'same-origin'
+
+      })
+
+        .then(response => {
+
+          if (!response.ok) {
+            throw new Error('Delete failed');
+          }
+
+          return response.json();
+
+        })
+
+        .then(data => {
+
+          if (data.success) {
+
+            stories.splice(currentStoryIndex, 1);
+
+            closeStoryPreview();
+
+            location.reload();
+
+          } else {
+
+            alert(
+              data.message ||
+              'Unable to delete story.'
+            );
+
+          }
+
+        })
+
+        .catch(error => {
+
+          console.error(error);
+
+          alert(
+            'Delete endpoint is not available yet.'
+          );
+
+        });
+
+    }
+
+
+    /* =========================================
+       KEYBOARD CONTROLS
+    ========================================= */
+
+    document.addEventListener('keydown', function (event) {
+
+      const modal =
+        document.getElementById('storyModal');
+
+      if (!modal.classList.contains('show')) {
+        return;
+      }
+
+
+      if (event.key === 'Escape') {
+
+        closeStoryPreview();
+
+      }
+
+
+      if (event.key === 'ArrowRight') {
+
+        nextStory();
+
+      }
+
+
+      if (event.key === 'ArrowLeft') {
+
+        previousStory();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+
+</html>

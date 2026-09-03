@@ -5,7 +5,16 @@ from flask import render_template
 from flask import session
 from werkzeug.utils import secure_filename
 
-from child.service import create_child_profile, follow_child, get_followers, get_followers_count, get_following, get_following_count, get_post_comments, get_post_count, get_random_children, get_recommended_posts, get_remaining_time, is_child_locked, is_following, is_follow_pending, unfollow_child, update_child_profile, update_profile_picture, get_following_stories, get_my_active_story, get_my_active_stories, get_my_posts_for_profile, delete_story, update_story_caption
+from child.service import (
+    create_child_profile, follow_child, get_followers, get_followers_count,
+    get_following, get_following_count, get_post_comments, get_post_count,
+    get_random_children, get_recommended_posts, get_remaining_time,
+    is_child_locked, is_following, is_follow_pending, unfollow_child,
+    update_child_profile, update_profile_picture, get_following_stories,
+    get_my_active_story, get_my_active_stories, get_my_posts_for_profile,
+    delete_story, update_story_caption, get_story_archive, get_story_highlights,
+    toggle_story_highlight, update_account_privacy, get_archived_posts
+)
 from child.service import get_child_profile
 from parent.service import get_time_limit
 from quiz.service import (
@@ -96,6 +105,9 @@ def dashboard():
     if "user_id" not in session:
         return redirect("/login/")
 
+    if session.get("role") == "PARENT":
+        return redirect("/parent/dashboard/")
+
     limit_data = get_time_limit(session["user_id"])
 
     # Use accurate remaining (includes current session)
@@ -154,8 +166,13 @@ def profile():
     if "user_id" not in session:
         return redirect("/login/")
 
+    if session.get("role") == "PARENT":
+        return redirect("/parent/dashboard/")
+
     child_id = session["user_id"]
     profile_data = get_child_profile(child_id)
+    highlights = get_story_highlights(child_id)
+    archived_posts = get_archived_posts(child_id)
 
     return render_template(
         "profile.html",
@@ -164,6 +181,8 @@ def profile():
         followers_count=get_followers_count(child_id),
         following_count=get_following_count(child_id),
         posts=get_my_posts_for_profile(child_id),
+        highlights=highlights,
+        archived_count=len(archived_posts),
     )
 
 
@@ -380,20 +399,30 @@ def upload_profile_picture():
 def view_profile(user_id):
     if "user_id" not in session:
         return redirect("/login/")
+    if user_id == session["user_id"]:
+        return redirect("/child/profile/")
+
     profile_data   = get_child_profile(user_id)
-    posts          = get_my_posts_for_profile(user_id)
     uid            = session["user_id"]
     following      = is_following(uid, user_id)
     pending        = is_follow_pending(uid, user_id)
+    is_private     = bool(profile_data and profile_data.get("is_private"))
+    can_view_posts = (not is_private) or following
+    posts          = get_my_posts_for_profile(user_id) if can_view_posts else []
+    highlights     = get_story_highlights(user_id) if can_view_posts else []
+
     return render_template(
         "view_profile.html",
         profile=profile_data,
         posts=posts,
+        highlights=highlights,
         post_count=get_post_count(user_id),
         followers_count=get_followers_count(user_id),
         following_count=get_following_count(user_id),
         is_following=following,
         is_pending=pending,
+        is_private=is_private,
+        can_view_posts=can_view_posts,
         target_user_id=user_id,
     )
 
@@ -413,5 +442,48 @@ def discover():
         "discover.html",
         children=children
     )
+
+
+# ── Story Archive ─────────────────────────────────────────────────────────────
+@child_bp.route("/story/archive/")
+def story_archive():
+    if "user_id" not in session:
+        return redirect("/login/")
+    child_id = session["user_id"]
+    stories = get_story_archive(child_id)
+    return render_template("story_archive.html", stories=stories)
+
+
+# ── Account Settings ──────────────────────────────────────────────────────────
+@child_bp.route("/child/settings/")
+def settings():
+    if "user_id" not in session:
+        return redirect("/login/")
+    child_id = session["user_id"]
+    profile_data = get_child_profile(child_id)
+    return render_template("settings.html", profile=profile_data)
+
+
+# ── Update Privacy (Public / Private) ─────────────────────────────────────────
+@child_bp.route("/api/update-privacy/", methods=["POST"])
+def api_update_privacy():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    is_private = bool(data.get("is_private", False))
+    update_account_privacy(session["user_id"], is_private)
+    return jsonify({"ok": True, "is_private": is_private})
+
+
+# ── Toggle Story Highlight ────────────────────────────────────────────────────
+@child_bp.route("/api/toggle-highlight/<int:post_id>/", methods=["POST"])
+def api_toggle_highlight(post_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+    data = request.get_json(silent=True) or {}
+    title = data.get("title", "Highlight")
+    is_hl = toggle_story_highlight(post_id, session["user_id"], title)
+    return jsonify({"ok": True, "is_highlight": is_hl})
+
 
 

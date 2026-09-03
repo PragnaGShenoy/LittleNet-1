@@ -11,6 +11,11 @@ from childMessage.routes import child_message_bp
 
 
 from flask_cors import CORS
+from database.migrations import run_migrations
+
+# Verify and execute database migrations
+run_migrations()
+
 app = Flask(__name__)
 CORS(
     app,

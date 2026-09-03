@@ -1,527 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Edit Profile | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#F5F7FB;
-
-padding:20px;
-
-color:#222;
-
-}
-
-.container{
-
-max-width:700px;
-
-margin:auto;
-
-}
-
-.card{
-
-background:white;
-
-border-radius:24px;
-
-padding:35px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-.header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:30px;
-
-}
-
-.logo{
-
-font-size:28px;
-
-font-weight:700;
-
-color:#2563EB;
-
-}
-
-.back{
-
-text-decoration:none;
-
-color:#2563EB;
-
-font-weight:600;
-
-}
-
-.avatar{
-
-width:110px;
-
-height:110px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:45px;
-
-color:white;
-
-margin-bottom:25px;
-
-position:relative;
-
-overflow:hidden;
-
-cursor:pointer;
-
-}
-
-.avatar img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
-
-.avatar-overlay{
-
-position:absolute;
-
-inset:0;
-
-background:rgba(0,0,0,.35);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-opacity:0;
-
-transition:.2s;
-
-}
-
-.avatar:hover .avatar-overlay{
-
-opacity:1;
-
-}
-
-.upload-status{
-
-text-align:center;
-
-font-size:13px;
-
-color:#2563EB;
-
-margin-top:-18px;
-
-margin-bottom:16px;
-
-min-height:18px;
-
-}
-
-.edit-icon{
-
-position:absolute;
-
-bottom:0;
-
-right:0;
-
-width:36px;
-
-height:36px;
-
-border-radius:50%;
-
-background:white;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-box-shadow:0 2px 8px rgba(0,0,0,.15);
-
-color:#2563EB;
-
-}
-
-h1{
-
-text-align:center;
-
-margin-bottom:8px;
-
-}
-
-.subtitle{
-
-text-align:center;
-
-color:#777;
-
-margin-bottom:30px;
-
-}
-
-.group{
-
-margin-bottom:22px;
-
-}
-
-.group label{
-
-display:block;
-
-font-weight:600;
-
-margin-bottom:8px;
-
-color:#374151;
-
-}
-
-.group input,
-
-.group textarea{
-
-width:100%;
-
-padding:15px;
-
-border:1px solid #E5E7EB;
-
-border-radius:14px;
-
-font-size:15px;
-
-outline:none;
-
-transition:.3s;
-
-}
-
-.group input:focus,
-
-.group textarea:focus{
-
-border-color:#2563EB;
-
-box-shadow:0 0 0 4px rgba(37,99,235,.10);
-
-}
-
-.group textarea{
-
-resize:vertical;
-
-min-height:120px;
-
-}
-
-button{
-
-width:100%;
-
-padding:16px;
-
-border:none;
-
-border-radius:14px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-color:white;
-
-font-size:16px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.25);
-
-}
-
-.bottom-nav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
-}
-
-.bottom-nav a{
-
-font-size:24px;
-
-color:#555;
-
-transition:.3s;
-
-}
-
-.bottom-nav a:hover{
-
-color:#2563EB;
-
-}
-
-@media(max-width:768px){
-
-.card{
-
-padding:25px;
-
-}
-
-.logo{
-
-font-size:24px;
-
-}
-
-.avatar{
-
-width:90px;
-
-height:90px;
-
-font-size:38px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Edit Profile | LittleNet</title>
+
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
+
+  <style>
+    .edit-page-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--ln-border-light);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      color: var(--ln-text);
+      font-size: 20px;
+      padding: 4px;
+    }
+
+    .header-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--ln-text);
+    }
+
+    .form-container {
+      padding: 24px 20px;
+    }
+
+    .avatar-change-section {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .avatar-big-wrap {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      padding: 3px;
+      background: var(--ln-brand-gradient);
+      box-shadow: var(--ln-shadow-glow);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .avatar-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--ln-purple);
+      overflow: hidden;
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-badge-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--ln-coral);
+      color: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+
+    .change-photo-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ln-coral);
+      cursor: pointer;
+    }
+
+    .upload-status-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ln-mint);
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      background: white;
+      border-color: var(--ln-coral);
+      box-shadow: 0 0 0 3.5px rgba(255, 107, 107, 0.12);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .btn-save {
+      width: 100%;
+      height: 52px;
+      background: var(--ln-brand-gradient);
+      color: white;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: var(--ln-shadow-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      margin-top: 24px;
+      transition: all 0.2s;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35);
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-
-<div class="card">
-
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/child/profile/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Back
-
-</a>
-
-</div>
-
-<input type="file" id="photoInput" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
-
-<div class="avatar" onclick="document.getElementById('photoInput').click()" title="Change photo">
-
-{% if profile.profile_picture %}
-<img src="/{{ profile.profile_picture }}" alt="Profile" id="avatarImg">
-{% else %}
-<i class="fa-solid fa-user" id="avatarIcon"></i>
-{% endif %}
-
-<div class="avatar-overlay">
-<i class="fa-solid fa-camera" style="color:white;font-size:26px;"></i>
-</div>
-
-</div>
-
-<div class="upload-status" id="uploadStatus"></div>
-
-<h1>Edit Profile</h1>
-
-<p class="subtitle">
-
-Update your information and let your friends know more about you.
-
-</p>
-
-<form method="POST">
-
-<div class="group">
-
-<label>Full Name</label>
-
-<input
-type="text"
-name="full_name"
-value="{{ profile.full_name }}">
-
-</div>
-
-<div class="group">
-
-<label>School Name</label>
-
-<input
-type="text"
-name="school_name"
-value="{{ profile.school_name }}">
-
-</div>
-
-<div class="group">
-
-<label>Location</label>
-
-<input
-type="text"
-name="location"
-value="{{ profile.location }}">
-
-</div>
-
-<div class="group">
-
-<label>Current Class</label>
-
-<input
-type="text"
-name="current_class"
-value="{{ profile.current_class }}">
-
-</div>
-
-<div class="group">
-
-<label>Bio</label>
-
-<textarea
-name="bio">{{ profile.bio }}</textarea>
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-floppy-disk"></i>
-
-&nbsp;
-
-Save Changes
-
-</button>
-
-</form>
-
-</div>
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/feed/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
+<div class="edit-page-wrap">
+
+  <div class="top-header">
+    <a href="/child/profile/" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="header-title">Edit Profile</div>
+    <div style="width:24px;"></div>
+  </div>
+
+  <div class="form-container">
+
+    <!-- Avatar Upload Section -->
+    <div class="avatar-change-section">
+      <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="uploadPhoto(this)">
+      <div class="avatar-big-wrap" onclick="document.getElementById('photoInput').click()">
+        <div class="avatar-inner">
+          {% if profile.profile_picture %}
+            <img src="/{{ profile.profile_picture|replace('\\','/') }}" id="avatarImg" alt="Profile">
+          {% else %}
+            <span id="avatarLetter">{{ profile.full_name[0]|upper if profile.full_name else '?' }}</span>
+          {% endif %}
+        </div>
+        <div class="avatar-badge-btn">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+      </div>
+      <div class="change-photo-text" onclick="document.getElementById('photoInput').click()">Change Profile Photo</div>
+      <div class="upload-status-text" id="uploadStatus"></div>
+    </div>
+
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="full_name" class="form-input" value="{{ profile.full_name or '' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">School Name</label>
+        <input type="text" name="school_name" class="form-input" value="{{ profile.school_name or '' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location / City</label>
+        <input type="text" name="location" class="form-input" value="{{ profile.location or '' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Current Grade / Class</label>
+        <input type="text" name="current_class" class="form-input" value="{{ profile.current_class or '' }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bio (Tell friends about yourself)</label>
+        <textarea name="bio" class="form-textarea">{{ profile.bio or '' }}</textarea>
+      </div>
+
+      <button type="submit" class="btn-save">
+        <i class="fa-solid fa-floppy-disk"></i>
+        <span>Save Profile Changes</span>
+      </button>
+    </form>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item active">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
 </div>
 
@@ -531,7 +282,7 @@ function uploadPhoto(input) {
   if (!file) return;
 
   const status = document.getElementById('uploadStatus');
-  status.textContent = 'Uploading…';
+  status.textContent = 'Uploading photo...';
 
   const formData = new FormData();
   formData.append('photo', file);
@@ -544,32 +295,15 @@ function uploadPhoto(input) {
   .then(r => r.json())
   .then(data => {
     if (data.ok) {
-      // Show new image in the avatar immediately
-      const avatar = document.querySelector('.avatar');
-      const icon = document.getElementById('avatarIcon');
-      let img = document.getElementById('avatarImg');
-
-      if (icon) icon.remove();
-
-      if (!img) {
-        img = document.createElement('img');
-        img.id = 'avatarImg';
-        img.alt = 'Profile';
-        avatar.insertBefore(img, avatar.firstChild);
-      }
-      img.src = data.path + '?t=' + Date.now();
-      status.textContent = '✓ Photo updated!';
-      setTimeout(() => status.textContent = '', 3000);
+      status.textContent = '✓ Photo updated successfully!';
+      setTimeout(() => window.location.reload(), 1000);
     } else {
       status.textContent = 'Upload failed. Try again.';
     }
   })
-  .catch(() => { status.textContent = 'Upload failed. Try again.'; });
-
-  input.value = '';
+  .catch(() => { status.textContent = 'Upload failed.'; });
 }
 </script>
 
 </body>
-
 </html>

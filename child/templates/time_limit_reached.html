@@ -1,295 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LittleNet - Screen Time Reached</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-min-height:100vh;
-
-padding:20px;
-
-}
-
-.card{
-
-background:white;
-
-width:100%;
-
-max-width:500px;
-
-padding:40px 30px;
-
-border-radius:24px;
-
-text-align:center;
-
-box-shadow:0 15px 40px rgba(0,0,0,.25);
-
-animation:popup .5s ease;
-
-}
-
-@keyframes popup{
-
-from{
-
-opacity:0;
-
-transform:scale(.9);
-
-}
-
-to{
-
-opacity:1;
-
-transform:scale(1);
-
-}
-
-}
-
-.icon{
-
-width:110px;
-
-height:110px;
-
-margin:auto;
-
-border-radius:50%;
-
-background:#EEF4FF;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:55px;
-
-color:#2563EB;
-
-margin-bottom:25px;
-
-}
-
-h1{
-
-font-size:30px;
-
-color:#111827;
-
-margin-bottom:18px;
-
-}
-
-.message{
-
-font-size:17px;
-
-color:#6B7280;
-
-line-height:1.8;
-
-margin-bottom:15px;
-
-}
-
-.tip{
-
-background:#F8FAFC;
-
-border-left:5px solid #2563EB;
-
-padding:18px;
-
-border-radius:12px;
-
-text-align:left;
-
-margin-top:25px;
-
-margin-bottom:30px;
-
-font-size:15px;
-
-color:#444;
-
-}
-
-button{
-
-width:100%;
-
-padding:15px;
-
-border:none;
-
-border-radius:14px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-color:white;
-
-font-size:17px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.30);
-
-}
-
-.footer{
-
-margin-top:25px;
-
-font-size:13px;
-
-color:#888;
-
-}
-
-@media(max-width:600px){
-
-.card{
-
-padding:30px 20px;
-
-}
-
-h1{
-
-font-size:24px;
-
-}
-
-.icon{
-
-width:90px;
-
-height:90px;
-
-font-size:45px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Time for Offline Play! | LittleNet</title>
+
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(255, 235, 235, 0.95) 0%, rgba(243, 240, 255, 0.9) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #1e293b;
+    }
+
+    .limit-container {
+      width: 100%;
+      max-width: 460px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .limit-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .limit-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff7e67, #ff6b6b, #9775fa, #20c997);
+    }
+
+    .time-icon-box {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: #fff5f5;
+      color: #ff6b6b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.25);
+    }
+
+    .limit-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .limit-desc {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .activity-box {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .activity-header {
+      font-size: 13px;
+      font-weight: 900;
+      color: #7950f2;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .activity-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .activity-item {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #9775fa 100%);
+      color: white;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.28);
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35);
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="card">
+<div class="limit-container">
+  <div class="limit-card">
+    
+    <div class="time-icon-box">
+      <i class="fa-solid fa-hourglass-end"></i>
+    </div>
 
-<div class="icon">
+    <h1 class="limit-title">Daily Screen Time Reached!</h1>
+    <p class="limit-desc">Great job exploring today! Your daily screen limit has been reached to help keep a healthy balance of study, play, and rest.</p>
 
-<i class="fa-solid fa-hourglass-end"></i>
+    <div class="activity-box">
+      <div class="activity-header">
+        <i class="fa-solid fa-star"></i>
+        <span>Fun Things to Do Offline:</span>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">📖 Read a book</div>
+        <div class="activity-item">🎨 Draw or sketch</div>
+        <div class="activity-item">⚽ Play outdoors</div>
+        <div class="activity-item">🧩 Solve a puzzle</div>
+        <div class="activity-item">🚴 Ride a bike</div>
+        <div class="activity-item">👨‍👩‍👧 Family time</div>
+      </div>
+    </div>
 
-</div>
-
-<h1>
-
-Screen Time Reached
-
-</h1>
-
-<p class="message">
-
-You've reached your daily LittleNet screen-time limit.
-
-</p>
-
-<p class="message">
-
-Your parent has enabled screen-time protection to help you maintain a healthy balance between online activities, learning, play, and rest.
-
-</p>
-
-<div class="tip">
-
-<b>💡 Today's Challenge</b>
-
-<br><br>
-
-📖 Read a story
-
-<br>
-
-🎨 Draw a picture
-
-<br>
-
-⚽ Play outside
-
-<br>
-
-👨‍👩‍👧 Spend time with your family
-
-</div>
-
-<a href="/logout/">
-
-<button>
-
-<i class="fa-solid fa-right-from-bracket"></i>
-
-Logout
-
-</button>
-
-</a>
-
-<div class="footer">
-
-See you tomorrow! 👋
-
-</div>
-
+    <a href="/logout/" class="btn-logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <span>Sign Out & See You Tomorrow!</span>
+    </a>
+  </div>
 </div>
 
 </body>
-
 </html>

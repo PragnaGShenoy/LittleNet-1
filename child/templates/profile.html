@@ -1,442 +1,737 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ profile.full_name }} | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{{ profile.full_name }}'s Profile | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;
-}
-.ig-logo{font-size:22px;font-weight:900;background:linear-gradient(135deg,#f9844a,#e76f51);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.ig-header-right{display:flex;gap:18px;align-items:center;}
-.ig-header-right a{font-size:21px;color:#262626;transition:.2s;}
-.ig-header-right a:hover{color:#e76f51;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Page wrapper ── */
-.page{max-width:470px;margin:0 auto;}
+  <style>
+    .profile-page-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 90px;
+    }
 
-/* ── Profile header section ── */
-.profile-top{padding:20px 16px 12px;}
-.profile-row{display:flex;align-items:center;gap:20px;margin-bottom:16px;}
-.avatar-ring{
-  width:86px;height:86px;border-radius:50%;padding:3px;flex-shrink:0;
-  background:linear-gradient(135deg,#f9844a,#e76f51,#c3b1e1);
-}
-.avatar-inner{
-  width:100%;height:100%;border-radius:50%;background:white;
-  display:flex;align-items:center;justify-content:center;
-  font-size:34px;overflow:hidden;
-}
-.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.stats-row{flex:1;display:flex;justify-content:space-around;}
-.stat{text-align:center;}
-.stat-num{font-size:18px;font-weight:900;color:#262626;display:block;}
-.stat-label{font-size:12px;color:#6b7280;font-weight:700;}
-.stat a{color:inherit;}
+    /* Top App Bar */
+    .profile-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--ln-border-light);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-.profile-name{font-size:15px;font-weight:900;color:#262626;margin-bottom:4px;}
-.profile-bio{font-size:14px;color:#262626;font-weight:500;line-height:1.5;margin-bottom:6px;}
-.profile-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
-.meta-chip{font-size:12px;font-weight:700;color:#6b7280;display:flex;align-items:center;gap:4px;}
-.meta-chip i{color:#e76f51;}
+    .profile-username-header {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ln-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-/* ── Action buttons ── */
-.profile-actions{display:flex;gap:8px;margin-bottom:4px;}
-.btn-edit{
-  flex:1;padding:8px;border-radius:10px;border:1.5px solid #dbdbdb;
-  background:white;font-size:14px;font-weight:800;color:#262626;
-  cursor:pointer;font-family:'Nunito',sans-serif;text-align:center;transition:.2s;
-}
-.btn-edit:hover{background:#f3f4f6;}
-.btn-upload-pic{
-  width:42px;height:38px;border-radius:10px;border:1.5px solid #dbdbdb;
-  background:white;font-size:16px;color:#e76f51;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:.2s;
-}
-.btn-upload-pic:hover{background:#fde8d0;}
+    .topbar-icons {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 19px;
+      color: var(--ln-text);
+    }
 
-/* ── Divider ── */
-.divider{height:1px;background:#dbdbdb;margin:0;}
+    /* Profile Header Section */
+    .profile-header-card {
+      padding: 18px 16px 10px;
+    }
 
-/* ── Post grid ── */
-.grid-header{
-  display:flex;border-bottom:1px solid #dbdbdb;
-  max-width:470px;margin:0 auto;
-}
-.grid-tab{
-  flex:1;padding:12px 0;text-align:center;font-size:20px;color:#9ca3af;
-  border-bottom:2px solid transparent;cursor:pointer;transition:.2s;
-}
-.grid-tab.active{color:#262626;border-bottom-color:#262626;}
+    .profile-main-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
 
-.posts-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
-  max-width:470px;margin:0 auto;
-}
-.grid-cell{
-  aspect-ratio:1/1;overflow:hidden;background:#f0f0f0;
-  cursor:pointer;position:relative;
-}
-.grid-cell img,.grid-cell video{width:100%;height:100%;object-fit:cover;display:block;}
-.grid-cell-overlay{
-  position:absolute;inset:0;background:rgba(0,0,0,.35);
-  display:none;align-items:center;justify-content:center;gap:14px;
-  color:white;font-size:13px;font-weight:900;
-}
-.grid-cell:hover .grid-cell-overlay{display:flex;}
-.grid-cell-overlay span{display:flex;align-items:center;gap:4px;}
-.video-badge{
-  position:absolute;top:7px;right:7px;
-  color:white;font-size:14px;pointer-events:none;
-}
-.empty-grid{
-  grid-column:1/-1;text-align:center;padding:50px 20px;
-}
-.empty-grid .icon{font-size:48px;margin-bottom:10px;}
-.empty-grid p{font-size:14px;font-weight:700;color:#9ca3af;margin-bottom:14px;}
-.empty-grid a{
-  padding:10px 24px;border-radius:50px;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  font-size:13px;font-weight:900;color:#7c3700;
-}
+    .avatar-wrapper {
+      position: relative;
+      width: 86px;
+      height: 86px;
+      flex-shrink: 0;
+    }
 
-/* ── Post lightbox ── */
-.lb-overlay{
-  display:none;position:fixed;inset:0;z-index:10000;
-  background:rgba(0,0,0,.85);align-items:center;justify-content:center;
-}
-.lb-overlay.show{display:flex;}
-.lb-card{
-  background:white;border-radius:20px;overflow:hidden;
-  width:min(94vw,430px);max-height:90vh;display:flex;flex-direction:column;
-}
-.lb-media{background:#000;max-height:55vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.lb-media img,.lb-media video{width:100%;max-height:55vh;object-fit:contain;}
-.lb-body{padding:14px 16px;overflow-y:auto;flex:1;}
-.lb-actions{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
-.lb-act{background:none;border:none;font-size:22px;cursor:pointer;color:#262626;padding:2px;transition:.15s;}
-.lb-act:hover{transform:scale(1.2);}
-.lb-likes{font-size:14px;font-weight:800;color:#262626;margin-bottom:6px;}
-.lb-caption{font-size:14px;color:#262626;line-height:1.5;margin-bottom:10px;}
-.lb-caption .uname{font-weight:900;margin-right:5px;}
-.lb-comments{border-top:1px solid #f0f0f0;padding-top:8px;}
-.lb-cmt{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
-.lb-cmt-name{font-weight:900;color:#262626;flex-shrink:0;}
-.lb-cmt-text{color:#262626;font-weight:500;}
-.lb-input-row{display:flex;gap:8px;align-items:center;border-top:1px solid #f0f0f0;padding:10px 16px;}
-.lb-input-row input{flex:1;border:none;outline:none;font-size:14px;font-weight:600;font-family:'Nunito',sans-serif;color:#262626;}
-.lb-input-row input::placeholder{color:#9ca3af;}
-.lb-send{background:none;border:none;cursor:pointer;font-size:17px;font-weight:900;color:#e76f51;font-family:'Nunito',sans-serif;}
-.lb-close{
-  position:absolute;top:14px;right:16px;
-  font-size:26px;color:white;cursor:pointer;z-index:10001;
-  text-shadow:0 1px 4px rgba(0,0,0,.4);
-}
-@keyframes heartPop{0%{transform:scale(1);}40%{transform:scale(1.5);}70%{transform:scale(.9);}100%{transform:scale(1);}}
-.heart-pop{animation:heartPop .35s ease;}
+    .avatar-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      padding: 3px;
+      background: var(--ln-brand-gradient);
+      box-shadow: var(--ln-shadow-glow);
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;transition:.2s;padding:4px 12px;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
+    .avatar-img-box {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--ln-purple);
+      overflow: hidden;
+      cursor: pointer;
+    }
 
-/* profile pic upload toast */
-.toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#262626;color:white;padding:10px 22px;
-  border-radius:50px;font-size:13px;font-weight:700;
-  opacity:0;transition:all .3s;z-index:10002;pointer-events:none;
-}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-</style>
+    .avatar-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-edit-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--ln-coral);
+      color: white;
+      border: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: var(--ln-shadow-xs);
+      transition: transform 0.2s;
+    }
+
+    .avatar-edit-badge:hover {
+      transform: scale(1.15);
+    }
+
+    /* Stats Grid */
+    .profile-stats-row {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-num {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ln-text);
+      line-height: 1.2;
+    }
+
+    .stat-lbl {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ln-text-muted);
+    }
+
+    /* Bio & Info */
+    .profile-bio-box {
+      margin-bottom: 14px;
+    }
+
+    .profile-name {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--ln-text);
+      margin-bottom: 4px;
+    }
+
+    .profile-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .meta-pill {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: var(--ln-surface-subtle);
+      color: var(--ln-text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .profile-bio-text {
+      font-size: 13.5px;
+      color: #334155;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    /* Action Buttons Row */
+    .profile-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .btn-action-pill {
+      flex: 1;
+      height: 38px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: var(--ln-text);
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-action-pill:hover {
+      background: #e2e8f0;
+    }
+
+    /* Story Highlights Section */
+    .highlights-section {
+      padding: 4px 0 12px;
+      border-bottom: 1px solid var(--ln-border-light);
+    }
+
+    /* 3-Column Post Grid */
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .grid-thumbnail {
+      aspect-ratio: 1 / 1;
+      background: #f1f5f9;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .grid-thumbnail img,
+    .grid-thumbnail video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .grid-thumbnail:hover img,
+    .grid-thumbnail:hover video {
+      transform: scale(1.05);
+    }
+
+    /* Fullscreen Post Lightbox Modal */
+    .post-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .post-modal-card {
+      background: white;
+      border-radius: 24px;
+      max-width: 440px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: var(--ln-shadow-lg);
+      position: relative;
+    }
+
+    .post-modal-media {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #000;
+    }
+
+    .post-modal-media img,
+    .post-modal-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .post-modal-details {
+      padding: 16px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <div class="ig-logo">🌟 LittleNet</div>
-    <div class="ig-header-right">
-      <a href="/child/dashboard/"><i class="fa-solid fa-house"></i></a>
-      <a href="/logout/"><i class="fa-solid fa-right-from-bracket"></i></a>
+<div class="profile-page-wrap">
+
+  <!-- Top App Bar -->
+  <header class="profile-topbar">
+    <div class="profile-username-header">
+      <i class="fa-solid fa-lock" style="font-size:12px;color:var(--ln-text-muted);"></i>
+      <span>{{ profile.full_name }}</span>
+      {% if profile.is_private %}
+        <span style="font-size:11px;font-weight:800;color:var(--ln-purple);background:#f3f0ff;padding:2px 6px;border-radius:4px;">Private</span>
+      {% endif %}
     </div>
-  </div>
-</div>
 
-<div class="page">
+    <div class="topbar-icons">
+      <a href="/story/archive/" title="Story Archive" style="color:inherit;"><i class="fa-solid fa-clock-rotate-left"></i></a>
+      <a href="/child/settings/" title="Settings" style="color:inherit;"><i class="fa-solid fa-gear"></i></a>
+    </div>
+  </header>
 
-  <!-- Profile top -->
-  <div class="profile-top">
-    <div class="profile-row">
-      <!-- Avatar -->
-      <div class="avatar-ring">
-        <div class="avatar-inner">
-          {% if profile and profile.profile_picture %}
-            <img src="/{{ profile.profile_picture|replace('\\','/') }}" alt="dp">
-          {% else %}
-            🧒
-          {% endif %}
+  <!-- Profile Header Card -->
+  <section class="profile-header-card">
+    <div class="profile-main-row">
+      
+      <!-- Avatar with Upload Picker -->
+      <div class="avatar-wrapper">
+        <div class="avatar-ring">
+          <div class="avatar-img-box" onclick="document.getElementById('profilePicInput').click()">
+            {% if profile.profile_picture %}
+              <img id="avatarPreview" src="/{{ profile.profile_picture|replace('\\','/') }}" alt="{{ profile.full_name }}">
+            {% else %}
+              <span id="avatarLetter">{{ profile.full_name[0]|upper if profile.full_name else '?' }}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="avatar-edit-badge" onclick="document.getElementById('profilePicInput').click()" title="Change photo">
+          <i class="fa-solid fa-camera"></i>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="stats-row">
-        <div class="stat">
+      <input type="file" id="profilePicInput" accept="image/*" style="display:none;" onchange="handleProfilePicUpload(this)">
+
+      <!-- Stats Grid -->
+      <div class="profile-stats-row">
+        <div class="stat-box">
           <span class="stat-num">{{ post_count }}</span>
-          <span class="stat-label">Posts</span>
+          <span class="stat-lbl">Posts</span>
         </div>
-        <div class="stat">
-          <span class="stat-num"><a href="/followers/">{{ followers_count }}</a></span>
-          <span class="stat-label">Followers</span>
-        </div>
-        <div class="stat">
-          <span class="stat-num"><a href="/following/">{{ following_count }}</a></span>
-          <span class="stat-label">Following</span>
-        </div>
+
+        <a href="/followers/" class="stat-box">
+          <span class="stat-num">{{ followers_count }}</span>
+          <span class="stat-lbl">Followers</span>
+        </a>
+
+        <a href="/following/" class="stat-box">
+          <span class="stat-num">{{ following_count }}</span>
+          <span class="stat-lbl">Following</span>
+        </a>
       </div>
+
     </div>
 
-    <!-- Name & bio -->
-    <div class="profile-name">{{ profile.full_name if profile else '—' }}</div>
-    {% if profile and profile.bio %}
-    <div class="profile-bio">{{ profile.bio }}</div>
-    {% endif %}
+    <!-- Bio & Details -->
+    <div class="profile-bio-box">
+      <div class="profile-name">{{ profile.full_name }}</div>
 
-    <!-- Meta chips -->
-    <div class="profile-meta">
-      {% if profile and profile.age %}
-      <span class="meta-chip"><i class="fa-solid fa-cake-candles"></i> {{ profile.age }} yrs</span>
-      {% endif %}
-      {% if profile and profile.school_name %}
-      <span class="meta-chip"><i class="fa-solid fa-school"></i> {{ profile.school_name }}</span>
-      {% endif %}
-      {% if profile and profile.location %}
-      <span class="meta-chip"><i class="fa-solid fa-location-dot"></i> {{ profile.location }}</span>
-      {% endif %}
-      {% if profile and profile.current_class %}
-      <span class="meta-chip"><i class="fa-solid fa-book"></i> Class {{ profile.current_class }}</span>
-      {% endif %}
-    </div>
-
-    <!-- Action row -->
-    <div class="profile-actions">
-      <a href="/child/edit-profile/" class="btn-edit">Edit Profile</a>
-      <button class="btn-upload-pic" onclick="document.getElementById('picInput').click()" title="Change photo">
-        <i class="fa-solid fa-camera"></i>
-      </button>
-      <input type="file" id="picInput" accept="image/*" style="display:none" onchange="uploadPic(this)">
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Grid tab -->
-  <div class="grid-header">
-    <div class="grid-tab active"><i class="fa-solid fa-grip"></i></div>
-  </div>
-
-  <!-- Posts grid -->
-  <div class="posts-grid" id="postsGrid">
-    {% if posts %}
-      {% for p in posts %}
-      <div class="grid-cell" onclick="openLb({{ p.post_id }})">
-        {% if p.media_type == 'VIDEO' %}
-          <video src="/{{ p.media_path|replace('\\','/') }}" muted preload="metadata"></video>
-          <div class="video-badge"><i class="fa-solid fa-play"></i></div>
-        {% else %}
-          <img src="/{{ p.media_path|replace('\\','/') }}" alt="post" loading="lazy">
+      <div class="profile-meta-tags">
+        {% if profile.age %}
+          <span class="meta-pill"><i class="fa-solid fa-cake-candles"></i> {{ profile.age }} yrs</span>
         {% endif %}
-        <div class="grid-cell-overlay">
-          <span><i class="fa-solid fa-heart"></i> {{ p.likes }}</span>
-          <span><i class="fa-solid fa-comment"></i> {{ p.comments_count }}</span>
+        {% if profile.school_name %}
+          <span class="meta-pill"><i class="fa-solid fa-school"></i> {{ profile.school_name }}</span>
+        {% endif %}
+        {% if profile.current_class %}
+          <span class="meta-pill"><i class="fa-solid fa-graduation-cap"></i> {{ profile.current_class }}</span>
+        {% endif %}
+      </div>
+
+      {% if profile.bio %}
+        <p class="profile-bio-text">{{ profile.bio }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Actions Row -->
+    <div class="profile-actions-row">
+      <a href="/child/edit-profile/" class="btn-action-pill">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>Edit Profile</span>
+      </a>
+      <a href="/story/archive/" class="btn-action-pill">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Story Archive</span>
+      </a>
+      <a href="/child/settings/" class="btn-action-pill" style="max-width:44px;">
+        <i class="fa-solid fa-gear"></i>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Story Highlights Section -->
+  <section class="highlights-section">
+    <div class="highlights-scroll-wrapper">
+      
+      <!-- New Story Highlight Button -->
+      <a href="/child/upload-post/" class="highlight-item">
+        <div class="highlight-ring">
+          <div class="highlight-cover" style="background:#f8fafc;color:var(--ln-coral);">
+            <i class="fa-solid fa-plus"></i>
+          </div>
         </div>
+        <span class="highlight-title">New</span>
+      </a>
+
+      <!-- Highlight Items from Backend -->
+      {% if highlights %}
+        {% for hl in highlights %}
+        <div class="highlight-item" onclick="openPostModal({{ hl.post_id }}, '{{ hl.media_type }}', '/{{ hl.media_path|replace('\\','/') }}', '{{ hl.caption }}', '{{ hl.highlight_title }}', 0, 0)">
+          <div class="highlight-ring active">
+            <div class="highlight-cover">
+              {% if hl.media_type == 'VIDEO' %}
+                <video src="/{{ hl.media_path|replace('\\','/') }}" preload="metadata"></video>
+              {% else %}
+                <img src="/{{ hl.media_path|replace('\\','/') }}" alt="">
+              {% endif %}
+            </div>
+          </div>
+          <span class="highlight-title">{{ hl.highlight_title or 'Moments' }}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <!-- Default Starter Highlight Categories -->
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-cover" style="background:#f3f0ff;color:var(--ln-purple);">
+              <i class="fa-solid fa-code"></i>
+            </div>
+          </div>
+          <span class="highlight-title">Coding</span>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-cover" style="background:#fff9db;color:var(--ln-gold);">
+              <i class="fa-solid fa-palette"></i>
+            </div>
+          </div>
+          <span class="highlight-title">Art & Craft</span>
+        </div>
+
+        <div class="highlight-item">
+          <div class="highlight-ring">
+            <div class="highlight-cover" style="background:#e6fcf5;color:var(--ln-mint);">
+              <i class="fa-solid fa-medal"></i>
+            </div>
+          </div>
+          <span class="highlight-title">Sports</span>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- 3-Column Post Grid -->
+  {% if posts %}
+    <main class="post-grid">
+      {% for post in posts %}
+      <div class="grid-thumbnail" onclick="openPostModal({{ post.post_id }}, '{{ post.media_type }}', '/{{ post.media_path|replace('\\','/') }}', '{{ post.caption }}', '{{ post.content_category }}', {{ post.likes }}, {{ post.comments_count }})">
+        
+        {% if post.media_type == 'VIDEO' %}
+          <div class="grid-video-badge"><i class="fa-solid fa-play"></i></div>
+          <video src="/{{ post.media_path|replace('\\','/') }}" preload="metadata"></video>
+        {% else %}
+          <img src="/{{ post.media_path|replace('\\','/') }}" loading="lazy" alt="Post">
+        {% endif %}
+
       </div>
       {% endfor %}
-    {% else %}
-      <div class="empty-grid">
-        <div class="icon">📸</div>
-        <p>No posts yet. Share your first moment!</p>
-        <a href="/child/upload-post/">Upload Post</a>
-      </div>
-    {% endif %}
-  </div>
+    </main>
+  {% else %}
+    <div style="text-align:center;padding:60px 20px;color:var(--ln-text-muted);">
+      <i class="fa-regular fa-image" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+      <h3 style="font-size:17px;font-weight:900;color:var(--ln-text);margin-bottom:4px;">No Posts Yet</h3>
+      <p style="font-size:13px;font-weight:600;margin-bottom:16px;">Share your creative artwork, coding projects, or fun memories!</p>
+      <a href="/child/upload-post/" class="btn-action-pill" style="display:inline-flex;padding:0 20px;background:var(--ln-brand-gradient);color:white;border:none;">
+        <i class="fa-solid fa-plus"></i>
+        <span>Create First Post</span>
+      </a>
+    </div>
+  {% endif %}
+
+  <!-- Sticky Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-create-btn" title="Create">
+        <i class="fa-solid fa-plus"></i>
+      </a>
+
+      <a href="/recommended/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item active">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
 </div>
 
-<!-- Lightbox -->
-<div class="lb-overlay" id="lbOverlay" onclick="closeLbIfBg(event)">
-  <span class="lb-close" onclick="closeLb()">✕</span>
-  <div class="lb-card" onclick="event.stopPropagation()">
-    <div class="lb-media" id="lbMedia"></div>
-    <div class="lb-body">
-      <div class="lb-actions">
-        <button class="lb-act" id="lbLikeBtn" onclick="lbToggleLike()">
-          <i class="fa-regular fa-heart" id="lbHeart"></i>
+<!-- Fullscreen Post Details Modal -->
+<div class="post-modal-overlay" id="postModalOverlay" onclick="closePostModal()">
+  <div class="post-modal-card" onclick="event.stopPropagation()">
+    
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f1f5f9;">
+      <div style="font-weight:800;font-size:14px;color:var(--ln-text);" id="modalCategory">Post Details</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button type="button" class="post-options-btn" onclick="openPostSheetMenu()" title="Post Options">
+          <i class="fa-solid fa-ellipsis"></i>
         </button>
-        <button class="lb-act"><i class="fa-regular fa-comment"></i></button>
+        <button type="button" class="post-options-btn" onclick="closePostModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
-      <div class="lb-likes" id="lbLikes"></div>
-      <div class="lb-caption" id="lbCaption"></div>
-      <div class="lb-comments" id="lbComments"></div>
     </div>
-    <div class="lb-input-row">
-      <input type="text" id="lbCmtInput" placeholder="Add a comment…">
-      <button class="lb-send" onclick="lbSubmitComment()">Post</button>
+
+    <div class="post-modal-media" id="modalMediaContainer"></div>
+
+    <div class="post-modal-details">
+      <div style="font-size:14px;font-weight:600;color:var(--ln-text);margin-bottom:12px;" id="modalCaption"></div>
+
+      <div style="display:flex;align-items:center;gap:18px;font-size:13px;font-weight:800;color:var(--ln-text-muted);">
+        <span><i class="fa-solid fa-heart" style="color:var(--ln-coral);margin-right:4px;"></i> <span id="modalLikes">0</span> Likes</span>
+        <span><i class="fa-solid fa-comment" style="color:var(--ln-purple);margin-right:4px;"></i> <span id="modalComments">0</span> Comments</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Post Options Bottom Sheet -->
+<div class="ln-sheet-menu" id="postSheetMenu">
+  <div class="ln-sheet-handle"></div>
+
+  <div class="ln-sheet-option" onclick="openEditPostDialog()">
+    <i class="fa-solid fa-pen-to-square" style="color:#339af0;"></i>
+    <span>Edit Post Caption</span>
+  </div>
+
+  <div class="ln-sheet-option" onclick="toggleArchiveCurrentPost()">
+    <i class="fa-solid fa-box-archive" style="color:#7950f2;"></i>
+    <span>Archive Post</span>
+  </div>
+
+  <div class="ln-sheet-option" onclick="copyPostLink()">
+    <i class="fa-solid fa-link" style="color:#20c997;"></i>
+    <span>Copy Link</span>
+  </div>
+
+  <div class="ln-sheet-option danger" onclick="confirmDeletePost()">
+    <i class="fa-solid fa-trash-can"></i>
+    <span>Delete Post</span>
+  </div>
+</div>
+
+<!-- Edit Post Modal -->
+<div class="post-modal-overlay" id="editPostModal" onclick="closeEditPostDialog()">
+  <div class="post-modal-card" style="padding:24px;" onclick="event.stopPropagation()">
+    <h3 style="font-size:18px;font-weight:900;color:var(--ln-text);margin-bottom:16px;">Edit Post</h3>
+
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:800;color:var(--ln-text-muted);margin-bottom:6px;">Caption</label>
+      <textarea id="editCaptionInput" class="ln-input-field" rows="3" placeholder="Write a caption..."></textarea>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:12px;font-weight:800;color:var(--ln-text-muted);margin-bottom:6px;">Category</label>
+      <input type="text" id="editCategoryInput" class="ln-input-field" placeholder="Coding, Art, Science...">
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn-action-pill" onclick="closeEditPostDialog()">Cancel</button>
+      <button type="button" class="btn-action-pill" style="background:var(--ln-brand-gradient);color:white;border:none;" onclick="saveEditedPost()">Save Changes</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
+<!-- Toast -->
+<div class="ln-toast" id="profileToast">
+  <i class="fa-solid fa-circle-check"></i>
+  <span id="toastMsg">Action completed!</span>
+</div>
 
 <script>
-var _lbPostId=null, _lbLiked=false;
+let currentActivePostId = null;
+let currentActiveCaption = '';
+let currentActiveCategory = '';
 
-function openLb(postId){
-  _lbPostId=postId; _lbLiked=false;
-  var med=document.getElementById('lbMedia');
-  var lbLikes=document.getElementById('lbLikes');
-  var lbCap=document.getElementById('lbCaption');
-  var lbCmts=document.getElementById('lbComments');
-  var heart=document.getElementById('lbHeart');
-  // reset
-  med.innerHTML='<div style="color:white;font-size:28px;padding:40px;">⏳</div>';
-  lbLikes.textContent='';lbCap.innerHTML='';lbCmts.innerHTML='';
-  heart.className='fa-regular fa-heart';
-  // fetch post data
-  fetch('/api/post-detail/'+postId+'/',{credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(p){
-      _lbLiked=p.liked;
-      if(p.media_type==='VIDEO'){
-        med.innerHTML='<video src="/'+p.media_path+'" controls autoplay muted style="width:100%;max-height:55vh;object-fit:contain;"></video>';
-      } else {
-        med.innerHTML='<img src="/'+p.media_path+'" style="width:100%;max-height:55vh;object-fit:contain;">';
-      }
-      heart.className='fa-heart '+(_lbLiked?'fa-solid':'fa-regular')+(_lbLiked?' liked-heart':'');
-      lbLikes.textContent=p.likes+' like'+(p.likes!==1?'s':'');
-      if(p.caption){
-        lbCap.innerHTML='<span class="uname">'+escHtml(p.full_name)+'</span>'+escHtml(p.caption);
-      }
-      lbCmts.innerHTML='';
-      (p.comments||[]).slice().reverse().forEach(function(c){
-        var d=document.createElement('div');d.className='lb-cmt';
-        d.innerHTML='<span class="lb-cmt-name">'+escHtml(c.full_name)+'</span><span class="lb-cmt-text">'+escHtml(c.comment_text)+'</span>';
-        lbCmts.appendChild(d);
-      });
-    }).catch(function(){});
-  document.getElementById('lbOverlay').classList.add('show');
-  document.getElementById('lbCmtInput').value='';
+function openPostModal(postId, mediaType, mediaPath, caption, category, likes, comments) {
+  currentActivePostId = postId;
+  currentActiveCaption = caption || '';
+  currentActiveCategory = category || 'Post Details';
+
+  document.getElementById('modalCategory').textContent = currentActiveCategory;
+  document.getElementById('modalCaption').textContent = currentActiveCaption;
+  document.getElementById('modalLikes').textContent = likes;
+  document.getElementById('modalComments').textContent = comments;
+
+  const container = document.getElementById('modalMediaContainer');
+  if (mediaType === 'VIDEO') {
+    container.innerHTML = `<video controls autoplay playsinline src="${mediaPath}" style="width:100%;height:100%;object-fit:contain;"></video>`;
+  } else {
+    container.innerHTML = `<img src="${mediaPath}" style="width:100%;height:100%;object-fit:contain;" alt="">`;
+  }
+
+  document.getElementById('postModalOverlay').style.display = 'flex';
 }
 
-function closeLb(){document.getElementById('lbOverlay').classList.remove('show');}
-function closeLbIfBg(e){if(e.target===document.getElementById('lbOverlay'))closeLb();}
-
-function lbToggleLike(){
-  fetch('/api/like/'+_lbPostId+'/',{method:'POST',credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      _lbLiked=d.liked;
-      var h=document.getElementById('lbHeart');
-      h.className='fa-heart '+(d.liked?'fa-solid liked-heart':'fa-regular');
-      h.classList.add('heart-pop');
-      setTimeout(function(){h.classList.remove('heart-pop');},400);
-      document.getElementById('lbLikes').textContent=d.count+' like'+(d.count!==1?'s':'');
-    }).catch(function(){});
+function closePostModal() {
+  document.getElementById('postModalOverlay').style.display = 'none';
+  document.getElementById('modalMediaContainer').innerHTML = '';
 }
 
-function lbSubmitComment(){
-  var inp=document.getElementById('lbCmtInput');
-  var text=(inp.value||'').trim(); if(!text)return;
-  inp.value='';
-  fetch('/api/comment/'+_lbPostId+'/',{
-    method:'POST',credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text:text})
+function openPostSheetMenu() {
+  document.getElementById('postSheetMenu').style.display = 'block';
+}
+
+function closePostSheetMenu() {
+  document.getElementById('postSheetMenu').style.display = 'none';
+}
+
+function openEditPostDialog() {
+  closePostSheetMenu();
+  document.getElementById('editCaptionInput').value = currentActiveCaption;
+  document.getElementById('editCategoryInput').value = currentActiveCategory;
+  document.getElementById('editPostModal').style.display = 'flex';
+}
+
+function closeEditPostDialog() {
+  document.getElementById('editPostModal').style.display = 'none';
+}
+
+function saveEditedPost() {
+  const newCap = document.getElementById('editCaptionInput').value.trim();
+  const newCat = document.getElementById('editCategoryInput').value.trim();
+
+  fetch(`/api/edit-post/${currentActivePostId}/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({ caption: newCap, category: newCat })
   })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.ok)return;
-    var cmts=document.getElementById('lbComments');
-    var item=document.createElement('div');item.className='lb-cmt';
-    item.innerHTML='<span class="lb-cmt-name">'+escHtml(d.full_name||'You')+'</span><span class="lb-cmt-text">'+escHtml(d.text)+'</span>';
-    cmts.appendChild(item);
-  }).catch(function(){});
-}
-document.getElementById('lbCmtInput').addEventListener('keydown',function(e){if(e.key==='Enter')lbSubmitComment();});
-
-function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// profile pic upload
-function uploadPic(input){
-  var file=input.files[0]; if(!file)return;
-  var fd=new FormData(); fd.append('photo',file);
-  fetch('/child/upload-profile-picture/',{method:'POST',credentials:'same-origin',body:fd})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.ok){showToast('Profile picture updated!');setTimeout(function(){location.reload();},1200);}
-      else showToast('Upload failed: '+(d.error||''));
-    }).catch(function(){showToast('Upload failed.');});
+  .then(r => r.json())
+  .then(data => {
+    closeEditPostDialog();
+    closePostModal();
+    showToast('Post updated successfully!');
+    setTimeout(() => window.location.reload(), 600);
+  })
+  .catch(() => window.location.reload());
 }
 
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2500);
+function toggleArchiveCurrentPost() {
+  closePostSheetMenu();
+  fetch(`/api/archive-post/${currentActivePostId}/`, {
+    method: 'POST',
+    credentials: 'same-origin'
+  })
+  .then(r => r.json())
+  .then(data => {
+    closePostModal();
+    showToast(data.message || 'Post updated!');
+    setTimeout(() => window.location.reload(), 600);
+  })
+  .catch(() => window.location.reload());
+}
+
+function copyPostLink() {
+  closePostSheetMenu();
+  navigator.clipboard.writeText(window.location.origin + `/child/view-profile/{{ session["user_id"] }}/`);
+  showToast('Profile link copied to clipboard!');
+}
+
+function confirmDeletePost() {
+  closePostSheetMenu();
+  if (confirm("Are you sure you want to delete this post?")) {
+    window.location.href = `/delete-post/${currentActivePostId}/`;
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('profileToast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function handleProfilePicUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('photo', file);
+
+  fetch('/child/upload-profile-picture/', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      window.location.reload();
+    } else {
+      alert(data.error || 'Could not update profile picture.');
+    }
+  })
+  .catch(() => window.location.reload());
 }
 </script>
+
 </body>
 </html>

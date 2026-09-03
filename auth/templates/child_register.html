@@ -1,441 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>LittleNet | Child Registration</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Inter',sans-serif;
-}
-
-body{
-
-    background:linear-gradient(135deg,#EEF2FF,#F8FAFC,#FFFFFF);
-
-    min-height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:30px 15px;
-
-}
-
-.container{
-
-    width:100%;
-    max-width:550px;
-
-}
-
-.card{
-
-    background:#fff;
-
-    border-radius:24px;
-
-    padding:35px;
-
-    box-shadow:0 15px 40px rgba(0,0,0,.08);
-
-    animation:fade .6s ease;
-
-}
-
-@keyframes fade{
-
-from{
-opacity:0;
-transform:translateY(20px);
-}
-
-to{
-opacity:1;
-transform:translateY(0);
-}
-
-}
-
-.logo{
-
-width:85px;
-height:85px;
-
-margin:auto;
-
-border-radius:24px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-align-items:center;
-
-color:white;
-
-font-size:34px;
-
-margin-bottom:18px;
-
-}
-
-h1{
-
-text-align:center;
-
-font-size:30px;
-
-color:#111827;
-
-margin-bottom:8px;
-
-}
-
-.subtitle{
-
-text-align:center;
-
-color:#6B7280;
-
-margin-bottom:28px;
-
-}
-
-.section{
-
-margin-top:25px;
-margin-bottom:15px;
-
-font-size:15px;
-
-font-weight:600;
-
-color:#4F46E5;
-
-display:flex;
-
-align-items:center;
-
-gap:8px;
-
-}
-
-.input-group{
-
-position:relative;
-
-margin-bottom:16px;
-
-}
-
-.input-group i{
-
-position:absolute;
-
-left:16px;
-
-top:18px;
-
-color:#9CA3AF;
-
-}
-
-.input-group input{
-
-width:100%;
-
-height:54px;
-
-border:1px solid #E5E7EB;
-
-border-radius:14px;
-
-padding-left:46px;
-
-font-size:15px;
-
-outline:none;
-
-transition:.3s;
-
-}
-
-.input-group input:focus{
-
-border-color:#4F46E5;
-
-box-shadow:0 0 0 4px rgba(79,70,229,.12);
-
-}
-
-button{
-
-width:100%;
-
-height:56px;
-
-margin-top:15px;
-
-border:none;
-
-border-radius:14px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-color:#fff;
-
-font-size:16px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 12px 25px rgba(37,99,235,.28);
-
-}
-
-.login{
-
-margin-top:24px;
-
-text-align:center;
-
-color:#6B7280;
-
-}
-
-.login a{
-
-color:#2563EB;
-
-text-decoration:none;
-
-font-weight:600;
-
-}
-
-.login a:hover{
-
-text-decoration:underline;
-
-}
-
-.footer{
-
-margin-top:25px;
-
-text-align:center;
-
-font-size:13px;
-
-color:#9CA3AF;
-
-}
-
-@media(max-width:600px){
-
-.card{
-
-padding:25px 20px;
-
-border-radius:20px;
-
-}
-
-h1{
-
-font-size:26px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join LittleNet | Create Child Account</title>
+  
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(255, 235, 235, 0.8) 0%, rgba(243, 240, 255, 0.7) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      color: #1e293b;
+    }
+
+    .register-container {
+      width: 100%;
+      max-width: 520px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .register-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 38px 32px;
+      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff7e67, #ff6b6b, #9775fa, #20c997);
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brand-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 12px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 45%, #9775fa 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.25);
+    }
+
+    .brand-title {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #7950f2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .brand-sub {
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .alert-error {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #b91c1c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .alert-success {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #15803d;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 14px;
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #7950f2;
+    }
+
+    .section-divider.parent-section {
+      color: #ff6b6b;
+      margin-top: 24px;
+    }
+
+    .section-divider i {
+      font-size: 14px;
+    }
+
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px 0 42px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .form-input:focus {
+      background: #ffffff;
+      border-color: #ff6b6b;
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12);
+    }
+
+    .field-hint {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ef4444;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .safety-notice {
+      background: #f0fdf4;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .safety-notice i {
+      font-size: 18px;
+      color: #20c997;
+      flex-shrink: 0;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #9775fa 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.28);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .auth-footer a {
+      color: #ff6b6b;
+      font-weight: 900;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .register-card {
+        padding: 28px 20px;
+        border-radius: 24px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="register-container">
+  <div class="register-card">
+    
+    <div class="brand-header">
+      <div class="brand-icon">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <h1 class="brand-title">Join LittleNet</h1>
+      <p class="brand-sub">Create your safe child profile</p>
+    </div>
 
-<div class="card">
+    {% if error %}
+    <div class="alert-error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
 
-<div class="logo">
+    {% if success_msg %}
+    <div class="alert-success">
+      <div style="font-size: 28px; margin-bottom: 8px;">🎉</div>
+      <div style="font-weight: 900; font-size: 16px; margin-bottom: 6px;">Registration Request Sent!</div>
+      <p style="font-size: 13px; font-weight: 600; color: #166534; line-height: 1.5;">
+        A parent verification invitation has been sent to <strong>{{ parent_email }}</strong>.<br>
+        Your parent must complete their identity verification and approve your account before you can log in.
+      </p>
+      {% if verification_link %}
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed #86efac; font-size: 12px;">
+        <em>Demo / Local Testing Shortcut:</em><br>
+        <a href="{{ verification_link }}" style="color: #15803d; font-weight: 800; text-decoration: underline;">Open Parent Verification Portal</a>
+      </div>
+      {% endif %}
+    </div>
+    {% else %}
 
-<i class="fa-solid fa-user-plus"></i>
+    <form method="POST" action="/register-child" id="childRegisterForm" onsubmit="return validateForm()">
+      
+      <!-- Child Info Section -->
+      <div class="section-divider">
+        <i class="fa-solid fa-child-reaching"></i>
+        <span>Child Profile</span>
+      </div>
 
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-at input-icon"></i>
+            <input type="text" name="username" id="childUsername" class="form-input" placeholder="coolkid123" value="{{ form_data.username if form_data else '' }}" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-cake-candles input-icon"></i>
+            <input type="number" name="age" min="5" max="17" class="form-input" placeholder="e.g. 10" value="{{ form_data.age if form_data else '' }}" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-id-card input-icon"></i>
+          <input type="text" name="full_name" class="form-input" placeholder="First and Last Name" value="{{ form_data.full_name if form_data else '' }}" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Child Email</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" name="email" id="childEmail" class="form-input" placeholder="child@mail.com" value="{{ form_data.email if form_data else '' }}" required oninput="checkEmails()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" name="password" class="form-input" placeholder="Create password" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parent Info Section -->
+      <div class="section-divider parent-section">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>Parent Supervision</span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Parent Name</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-user-tie input-icon"></i>
+            <input type="text" name="parent_name" class="form-input" placeholder="Parent / Guardian Name" value="{{ form_data.parent_name if form_data else '' }}" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Parent Email</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-envelope-open-text input-icon"></i>
+            <input type="email" name="parent_email" id="parentEmail" class="form-input" placeholder="parent@mail.com" value="{{ form_data.parent_email if form_data else '' }}" required oninput="checkEmails()">
+          </div>
+          <div id="emailMatchError" class="field-hint">
+            <i class="fa-solid fa-triangle-exclamation"></i> Child and parent email cannot be the same.
+          </div>
+        </div>
+      </div>
+
+      <div class="safety-notice">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span><strong>Verified Supervision:</strong> Your parent will complete a live identity verification to approve this account. Self-approval is not permitted.</span>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <span>Create Child Account</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+    {% endif %}
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login/">Log In</a>
+    </div>
+  </div>
 </div>
 
-<h1>Create Child Account</h1>
+<script>
+  function checkEmails() {
+    const childEmail = (document.getElementById('childEmail')?.value || '').trim().toLowerCase();
+    const parentEmail = (document.getElementById('parentEmail')?.value || '').trim().toLowerCase();
+    const errorEl = document.getElementById('emailMatchError');
+    const submitBtn = document.getElementById('submitBtn');
 
-<p class="subtitle">
+    if (childEmail && parentEmail && childEmail === parentEmail) {
+      errorEl.style.display = 'block';
+      if (submitBtn) submitBtn.disabled = true;
+      return false;
+    } else {
+      if (errorEl) errorEl.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = false;
+      return true;
+    }
+  }
 
-Create a safe LittleNet account with parent approval.
-
-</p>
-
-<form method="POST" action="/register-child">
-
-<div class="section">
-
-<i class="fa-solid fa-child-reaching"></i>
-
-Child Information
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-user"></i>
-
-<input
-type="text"
-name="username"
-placeholder="Username"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-id-card"></i>
-
-<input
-type="text"
-name="full_name"
-placeholder="Full Name"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-cake-candles"></i>
-
-<input
-type="number"
-name="age"
-placeholder="Age"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-envelope"></i>
-
-<input
-type="email"
-name="email"
-placeholder="Child Email"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-lock"></i>
-
-<input
-type="password"
-name="password"
-placeholder="Password"
-required>
-
-</div>
-
-<div class="section">
-
-<i class="fa-solid fa-user-shield"></i>
-
-Parent Information
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-user-tie"></i>
-
-<input
-type="text"
-name="parent_name"
-placeholder="Parent Name"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-envelope-open"></i>
-
-<input
-type="email"
-name="parent_email"
-placeholder="Parent Email"
-required>
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-circle-check"></i>
-
-&nbsp;
-
-Register Child
-
-</button>
-
-</form>
-
-<div class="login">
-
-Already have an account?
-
-<a href="/login">
-
-Login Here
-
-</a>
-
-</div>
-
-<div class="footer">
-
-© 2026 LittleNet
-
-</div>
-
-</div>
-
-</div>
+  function validateForm() {
+    if (!checkEmails()) {
+      alert("Child email and parent email cannot be the same address. Self-approval is not permitted.");
+      return false;
+    }
+    return true;
+  }
+</script>
 
 </body>
-
 </html>

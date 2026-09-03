@@ -7,7 +7,7 @@ from flask import jsonify
 from database.connection import get_db_connection
 from child.service import follow_child, get_child_profile, is_following, delete_story, update_story_caption
 from uploadPost.ml_service import check_image_safety, check_video_safety
-from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments, like_post, save_post, get_all_posts, is_liked, unlike_post, get_like_count, get_random_posts
+from uploadPost.service import add_comment, delete_post, get_my_posts, get_post_comments, like_post, save_post, get_all_posts, is_liked, unlike_post, get_like_count, get_random_posts, edit_post, toggle_archive_post
 
 import os
 
@@ -463,64 +463,144 @@ def api_random_posts():
 # ── Story upload (POST only, AJAX) — supports multiple files ─────────────────
 @upload_bp.route("/upload-story/", methods=["POST"])
 def upload_story():
+    print("\n========== STORY UPLOAD ==========")
+
     if "user_id" not in session:
+        print("ERROR: user not logged in")
         return jsonify(success=False, error="not logged in"), 401
 
+    print("USER:", session["user_id"])
+
     files = request.files.getlist("media")
+
+    print("FILES:", files)
+
     if not files or all(f.filename == "" for f in files):
-        return jsonify(success=False, error="no file")
+        print("ERROR: no file received")
+        return jsonify(success=False, error="no file"), 400
 
-    caption    = request.form.get("caption", "")
-    music_key  = request.form.get("music_key", "")
-    music_file = request.files.get("music_file")
+    caption = request.form.get("caption", "")
 
-    # Build the music caption suffix
-    music_suffix = ""
-    if music_file and music_file.filename:
-        mfname = secure_filename(music_file.filename)
-        music_dir = os.path.join("uploads", "music")
-        os.makedirs(music_dir, exist_ok=True)
-        mfpath = os.path.join(music_dir, mfname).replace("\\", "/")
-        music_file.save(mfpath)
-        music_suffix = "||music_file:" + mfpath
-    elif music_key:
-        music_suffix = "||music:" + music_key
+    print("CAPTION:", caption)
+
+    saved = 0
 
     image_extensions = {"jpg", "jpeg", "png", "gif", "webp", "bmp"}
     video_extensions = {"mp4", "mov", "avi", "mkv", "webm"}
 
-    saved = 0
     for media in files:
-        if not media or media.filename == "":
-            continue
+
+        print("FILENAME:", media.filename)
+
         filename = secure_filename(media.filename)
+
         ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
 
+        print("EXTENSION:", ext)
+
         if ext in image_extensions:
-            filepath = os.path.join("uploads/images", filename).replace("\\", "/")
+
+            filepath = os.path.join(
+                "uploads/images",
+                filename
+            ).replace("\\", "/")
+
+            print("SAVING IMAGE:", filepath)
+
             media.save(filepath)
+
+            print("RUNNING IMAGE SAFETY CHECK...")
+
             moderation = check_image_safety(filepath)
+
+            print("MODERATION RESULT:", moderation)
+
             if not moderation["safe"]:
+
+                print("IMAGE REJECTED:", moderation)
+
                 os.remove(filepath)
-                continue
-            save_post(session["user_id"], "IMAGE", filepath,
-                      caption + music_suffix, "Story", is_story=True)
+
+                return jsonify(
+                    success=False,
+                    error="unsafe_content",
+                    category=moderation.get("category", "unsafe")
+                ), 400
+
+            save_post(
+                session["user_id"],
+                "IMAGE",
+                filepath,
+                caption,
+                "Story",
+                is_story=True
+            )
+
             saved += 1
 
         elif ext in video_extensions:
-            filepath = os.path.join("uploads/videos", filename).replace("\\", "/")
+
+            filepath = os.path.join(
+                "uploads/videos",
+                filename
+            ).replace("\\", "/")
+
+            print("SAVING VIDEO:", filepath)
+
             media.save(filepath)
+
+            print("RUNNING VIDEO SAFETY CHECK...")
+
             safety = check_video_safety(filepath)
+
+            print("VIDEO SAFETY RESULT:", safety)
+
             if not safety["safe"]:
+
+                print("VIDEO REJECTED:", safety)
+
                 os.remove(filepath)
-                continue
-            save_post(session["user_id"], "VIDEO", filepath,
-                      caption + music_suffix, "Story", is_story=True)
+
+                return jsonify(
+                    success=False,
+                    error="unsafe_content",
+                    category=safety.get("category", "unsafe")
+                ), 400
+
+            save_post(
+                session["user_id"],
+                "VIDEO",
+                filepath,
+                caption,
+                "Story",
+                is_story=True
+            )
+
             saved += 1
 
+        else:
+
+            print("UNSUPPORTED EXTENSION:", ext)
+
+            return jsonify(
+                success=False,
+                error="unsupported_file_type",
+                extension=ext
+            ), 400
+
+    print("STORIES SAVED:", saved)
+    print("=================================\n")
+
     if saved > 0:
-        return jsonify(success=True, count=saved)
-    return jsonify(success=False, error="no safe media uploaded")
+        return jsonify(
+            success=True,
+            count=saved
+        )
+
+    return jsonify(
+        success=False,
+        error="no safe media uploaded"
+    ), 400
 
 
 # ── Story delete ──────────────────────────────────────────────────────────────
@@ -541,4 +621,26 @@ def api_edit_story_caption(post_id):
     caption = (data.get("caption") or "").strip()
     update_story_caption(post_id, session["user_id"], caption)
     return jsonify(ok=True)
+
+
+# ── Post edit caption & category ──────────────────────────────────────────────
+@upload_bp.route("/api/edit-post/<int:post_id>/", methods=["POST"])
+def api_edit_post(post_id):
+    if "user_id" not in session:
+        return jsonify(ok=False, error="Unauthorized"), 401
+    data = request.get_json(silent=True) or {}
+    caption = (data.get("caption") or "").strip()
+    category = (data.get("category") or "").strip()
+    edit_post(post_id, session["user_id"], caption, category if category else None)
+    return jsonify(ok=True, message="Post updated successfully.")
+
+
+# ── Post archive toggle ───────────────────────────────────────────────────────
+@upload_bp.route("/api/archive-post/<int:post_id>/", methods=["POST"])
+def api_archive_post(post_id):
+    if "user_id" not in session:
+        return jsonify(ok=False, error="Unauthorized"), 401
+    is_archived = toggle_archive_post(post_id, session["user_id"])
+    return jsonify(ok=True, is_archived=is_archived, message="Post archived." if is_archived else "Post unarchived.")
+
 

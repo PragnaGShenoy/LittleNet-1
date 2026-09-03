@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Identity Verification | LittleNet Safe Supervision</title>
+  
+  <meta name="theme-color" content="#7950F2">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(243, 240, 255, 0.9) 0%, rgba(235, 248, 255, 0.8) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 16px;
+      color: #0f172a;
+    }
+
+    .verify-container {
+      width: 100%;
+      max-width: 600px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .verify-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 40px 34px;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verify-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #7950f2, #9775fa, #20c997, #ff6b6b);
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f3f0ff;
+      color: #7950f2;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+
+    .header-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .header-desc {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .demo-notice {
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e40af;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .demo-notice i {
+      font-size: 16px;
+      color: #3b82f6;
+      margin-top: 2px;
+    }
+
+    .child-summary {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    .child-summary-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .child-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .child-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .child-item span:first-child {
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .child-item span:last-child {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #7950f2;
+      margin: 24px 0 14px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    /* Camera Live Capture Area */
+    .camera-box {
+      background: #0f172a;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+    }
+
+    #videoFeed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    #selfieCanvas {
+      display: none;
+    }
+
+    #capturedPreview {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-overlay {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .camera-overlay .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    .camera-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-camera {
+      flex: 1;
+      height: 46px;
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-camera:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-camera.active {
+      background: #7950f2;
+      color: #ffffff;
+      border-color: #7950f2;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px 0 42px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      background: #ffffff;
+      border-color: #7950f2;
+      box-shadow: 0 0 0 3px rgba(121, 80, 242, 0.12);
+      outline: none;
+    }
+
+    .consent-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 20px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .consent-card input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: #7950f2;
+      cursor: pointer;
+    }
+
+    .consent-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .alert-error {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #b91c1c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(121, 80, 242, 0.28);
+      transition: all 0.25s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(121, 80, 242, 0.35);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+<div class="verify-container">
+  <div class="verify-card">
+    
+    <div class="brand-badge">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span>Parent Identity Verification</span>
+    </div>
+
+    <h1 class="header-title">Parent Supervision Verification</h1>
+    <p class="header-desc">Complete live photo and identity verification to establish verified supervisory authorization over your child's account.</p>
+
+    <div class="demo-notice">
+      <i class="fa-solid fa-flask"></i>
+      <div>
+        <strong>DEMO / TEST VERIFICATION PORTAL</strong><br>
+        Identity verification is running in Sandbox Mock Mode. Enter a 12-digit mock identity number (e.g. <code>123456789012</code>). Raw biometric data and ID numbers are never saved in plaintext.
+      </div>
+    </div>
+
+    {% if error %}
+    <div class="alert-error">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Child Info Summary -->
+    <div class="child-summary">
+      <div class="child-summary-title">
+        <i class="fa-solid fa-child"></i>
+        <span>Child Registration Request</span>
+      </div>
+      <div class="child-grid">
+        <div class="child-item">
+          <span>Full Name</span>
+          <span>{{ child.child_name }}</span>
+        </div>
+        <div class="child-item">
+          <span>Username</span>
+          <span>@{{ child.child_username }}</span>
+        </div>
+        <div class="child-item">
+          <span>Age</span>
+          <span>{{ child.child_age }} years</span>
+        </div>
+        <div class="child-item">
+          <span>Child Email</span>
+          <span>{{ child.child_email }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" id="verifyForm" onsubmit="return validateVerificationForm()">
+      <input type="hidden" name="selfie_data" id="selfieData">
+
+      <!-- Step 1: Live Selfie Capture -->
+      <div class="section-title">
+        <i class="fa-solid fa-camera"></i>
+        <span>1. Live Parent Selfie (Anti-Spoofing)</span>
+      </div>
+
+      <div class="camera-box">
+        <div class="camera-overlay" id="cameraStatus">
+          <div class="dot"></div>
+          <span>LIVE CAMERA FEED</span>
+        </div>
+        <video id="videoFeed" autoplay playsinline muted></video>
+        <img id="capturedPreview" alt="Captured Live Selfie">
+        <canvas id="selfieCanvas" width="480" height="360"></canvas>
+      </div>
+
+      <div class="camera-actions">
+        <button type="button" id="startCamBtn" class="btn-camera" onclick="startCamera()">
+          <i class="fa-solid fa-video"></i> Start Camera
+        </button>
+        <button type="button" id="captureBtn" class="btn-camera active" onclick="takeSelfie()">
+          <i class="fa-solid fa-camera-retro"></i> Capture Selfie
+        </button>
+        <button type="button" id="retakeBtn" class="btn-camera" style="display:none;" onclick="retakeSelfie()">
+          <i class="fa-solid fa-rotate-left"></i> Retake
+        </button>
+      </div>
+
+      <!-- Step 2: Identity Document Verification -->
+      <div class="section-title">
+        <i class="fa-solid fa-id-card"></i>
+        <span>2. Identity Document Verification</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Parent Full Name (As on ID)</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-user input-icon"></i>
+          <input type="text" name="parent_name" class="form-input" value="{{ child.parent_name }}" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Document Type</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-passport input-icon"></i>
+            <select name="document_type" class="form-select">
+              <option value="AADHAAR_MOCK">Aadhaar Card (Sandbox Mock)</option>
+              <option value="PASSPORT_MOCK">Passport (Sandbox Mock)</option>
+              <option value="DRIVING_LICENSE_MOCK">Driving License (Sandbox Mock)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">12-Digit Identity Number</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-fingerprint input-icon"></i>
+            <input type="text" name="document_number" class="form-input" placeholder="e.g. 5489 1234 5678" maxlength="14" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Account Setup (if new parent) -->
+      {% if not parent_exists %}
+      <div class="section-title">
+        <i class="fa-solid fa-lock"></i>
+        <span>3. Create Parent Account Password</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Create Parent Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-key input-icon"></i>
+          <input type="password" name="password" class="form-input" placeholder="Choose secure password for Parent Portal" required>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Step 4: Consent -->
+      <div class="consent-card">
+        <input type="checkbox" name="consent" id="consentCheck" required>
+        <label for="consentCheck" class="consent-text">
+          I declare that I am the legal parent/guardian of <strong>{{ child.child_name }}</strong>. I explicitly consent to identity verification and live facial anti-spoofing for parental supervision. I understand raw biometrics and document numbers are never permanently stored.
+        </label>
+      </div>
+
+      <button type="submit" id="submitVerifyBtn" class="btn-submit">
+        <span>Verify Parent Identity & Proceed</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+
+    <div class="footer-note">
+      LittleNet Child Safety Architecture &bull; Compliant Parent Verification
+    </div>
+  </div>
+</div>
+
+<script>
+  let videoStream = null;
+  const video = document.getElementById('videoFeed');
+  const canvas = document.getElementById('selfieCanvas');
+  const preview = document.getElementById('capturedPreview');
+  const selfieInput = document.getElementById('selfieData');
+  const cameraStatus = document.getElementById('cameraStatus');
+  const captureBtn = document.getElementById('captureBtn');
+  const retakeBtn = document.getElementById('retakeBtn');
+
+  async function startCamera() {
+    try {
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+      }
+      videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }
+      });
+      video.srcObject = videoStream;
+      video.style.display = 'block';
+      preview.style.display = 'none';
+      cameraStatus.innerHTML = '<div class="dot"></div><span>LIVE CAMERA FEED ACTIVE</span>';
+      captureBtn.style.display = 'flex';
+      retakeBtn.style.display = 'none';
+    } catch (err) {
+      console.warn("Camera access failed:", err);
+      cameraStatus.innerHTML = '<span style="color:#f87171;">⚠️ Camera access denied / unavailable. Using simulated canvas.</span>';
+      drawFallbackSelfie();
+    }
+  }
+
+  function takeSelfie() {
+    if (video.videoWidth > 0) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      // Mirror the capture to match camera preview
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      selfieInput.value = dataUrl;
+
+      preview.src = dataUrl;
+      preview.style.display = 'block';
+      video.style.display = 'none';
+      cameraStatus.innerHTML = '<span style="color:#4ade80;">✔ LIVE PHOTO CAPTURED</span>';
+      captureBtn.style.display = 'none';
+      retakeBtn.style.display = 'flex';
+    } else {
+      drawFallbackSelfie();
+    }
+  }
+
+  function retakeSelfie() {
+    selfieInput.value = '';
+    preview.style.display = 'none';
+    video.style.display = 'block';
+    captureBtn.style.display = 'flex';
+    retakeBtn.style.display = 'none';
+    cameraStatus.innerHTML = '<div class="dot"></div><span>LIVE CAMERA FEED ACTIVE</span>';
+    if (!videoStream) startCamera();
+  }
+
+  function drawFallbackSelfie() {
+    canvas.width = 400;
+    canvas.height = 300;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#6366f1';
+    ctx.fillRect(0, 0, 400, 300);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Live Verified Parent Selfie', 200, 140);
+    ctx.font = '14px sans-serif';
+    ctx.fillText(new Date().toLocaleTimeString(), 200, 170);
+
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    selfieInput.value = dataUrl;
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    video.style.display = 'none';
+    cameraStatus.innerHTML = '<span style="color:#4ade80;">✔ SELFIE PREPARED (SIMULATED)</span>';
+    captureBtn.style.display = 'none';
+    retakeBtn.style.display = 'flex';
+  }
+
+  function validateVerificationForm() {
+    if (!selfieInput.value) {
+      alert("Please capture a live parent selfie before submitting verification.");
+      return false;
+    }
+    const consent = document.getElementById('consentCheck');
+    if (!consent.checked) {
+      alert("Please check the consent box to proceed with parent verification.");
+      return false;
+    }
+    const btn = document.getElementById('submitVerifyBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying Identity & Matching Face...';
+    return true;
+  }
+
+  // Autostart camera on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    startCamera();
+  });
+</script>
+
+</body>
+</html>

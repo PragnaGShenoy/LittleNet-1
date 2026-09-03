@@ -1,295 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Explore & Find Friends | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  padding:10px 14px;
-}
-.search-bar{
-  display:flex;align-items:center;gap:10px;
-  background:#efefef;border-radius:12px;
-  padding:9px 14px;
-}
-.search-bar i{font-size:15px;color:#8e8e8e;}
-.search-bar input{
-  flex:1;border:none;outline:none;background:transparent;
-  font-size:15px;font-weight:600;color:#262626;
-  font-family:'Nunito',sans-serif;
-}
-.search-bar input::placeholder{color:#8e8e8e;font-weight:600;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Page wrap ── */
-.page{max-width:470px;margin:0 auto;}
+  <style>
+    .discover-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
 
-/* ── Section label ── */
-.section-label{
-  font-size:14px;font-weight:900;color:#262626;
-  padding:14px 14px 8px;
-}
+    /* Sticky Search Bar Header */
+    .search-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+    }
 
-/* ── Suggested list (shown when no search) ── */
-.people-list{display:flex;flex-direction:column;}
-.person-row{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 14px;cursor:pointer;transition:.15s;
-}
-.person-row:hover{background:#fafafa;}
-.person-row.hidden{display:none;}
+    .search-input-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-.p-avatar{
-  width:52px;height:52px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.p-avatar img{width:100%;height:100%;object-fit:cover;}
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 15px;
+      pointer-events: none;
+    }
 
-.p-info{flex:1;min-width:0;}
-.p-name{font-size:14px;font-weight:800;color:#262626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.p-sub{font-size:12px;color:#8e8e8e;font-weight:600;margin-top:2px;}
+    .search-field {
+      width: 100%;
+      height: 42px;
+      padding: 0 16px 0 42px;
+      background: #f1f5f9;
+      border: 1.5px solid transparent;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ln-text);
+      transition: all 0.2s ease;
+    }
 
-.p-btn{
-  padding:7px 16px;border-radius:8px;border:none;
-  font-size:13px;font-weight:800;cursor:pointer;
-  font-family:'Nunito',sans-serif;white-space:nowrap;transition:.2s;flex-shrink:0;
-}
-.p-btn-follow{background:#0095f6;color:white;}
-.p-btn-follow:hover{background:#0081d6;}
-.p-btn-following{background:#efefef;color:#262626;}
-.p-btn-following:hover{background:#e0e0e0;}
-.p-btn-pending{background:#fff3cd;color:#856404;border:1.5px solid #ffc107;}
-.p-btn-pending:hover{background:#ffe69c;}
+    .search-field:focus {
+      background: white;
+      border-color: var(--ln-coral);
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12);
+    }
 
-/* ── Search results grid (shown when typing) ── */
-.search-results{display:none;flex-direction:column;}
-.sr-row{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 14px;cursor:pointer;transition:.15s;
-}
-.sr-row:hover{background:#fafafa;}
-.sr-avatar{
-  width:46px;height:46px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.sr-avatar img{width:100%;height:100%;object-fit:cover;}
-.sr-info{flex:1;min-width:0;}
-.sr-name{font-size:14px;font-weight:800;color:#262626;}
-.sr-followers{font-size:12px;color:#8e8e8e;font-weight:600;}
+    /* Trending Topics Chips */
+    .topics-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      scrollbar-width: none;
+    }
 
-/* ── Empty ── */
-.empty-state{text-align:center;padding:50px 20px;}
-.empty-state .icon{font-size:48px;margin-bottom:10px;}
-.empty-state p{font-size:14px;font-weight:700;color:#9ca3af;}
+    .topics-strip::-webkit-scrollbar {
+      display: none;
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;transition:.2s;padding:4px 12px;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-</style>
+    .topic-chip {
+      padding: 6px 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .topic-chip:hover {
+      background: var(--ln-coral-light);
+      border-color: var(--ln-coral);
+      color: var(--ln-coral);
+    }
+
+    /* Friends List */
+    .section-headline {
+      padding: 16px 16px 8px;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--ln-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .friend-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      transition: background 0.15s;
+    }
+
+    .friend-row:hover {
+      background: #f8fafc;
+    }
+
+    .friend-user-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .friend-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: white;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid white;
+      box-shadow: var(--ln-shadow-xs);
+    }
+
+    .friend-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .friend-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .friend-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ln-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .friend-meta {
+      font-size: 12px;
+      color: var(--ln-text-muted);
+      font-weight: 600;
+      margin-top: 1px;
+    }
+
+    .follow-btn {
+      padding: 7px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .follow-btn.to-follow {
+      background: var(--ln-coral-gradient);
+      color: white;
+      box-shadow: var(--ln-shadow-glow);
+    }
+
+    .follow-btn.following {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .follow-btn.pending {
+      background: #fff9db;
+      color: #d97706;
+      border: 1px solid #fde68a;
+    }
+
+    .empty-search-box {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--ln-text-muted);
+    }
+
+    .empty-search-box i {
+      font-size: 48px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header / Search bar -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <div class="search-bar">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Search" autocomplete="off" oninput="onSearch(this.value)">
+<div class="discover-wrap">
+
+  <!-- Search Header -->
+  <div class="search-header">
+    <div class="search-input-box">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input
+        type="text"
+        id="friendSearchInput"
+        class="search-field"
+        placeholder="Search children, schools, or talents..."
+        onkeyup="filterFriends()"
+      >
     </div>
   </div>
-</div>
 
-<div class="page">
+  <!-- Quick Topic Filters -->
+  <div class="topics-strip">
+    <div class="topic-chip"><i class="fa-solid fa-code" style="color:#7950f2;"></i> Coding</div>
+    <div class="topic-chip"><i class="fa-solid fa-robot" style="color:#ff6b6b;"></i> Robotics</div>
+    <div class="topic-chip"><i class="fa-solid fa-palette" style="color:#20c997;"></i> Art & Craft</div>
+    <div class="topic-chip"><i class="fa-solid fa-futbol" style="color:#fcc419;"></i> Sports</div>
+    <div class="topic-chip"><i class="fa-solid fa-flask" style="color:#339af0;"></i> Science</div>
+  </div>
 
-  <!-- Suggested people (default view) -->
-  <div id="suggestedSection">
-    <div class="section-label">Suggested for you</div>
-    <div class="people-list" id="peopleList">
-      {% if children %}
-        {% for child in children %}
-        <div class="person-row" id="row-{{ child.user_id }}" data-name="{{ child.full_name|lower }}" data-uid="{{ child.user_id }}">
-          <a href="/child/view-profile/{{ child.user_id }}/" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
-            <div class="p-avatar">
-              {% if child.profile_picture %}
-                <img src="/{{ child.profile_picture|replace('\\','/') }}" alt="dp">
-              {% else %}
-                {{ child.full_name[0]|upper if child.full_name else '?' }}
-              {% endif %}
+  <div class="section-headline">Suggested For You</div>
+
+  <!-- Discover List -->
+  <div id="friendsListContainer">
+    {% if children %}
+      {% for child in children %}
+      <div class="friend-row friend-card-item" data-name="{{ child.full_name|lower }}">
+        <a href="/child/view-profile/{{ child.user_id }}/" class="friend-user-link">
+          <div class="friend-avatar">
+            {% if child.profile_picture %}
+              <img src="/{{ child.profile_picture|replace('\\','/') }}" alt="{{ child.full_name }}">
+            {% else %}
+              {{ child.full_name[0]|upper if child.full_name else '?' }}
+            {% endif %}
+          </div>
+          <div class="friend-info">
+            <div class="friend-name">{{ child.full_name }}</div>
+            <div class="friend-meta">
+              <span>{{ child.followers }} followers</span>
             </div>
-            <div class="p-info">
-              <div class="p-name">{{ child.full_name }}</div>
-              <div class="p-sub">{{ child.followers }} follower{{ 's' if child.followers != 1 else '' }}</div>
-            </div>
-          </a>
+          </div>
+        </a>
+
+        <div>
           {% if child.is_following %}
-            <button class="p-btn p-btn-following" onclick="toggleFollow(this, {{ child.user_id }})">Following</button>
+            <a href="/follow/{{ child.user_id }}/" class="follow-btn following">Following</a>
           {% elif child.is_pending %}
-            <button class="p-btn p-btn-pending" onclick="toggleFollow(this, {{ child.user_id }})">Pending</button>
+            <a href="/follow/{{ child.user_id }}/" class="follow-btn pending">Pending</a>
           {% else %}
-            <button class="p-btn p-btn-follow" onclick="toggleFollow(this, {{ child.user_id }})">Follow</button>
+            <a href="/follow/{{ child.user_id }}/" class="follow-btn to-follow">Follow</a>
           {% endif %}
         </div>
-        {% endfor %}
-      {% else %}
-        <div class="empty-state">
-          <div class="icon">👥</div>
-          <p>No one to suggest yet.<br>Check back soon!</p>
-        </div>
-      {% endif %}
-    </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-search-box">
+        <i class="fa-solid fa-users-rays"></i>
+        <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">No children found yet</h3>
+        <p style="font-size:14px;font-weight:700;">When new friends join LittleNet, you can discover them here.</p>
+      </div>
+    {% endif %}
   </div>
 
-  <!-- Search results (shown while typing) -->
-  <div class="search-results" id="searchResults">
-    <div class="section-label" id="srLabel">Results</div>
-    <div id="srList"></div>
-    <div class="empty-state" id="srEmpty" style="display:none;">
-      <div class="icon">🔍</div>
-      <p>No one found.<br>Try a different name.</p>
-    </div>
+  <div id="noResultsMsg" class="empty-search-box" style="display:none;">
+    <i class="fa-solid fa-user-xmark"></i>
+    <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">No matches found</h3>
+    <p style="font-size:14px;font-weight:700;">Try searching for a different friend or name.</p>
   </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item active">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
 </div>
 
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
-
 <script>
-// All children data from server
-var allPeople = [
-  {% for child in children %}
-  {
-    uid: {{ child.user_id }},
-    name: {{ child.full_name | tojson }},
-    followers: {{ child.followers }},
-    profile_picture: {{ (child.profile_picture or '') | replace('\\', '/') | tojson }},
-    is_following: {{ 'true' if child.is_following else 'false' }}
-  }{% if not loop.last %},{% endif %}
-  {% endfor %}
-];
+function filterFriends() {
+  const query = document.getElementById('friendSearchInput').value.toLowerCase().trim();
+  const rows = document.querySelectorAll('.friend-card-item');
+  let visibleCount = 0;
 
-function onSearch(q){
-  q = q.trim().toLowerCase();
-  var suggested = document.getElementById('suggestedSection');
-  var results   = document.getElementById('searchResults');
-
-  if(!q){
-    suggested.style.display = 'block';
-    results.style.display   = 'none';
-    return;
-  }
-
-  suggested.style.display = 'none';
-  results.style.display   = 'flex';
-
-  var filtered = allPeople.filter(function(p){
-    return p.name.toLowerCase().includes(q);
+  rows.forEach(row => {
+    const name = row.getAttribute('data-name') || '';
+    if (name.includes(query)) {
+      row.style.display = 'flex';
+      visibleCount++;
+    } else {
+      row.style.display = 'none';
+    }
   });
 
-  var list = document.getElementById('srList');
-  var empty = document.getElementById('srEmpty');
-  list.innerHTML = '';
-
-  if(filtered.length === 0){
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  filtered.forEach(function(p){
-    var av = p.profile_picture
-      ? '<img src="/'+p.profile_picture+'" alt="dp">'
-      : p.name[0].toUpperCase();
-
-    var row = document.createElement('a');
-    row.href = '/child/view-profile/'+p.uid+'/';
-    row.className = 'sr-row';
-    row.innerHTML =
-      '<div class="sr-avatar">'+av+'</div>'+
-      '<div class="sr-info">'+
-        '<div class="sr-name">'+escHtml(p.name)+'</div>'+
-        '<div class="sr-followers">'+p.followers+' follower'+(p.followers!==1?'s':'')+'</div>'+
-      '</div>';
-    list.appendChild(row);
-  });
-}
-
-function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// Auto-focus search on load
-document.getElementById('searchInput').focus();
-
-function toggleFollow(btn, userId){
-  btn.disabled=true;
-  fetch('/follow/'+userId+'/',{method:'POST',credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      btn.disabled=false;
-      if(d.status==='pending'){
-        btn.textContent='Pending';
-        btn.className='p-btn p-btn-pending';
-      } else if(d.status==='cancelled'||d.status==='unfollowed'){
-        btn.textContent='Follow';
-        btn.className='p-btn p-btn-follow';
-      } else if(d.status==='following'){
-        btn.textContent='Following';
-        btn.className='p-btn p-btn-following';
-      }
-    }).catch(function(){ btn.disabled=false; });
+  document.getElementById('noResultsMsg').style.display = visibleCount === 0 ? 'block' : 'none';
 }
 </script>
+
 </body>
 </html>

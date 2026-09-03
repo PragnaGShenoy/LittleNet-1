@@ -53,33 +53,25 @@ def view_child_profile(child_id):
         profile=profile
     )
 
-@parent_bp.route(
-    "/parent/approve-content/"
-)
+@parent_bp.route("/parent/approve-content/")
 def approve_content():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
+    content = get_child_content_for_approval(session["user_id"])
+    return render_template("approve_content.html", content=content)
 
-    content = get_child_content_for_approval(
-        session["user_id"]
-    )
 
-    return render_template(
-        "approve_content.html",
-        content=content
-    )
-
-@parent_bp.route(
-    "/parent/save-approval/",
-    methods=["POST"]
-)
+@parent_bp.route("/parent/save-approval/", methods=["POST"])
 def save_approval():
-
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
     skill_ids = request.form.getlist("skills")
     interest_ids = request.form.getlist("interests")
     ambition_ids = request.form.getlist("ambitions")
 
-    content = get_child_content_for_approval(
-        session["user_id"]
-    )
+    content = get_child_content_for_approval(session["user_id"])
+    if not content:
+        return redirect("/parent/dashboard/")
 
     save_child_content_approval(
         content["child_id"],
@@ -87,111 +79,84 @@ def save_approval():
         interest_ids,
         ambition_ids
     )
+    return redirect("/parent/approve-content/")
 
-    return """
-    <h2>
-    Approval Saved Successfully
-    </h2>
-    """
 
-@parent_bp.route(
-    "/parent/deleted-posts/"
-)
+@parent_bp.route("/parent/deleted-posts/")
 def deleted_posts():
-
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
     posts = get_deleted_posts()
+    return render_template("deleted_posts.html", posts=posts)
 
-    return render_template(
-        "deleted_posts.html",
-        posts=posts
-    )
 
-@parent_bp.route(
-    "/parent/time-limit/",
-    methods=["GET", "POST"]
-)
+@parent_bp.route("/parent/time-limit/", methods=["GET", "POST"])
 def time_limit():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
 
-    child = get_parent_child(
-        session["user_id"]
-    )
+    child = get_parent_child(session["user_id"])
+    if not child:
+        return render_template("time_limit.html", child=None, limit_data=None)
 
     if request.method == "POST":
-
         save_time_limit(
             child["user_id"],
-            request.form["daily_limit"],
+            request.form.get("daily_limit", 60),
             "strict_mode" in request.form
         )
-
         return redirect("/parent/time-limit/")
 
-    limit_data = get_time_limit(
-        child["user_id"]
-    )
-
+    limit_data = get_time_limit(child["user_id"])
     return render_template(
         "time_limit.html",
         child=child,
         limit_data=limit_data
     )
 
-@parent_bp.route(
-    "/parent/usage-report/"
-)
+
+@parent_bp.route("/parent/usage-report/")
 def usage_report():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
 
-    child = get_parent_child(
-        session["user_id"]
-    )
+    child = get_parent_child(session["user_id"])
+    if not child:
+        return render_template("usage_report.html", report=[], child=None)
 
-    report = get_weekly_usage(
-        child["user_id"]
-    )
+    report = get_weekly_usage(child["user_id"])
+    return render_template("usage_report.html", report=report, child=child)
 
-    return render_template(
-        "usage_report.html",
-        report=report
-    )
 
 @parent_bp.route("/parent/child-posts/")
 def child_posts():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
 
-    child = get_parent_child(
-        session["user_id"]
-    )
+    child = get_parent_child(session["user_id"])
+    if not child:
+        return render_template("child_posts.html", posts=[], child=None)
 
-    posts = get_child_posts(
-        child["user_id"]
-    )
-
+    posts = get_child_posts(child["user_id"])
     return render_template(
         "child_posts.html",
         posts=posts,
         child=child
     )
 
-@parent_bp.route(
-    "/parent/child-connections/"
-)
+
+@parent_bp.route("/parent/child-connections/")
 def child_connections():
+    if "user_id" not in session or session.get("role") != "PARENT":
+        return redirect("/login/")
 
-    parent_id = session["user_id"]
-
-    child = get_parent_child(
-        session["user_id"]
-    )
+    child = get_parent_child(session["user_id"])
+    if not child:
+        return render_template("child_connections.html", followers=[], following=[], pending=[], child=None)
 
     child_id = child["user_id"]
-
-    followers = get_child_followers(
-        child_id
-    )
-
-    following = get_child_following(
-        child_id
-    )
-
+    followers = get_child_followers(child_id)
+    following = get_child_following(child_id)
     pending = get_pending_follow_requests(session["user_id"])
 
     return render_template(
@@ -199,6 +164,7 @@ def child_connections():
         followers=followers,
         following=following,
         pending=pending,
+        child=child
     )
 
 

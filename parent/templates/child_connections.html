@@ -1,325 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Followers & Following | Parent Portal</title>
 
-<meta charset="UTF-8">
+  <meta name="theme-color" content="#7950F2">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-<title>Child Connections | LittleNet</title>
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
 
-<style>
+    .container {
+      max-width: 900px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
 
-body{
-background:#f5f7fb;
-color:#222;
-}
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
 
-.header{
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-}
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
 
-.logo{
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-}
+    .user-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      border: 1px solid #f1f5f9;
+    }
 
-.back{
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-}
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-purple, #7950f2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+    }
 
-.container{
-max-width:1000px;
-margin:30px auto;
-padding:0 15px;
-}
+    .user-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
 
-.page-title{
-font-size:30px;
-font-weight:700;
-margin-bottom:30px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:25px;
-}
-
-.section{
-
-background:white;
-border-radius:20px;
-padding:25px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-
-}
-
-.section-title{
-
-display:flex;
-align-items:center;
-gap:10px;
-margin-bottom:20px;
-font-size:22px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.user{
-
-display:flex;
-align-items:center;
-gap:15px;
-padding:15px;
-margin-bottom:12px;
-background:#f8f9fc;
-border-radius:14px;
-
-}
-
-.avatar{
-
-width:50px;
-height:50px;
-border-radius:50%;
-
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-font-size:20px;
-
-}
-
-.name{
-
-font-size:17px;
-font-weight:600;
-
-}
-
-.empty{
-
-text-align:center;
-padding:40px 20px;
-color:#777;
-
-}
-
-.empty i{
-
-font-size:60px;
-color:#d1d5db;
-margin-bottom:15px;
-
-}
-
-@media(max-width:768px){
-
-.grid{
-
-grid-template-columns:1fr;
-
-}
-
-.logo{
-
-font-size:24px;
-
-}
-
-.page-title{
-
-font-size:24px;
-
-}
-
-}
-
-</style>
-
+    @media (max-width: 700px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/parent/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Connections Monitor</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
-
-<div class="page-title">
-
-Followers & Following
-
-</div>
-
-<div class="grid">
-
-<!-- Followers -->
-
-<div class="section">
-
-<div class="section-title">
-
-<i class="fa-solid fa-users"></i>
-
-Followers
-
-</div>
-
-{% if followers %}
-
-{% for user in followers %}
-
-<div class="user">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div class="name">
-
-{{ user.full_name }}
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-solid fa-user-group"></i>
-
-<h3>
-
-No Followers
-
-</h3>
-
-<p>
-
-This child has no followers yet.
-
-</p>
-
-</div>
-
-{% endif %}
-
-</div>
-
-<!-- Following -->
-
-<div class="section">
-
-<div class="section-title">
-
-<i class="fa-solid fa-heart"></i>
-
-Following
-
-</div>
-
-{% if following %}
-
-{% for user in following %}
-
-<div class="user">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div class="name">
-
-{{ user.full_name }}
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-solid fa-user-plus"></i>
-
-<h3>
-
-Not Following Anyone
-
-</h3>
-
-<p>
-
-The child is not following any users.
-
-</p>
-
-</div>
-
-{% endif %}
-
-</div>
-
-</div>
-
+  <div class="grid-2">
+    
+    <!-- Followers -->
+    <div class="card">
+      <div class="card-title">
+        <i class="fa-solid fa-users" style="color:#7950f2;"></i>
+        <span>Followers ({{ followers|length if followers else 0 }})</span>
+      </div>
+
+      {% if followers %}
+        {% for u in followers %}
+        <div class="user-item">
+          <div class="user-avatar">{{ u.full_name[0]|upper if u.full_name else '?' }}</div>
+          <div class="user-name">{{ u.full_name }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="font-size:13px;color:#64748b;font-weight:600;text-align:center;padding:24px 0;">No followers yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Following -->
+    <div class="card">
+      <div class="card-title">
+        <i class="fa-solid fa-user-plus" style="color:#ff6b6b;"></i>
+        <span>Following ({{ following|length if following else 0 }})</span>
+      </div>
+
+      {% if following %}
+        {% for u in following %}
+        <div class="user-item">
+          <div class="user-avatar" style="background:#ff6b6b;">{{ u.full_name[0]|upper if u.full_name else '?' }}</div>
+          <div class="user-name">{{ u.full_name }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="font-size:13px;color:#64748b;font-weight:600;text-align:center;padding:24px 0;">Not following anyone yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
 </div>
 
 </body>
-
 </html>

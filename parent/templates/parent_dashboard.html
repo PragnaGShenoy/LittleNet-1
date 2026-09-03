@@ -1,356 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LittleNet Parent Dashboard</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-background:#f5f7fb;
-color:#222;
-padding-bottom:40px;
-}
-
-.header{
-
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.parent{
-
-font-size:18px;
-font-weight:600;
-color:#555;
-
-}
-
-.container{
-
-max-width:900px;
-margin:25px auto;
-padding:0 15px;
-
-}
-
-.section-title{
-
-font-size:28px;
-font-weight:700;
-margin-bottom:20px;
-
-}
-
-.child-card{
-
-background:white;
-border-radius:18px;
-padding:20px;
-margin-bottom:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-
-}
-
-.child-info{
-
-display:flex;
-align-items:center;
-gap:15px;
-
-}
-
-.avatar{
-
-width:60px;
-height:60px;
-border-radius:50%;
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-display:flex;
-justify-content:center;
-align-items:center;
-color:white;
-font-size:24px;
-
-}
-
-.child-name{
-
-font-size:20px;
-font-weight:600;
-
-}
-
-.view-btn{
-
-padding:10px 18px;
-background:#2563EB;
-color:white;
-text-decoration:none;
-border-radius:10px;
-font-weight:600;
-
-}
-
-.grid{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:20px;
-margin-top:30px;
-
-}
-
-.card{
-
-background:white;
-border-radius:18px;
-padding:25px;
-text-align:center;
-text-decoration:none;
-color:#333;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-transition:.3s;
-
-}
-
-.card:hover{
-
-transform:translateY(-5px);
-
-}
-
-.card i{
-
-font-size:40px;
-color:#2563EB;
-margin-bottom:15px;
-
-}
-
-.card h3{
-
-margin-bottom:10px;
-
-}
-
-.card p{
-
-color:#777;
-font-size:14px;
-
-}
-
-@media(max-width:768px){
-
-.child-card{
-
-flex-direction:column;
-align-items:flex-start;
-gap:15px;
-
-}
-
-.view-btn{
-
-width:100%;
-text-align:center;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parent Portal | LittleNet Supervision</title>
+
+  <meta name="theme-color" content="#7950F2">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* Top Navigation Bar */
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-shield {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(121, 80, 242, 0.25);
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f3f0ff;
+      color: #7950f2;
+      margin-left: 6px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-logout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      color: #ef4444;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: #fee2e2;
+    }
+
+    /* Main Container */
+    .portal-container {
+      max-width: 1080px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+    }
+
+    /* Welcome Hero Header */
+    .welcome-hero {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+      border-radius: 24px;
+      padding: 32px;
+      color: white;
+      margin-bottom: 28px;
+      box-shadow: 0 15px 35px -5px rgba(49, 46, 129, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(151, 117, 250, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: #c7d2fe;
+      font-weight: 600;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    /* Linked Children Cards */
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .children-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .child-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s;
+    }
+
+    .child-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      border-color: #cbd5e1;
+    }
+
+    .child-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .child-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .child-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #20c997;
+      background: #e6fcf5;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+
+    .btn-child-view {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-child-view:hover {
+      background: #e2e8f0;
+    }
+
+    /* Management Control Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+
+    .control-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .control-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .control-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .control-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .control-desc {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.45;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<div class="parent">
-
-👨‍👩‍👧 Parent Dashboard
-
-</div>
-
-</div>
-
-<div class="container">
-
-<div class="section-title">
-
-Your Children
-
-</div>
-
-{% for child in children %}
-
-<div class="child-card">
-
-<div class="child-info">
-
-<div class="avatar">
-
-<i class="fa-solid fa-child"></i>
-
-</div>
-
-<div>
-
-<div class="child-name">
-
-{{ child.full_name }}
-
-</div>
-
-</div>
-
-</div>
-
-<a
-href="/parent/child/{{ child.user_id }}/"
-class="view-btn">
-
-View Profile
-
-</a>
-
-</div>
-
-{% endfor %}
-
-<div class="grid">
-
-<a href="/parent/approve-content/" class="card">
-
-<i class="fa-solid fa-circle-check"></i>
-
-<h3>Approve Content</h3>
-
-<p>Review your child's uploaded posts.</p>
-
-</a>
-
-<a href="/parent/deleted-posts/" class="card">
-
-<i class="fa-solid fa-trash"></i>
-
-<h3>Deleted Posts</h3>
-
-<p>See posts removed by AI moderation.</p>
-
-</a>
-
-<a href="/parent/time-limit/" class="card">
-
-<i class="fa-solid fa-clock"></i>
-
-<h3>Screen Time</h3>
-
-<p>Manage daily usage limits.</p>
-
-</a>
-
-<a href="/parent/usage-report/" class="card">
-
-<i class="fa-solid fa-chart-line"></i>
-
-<h3>Usage Report</h3>
-
-<p>View your child's activity summary.</p>
-
-</a>
-
-<a href="/parent/child-posts/" class="card">
-
-<i class="fa-solid fa-images"></i>
-
-<h3>Child Posts</h3>
-
-<p>Browse all uploaded posts.</p>
-
-</a>
-
-<a href="/quiz/settings/" class="card">
-
-<i class="fa-solid fa-graduation-cap"></i>
-
-<h3>Quiz Settings</h3>
-
-<p>Configure learning quizzes.</p>
-
-</a>
-
-<a href="/parent/quiz-report/" class="card">
-
-<i class="fa-solid fa-file-lines"></i>
-
-<h3>Quiz Report</h3>
-
-<p>Review quiz scores and progress.</p>
-
-</a>
-
-<a href="/parent/follow-requests/" class="card" style="position:relative;">
-<i class="fa-solid fa-user-clock"></i>
-<h3>Follow Requests</h3>
-<p>Approve or reject who your child follows.</p>
-</a>
-
-<a href="/parent/child-connections/" class="card">
-<i class="fa-solid fa-user-group"></i>
-<h3>Followers & Following</h3>
-
-<p>Monitor your child's connections.</p>
-
-</a>
-
-</div>
+<!-- Navigation Header -->
+<nav class="portal-nav">
+  <div class="portal-brand">
+    <div class="brand-shield">
+      <i class="fa-solid fa-shield-cat"></i>
+    </div>
+    <div class="brand-title">
+      LittleNet <span class="brand-tag">Parent Portal</span>
+    </div>
+  </div>
+
+  <div class="nav-actions">
+    <a href="/logout/" class="btn-logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      <span>Sign Out</span>
+    </a>
+  </div>
+</nav>
+
+<div class="portal-container">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-hero">
+    <h1 class="hero-title">Parent Supervision Dashboard</h1>
+    <p class="hero-sub">Monitor your child's online activities, review AI-filtered content, set healthy daily screen-time limits, and approve connection requests in a safe environment.</p>
+  </div>
+
+  <!-- Linked Children Section -->
+  <div class="section-title">
+    <i class="fa-solid fa-children" style="color:#7950f2;"></i>
+    <span>Supervised Accounts</span>
+  </div>
+
+  <div class="children-grid">
+    {% if children %}
+      {% for child in children %}
+      <div class="child-card">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="child-avatar">
+            {{ child.full_name[0]|upper if child.full_name else '?' }}
+          </div>
+          <div>
+            <div class="child-name">{{ child.full_name }}</div>
+            <div class="child-badge"><i class="fa-solid fa-circle" style="font-size:6px;"></i> Active Profile</div>
+          </div>
+        </div>
+
+        <a href="/parent/child/{{ child.user_id }}/" class="btn-child-view">
+          <span>View Profile</span>
+          <i class="fa-solid fa-arrow-right" style="margin-left:4px;"></i>
+        </a>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="background:white;padding:24px;border-radius:18px;border:1px solid #e2e8f0;grid-column:1/-1;">
+        <p style="font-size:14px;color:#64748b;font-weight:700;">No linked children registered yet.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Features & Controls Grid -->
+  <div class="section-title">
+    <i class="fa-solid fa-sliders" style="color:#ff6b6b;"></i>
+    <span>Safety & Supervision Controls</span>
+  </div>
+
+  <div class="controls-grid">
+    
+    <!-- Approve Content -->
+    <a href="/parent/approve-content/" class="control-card">
+      <div class="control-icon-box" style="background:#f3f0ff;color:#7950f2;">
+        <i class="fa-solid fa-clipboard-check"></i>
+      </div>
+      <div class="control-title">Approve Content</div>
+      <div class="control-desc">Choose which skills, interests, and ambitions appear on your child's public profile.</div>
+    </a>
+
+    <!-- Screen Time Limits -->
+    <a href="/parent/time-limit/" class="control-card">
+      <div class="control-icon-box" style="background:#fff5f5;color:#ff6b6b;">
+        <i class="fa-solid fa-hourglass-half"></i>
+      </div>
+      <div class="control-title">Screen Time Limits</div>
+      <div class="control-desc">Set daily minute quotas and configure Strict Mode auto-logout protection.</div>
+    </a>
+
+    <!-- AI Moderation Logs -->
+    <a href="/parent/deleted-posts/" class="control-card">
+      <div class="control-icon-box" style="background:#fff0f6;color:#d6336c;">
+        <i class="fa-solid fa-shield-virus"></i>
+      </div>
+      <div class="control-title">AI Moderation Logs</div>
+      <div class="control-desc">Audit posts and media automatically blocked by YOLO, NudeNet, and CLIP safety filters.</div>
+    </a>
+
+    <!-- Follow Requests -->
+    <a href="/parent/follow-requests/" class="control-card">
+      <div class="control-icon-box" style="background:#e6fcf5;color:#20c997;">
+        <i class="fa-solid fa-user-check"></i>
+      </div>
+      <div class="control-title">Follow Requests</div>
+      <div class="control-desc">Review and approve new follower connection requests from other children.</div>
+    </a>
+
+    <!-- Usage Reports -->
+    <a href="/parent/usage-report/" class="control-card">
+      <div class="control-icon-box" style="background:#e7f5ff;color:#339af0;">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+      <div class="control-title">Usage & Activity</div>
+      <div class="control-desc">View daily and weekly screen time analytics and app engagement reports.</div>
+    </a>
+
+    <!-- Child Posts -->
+    <a href="/parent/child-posts/" class="control-card">
+      <div class="control-icon-box" style="background:#fff9db;color:#f59f00;">
+        <i class="fa-regular fa-images"></i>
+      </div>
+      <div class="control-title">Child Posts & Feed</div>
+      <div class="control-desc">Inspect all photos, videos, and comments shared by your child on LittleNet.</div>
+    </a>
+
+    <!-- Followers & Following -->
+    <a href="/parent/child-connections/" class="control-card">
+      <div class="control-icon-box" style="background:#f1f3f5;color:#495057;">
+        <i class="fa-solid fa-users-gear"></i>
+      </div>
+      <div class="control-title">Friends & Connections</div>
+      <div class="control-desc">Monitor everyone your child is following and who follows them back.</div>
+    </a>
+
+    <!-- Quiz Settings -->
+    <a href="/quiz/settings/" class="control-card">
+      <div class="control-icon-box" style="background:#f3f0ff;color:#845ef7;">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="control-title">Quiz Settings</div>
+      <div class="control-desc">Configure educational question frequency (every 3–10 slides) and mandatory mode.</div>
+    </a>
+
+    <!-- Quiz Reports -->
+    <a href="/parent/quiz-report/" class="control-card">
+      <div class="control-icon-box" style="background:#e6fcf5;color:#0ca678;">
+        <i class="fa-solid fa-award"></i>
+      </div>
+      <div class="control-title">Quiz Performance</div>
+      <div class="control-desc">Inspect your child's learning scores, accuracy rate, and answered questions.</div>
+    </a>
+
+  </div>
 
 </div>
 
 </body>
-
 </html>

@@ -1,670 +1,659 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Post | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Create Post | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;
-}
-.ig-back{font-size:21px;color:#262626;cursor:pointer;width:36px;}
-.ig-back:hover{color:#e76f51;}
-.ig-title{font-size:17px;font-weight:900;color:#262626;}
-.ig-share-btn{
-  padding:7px 18px;border-radius:8px;border:none;cursor:pointer;
-  background:#0095f6;color:white;font-size:14px;font-weight:900;
-  font-family:'Nunito',sans-serif;transition:.2s;
-}
-.ig-share-btn:hover{background:#0081d6;}
-.ig-share-btn:disabled{opacity:.5;cursor:not-allowed;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Page ── */
-.page{max-width:470px;margin:0 auto;}
+  <style>
+    .upload-page-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
 
-/* ── Media preview ── */
-.media-preview{
-  width:100%;aspect-ratio:1/1;background:#efefef;
-  position:relative;overflow:hidden;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid #dbdbdb;
-}
-.media-preview img,.media-preview video{
-  width:100%;height:100%;object-fit:cover;display:block;
-}
-.media-placeholder{
-  display:flex;flex-direction:column;align-items:center;gap:14px;
-  color:#8e8e8e;
-}
-.media-placeholder i{font-size:54px;}
-.media-placeholder p{font-size:15px;font-weight:700;}
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* ── Pick row ── */
-.pick-row{
-  display:flex;gap:0;border-bottom:1px solid #dbdbdb;
-}
-.pick-btn{
-  flex:1;padding:14px;border:none;background:white;cursor:pointer;
-  font-size:14px;font-weight:800;color:#262626;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  font-family:'Nunito',sans-serif;transition:.15s;
-}
-.pick-btn:first-child{border-right:1px solid #dbdbdb;}
-.pick-btn:hover{background:#f9f9f9;}
-.pick-btn i{color:#e76f51;font-size:16px;}
+    .back-btn {
+      color: var(--ln-text);
+      font-size: 20px;
+      padding: 4px;
+    }
 
-/* ── Form section ── */
-.form-section{background:white;}
+    .header-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: var(--ln-text);
+    }
 
-.caption-row{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:14px 16px;border-bottom:1px solid #dbdbdb;
-}
-.caption-avatar{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.caption-avatar img{width:100%;height:100%;object-fit:cover;}
-.caption-input{
-  flex:1;border:none;outline:none;resize:none;
-  font-size:15px;font-weight:600;color:#262626;
-  min-height:80px;background:transparent;
-  font-family:'Nunito',sans-serif;line-height:1.6;
-}
-.caption-input::placeholder{color:#8e8e8e;}
+    .upload-form-body {
+      padding: 20px 16px;
+    }
 
-/* ── Category section ── */
-.section-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;border-bottom:1px solid #dbdbdb;
-  cursor:pointer;
-}
-.section-row-label{font-size:15px;font-weight:700;color:#262626;display:flex;align-items:center;gap:10px;}
-.section-row-label i{color:#e76f51;width:20px;text-align:center;}
-.section-row-value{font-size:14px;font-weight:700;color:#8e8e8e;display:flex;align-items:center;gap:6px;}
-.section-row-value i{font-size:12px;}
+    /* Media Select Area */
+    .media-picker-card {
+      border: 2px dashed #cbd5e1;
+      border-radius: 20px;
+      background: #f8fafc;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-bottom: 18px;
+    }
 
-/* Category drawer */
-.cat-drawer{
-  display:none;padding:14px 16px 18px;border-bottom:1px solid #dbdbdb;
-  background:#fafafa;
-}
-.cat-drawer.open{display:block;}
-.cat-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.cat-chip{
-  padding:8px 16px;border-radius:50px;font-size:13px;font-weight:800;
-  cursor:pointer;border:2px solid transparent;transition:.2s;
-}
-.cat-chip:hover{transform:scale(1.05);}
-.cat-chip.selected{border-color:currentColor;box-shadow:0 2px 8px rgba(0,0,0,.1);}
-.c1{background:#dbeafe;color:#1d4ed8;}
-.c2{background:#d1fae5;color:#065f46;}
-.c3{background:#ede9fe;color:#5b21b6;}
-.c4{background:#fce7f3;color:#be185d;}
-.c5{background:#fef3c7;color:#78350f;}
-.c6{background:#ffedd5;color:#c2410c;}
-.c7{background:#ecfccb;color:#365314;}
-.c8{background:#e0f2fe;color:#0369a1;}
-.c9{background:#fdf2f8;color:#86198f;}
-.c10{background:#f0fdf4;color:#14532d;}
-.c11{background:#f3f4f6;color:#6b7280;}
+    .media-picker-card:hover {
+      border-color: var(--ln-coral);
+      background: var(--ln-coral-light);
+    }
 
-/* Hidden inputs */
-input[type=file]{display:none;}
-select#content_category{display:none;}
+    .picker-icon-circle {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: white;
+      color: var(--ln-coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: var(--ln-shadow-sm);
+    }
 
-/* ── Uploading overlay ── */
-.uploading-overlay{
-  display:none;position:fixed;inset:0;z-index:9999;
-  background:rgba(255,255,255,.9);backdrop-filter:blur(6px);
-  flex-direction:column;align-items:center;justify-content:center;gap:16px;
-}
-.uploading-overlay.show{display:flex;}
-.upload-spinner{
-  width:60px;height:60px;border-radius:50%;
-  border:5px solid #efefef;border-top-color:#0095f6;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-.upload-text{font-size:16px;font-weight:900;color:#262626;}
-.upload-sub{font-size:13px;font-weight:600;color:#8e8e8e;}
+    .picker-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--ln-text);
+      margin-bottom: 4px;
+    }
 
-/* ── Result modal ── */
-.result-modal-overlay{
-  display:none;position:fixed;inset:0;z-index:10000;
-  background:rgba(0,0,0,.5);align-items:center;justify-content:center;
-}
-.result-modal-overlay.show{display:flex;}
-.result-modal{
-  background:white;border-radius:20px;padding:32px 26px;
-  text-align:center;max-width:300px;width:90%;
-}
-.result-modal .modal-icon{font-size:56px;margin-bottom:12px;display:block;}
-.result-modal h3{font-size:18px;font-weight:900;color:#262626;margin-bottom:8px;}
-.result-modal p{font-size:14px;color:#8e8e8e;font-weight:600;margin-bottom:20px;line-height:1.5;}
-.modal-btn{
-  display:inline-block;padding:10px 24px;border-radius:8px;
-  font-size:14px;font-weight:900;cursor:pointer;border:none;
-  font-family:'Nunito',sans-serif;transition:.2s;
-}
-.modal-btn-ok{background:#efefef;color:#262626;}
-.modal-btn-ok:hover{background:#e0e0e0;}
-.modal-btn-go{background:#0095f6;color:white;margin-left:8px;}
-.modal-btn-go:hover{background:#0081d6;}
+    .picker-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ln-text-muted);
+    }
 
-/* ── Live camera modal ── */
-.cam-overlay{
-  display:none;position:fixed;inset:0;z-index:10001;
-  background:rgba(0,0,0,.85);align-items:center;justify-content:center;
-}
-.cam-overlay.show{display:flex;}
-.cam-box{
-  background:white;border-radius:20px;overflow:hidden;
-  width:min(96vw,460px);display:flex;flex-direction:column;
-}
-.cam-header{
-  padding:14px 18px;display:flex;justify-content:space-between;align-items:center;
-  border-bottom:1px solid #dbdbdb;
-}
-.cam-header span{font-size:16px;font-weight:900;color:#262626;}
-.cam-close{background:none;border:none;font-size:22px;cursor:pointer;color:#262626;}
-#camVideo{width:100%;max-height:52vh;object-fit:cover;background:#111;display:block;}
-#camCanvas{display:none;}
-.cam-footer{
-  padding:14px 18px;display:flex;gap:10px;justify-content:center;
-  background:white;border-top:1px solid #dbdbdb;
-}
-.cam-snap{
-  padding:11px 28px;border-radius:8px;border:none;cursor:pointer;
-  background:#0095f6;color:white;font-size:14px;font-weight:900;
-  font-family:'Nunito',sans-serif;transition:.2s;
-}
-.cam-snap:hover{background:#0081d6;}
-.cam-retake{
-  padding:11px 20px;border-radius:8px;border:1.5px solid #dbdbdb;cursor:pointer;
-  background:white;color:#262626;font-size:14px;font-weight:800;
-  font-family:'Nunito',sans-serif;display:none;transition:.2s;
-}
-.cam-retake:hover{background:#f3f4f6;}
-.cam-use{
-  padding:11px 22px;border-radius:8px;border:none;cursor:pointer;
-  background:#0095f6;color:white;font-size:14px;font-weight:900;
-  font-family:'Nunito',sans-serif;display:none;transition:.2s;
-}
-.cam-use:hover{background:#0081d6;}
+    .media-buttons-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      justify-content: center;
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-</style>
+    .btn-picker-sub {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: white;
+      border: 1px solid #cbd5e1;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ln-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Preview Box */
+    .preview-box {
+      display: none;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      overflow: hidden;
+      background: black;
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .preview-box img,
+    .preview-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .remove-media-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Caption Box */
+    .caption-box {
+      margin-bottom: 18px;
+    }
+
+    .caption-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .caption-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ln-text);
+      resize: vertical;
+    }
+
+    .caption-textarea:focus {
+      background: white;
+      border-color: var(--ln-coral);
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12);
+    }
+
+    /* Category Chips */
+    .category-section {
+      margin-bottom: 24px;
+    }
+
+    .category-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .category-chips-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .cat-chip {
+      position: relative;
+    }
+
+    .cat-chip input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .cat-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: #f1f5f9;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-chip input[type="radio"]:checked + .cat-label {
+      background: var(--ln-coral-light);
+      border-color: var(--ln-coral);
+      color: var(--ln-coral);
+      box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+      transform: scale(1.04);
+    }
+
+    .btn-publish {
+      width: 100%;
+      height: 52px;
+      background: var(--ln-brand-gradient);
+      color: white;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      box-shadow: var(--ln-shadow-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-publish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35);
+    }
+
+    /* AI Scanning Overlay Modal */
+    #aiScanOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10010;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .scan-card {
+      background: white;
+      width: 100%;
+      max-width: 380px;
+      border-radius: 28px;
+      padding: 36px 28px;
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .scan-radar {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: var(--ln-purple-light);
+      color: var(--ln-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      position: relative;
+    }
+
+    .scan-radar::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px dashed var(--ln-purple);
+      animation: spin 3s linear infinite;
+    }
+
+    /* AI Result Modal */
+    #aiResultModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 10011;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .result-card {
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 28px;
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    /* Live Camera Modal */
+    #cameraModal {
+      position: fixed;
+      inset: 0;
+      background: black;
+      z-index: 10020;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #cameraVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .camera-bottom-bar {
+      position: absolute;
+      bottom: 24px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .snap-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 4px solid white;
+      background: var(--ln-coral);
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Uploading overlay -->
-<div class="uploading-overlay" id="uploadingOverlay">
-  <div style="font-size:48px;">📸</div>
-  <div class="upload-spinner"></div>
-  <div class="upload-text">Checking your post…</div>
-  <div class="upload-sub">Our safety helpers are reviewing it ✨</div>
-</div>
+<div class="upload-page-wrap">
 
-<!-- Header -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <a class="ig-back" href="/child/dashboard/"><i class="fa-solid fa-arrow-left"></i></a>
-    <div class="ig-title">New post</div>
-    <button class="ig-share-btn" id="shareBtn" onclick="submitPost()">Share</button>
+  <div class="top-header">
+    <a href="/child/dashboard/" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="header-title">New Post</div>
+    <div style="width:24px;"></div>
   </div>
-</div>
 
-<div class="page">
+  <div class="upload-form-body">
+    
+    <form id="postForm" enctype="multipart/form-data">
+      <input type="file" id="mediaInput" name="media" accept="image/*,video/*" style="display:none;" onchange="handleFileSelect(this)">
 
-  <form method="POST" enctype="multipart/form-data" id="postForm">
+      <!-- Media Select Card -->
+      <div class="media-picker-card" id="pickerCard" onclick="document.getElementById('mediaInput').click()">
+        <div class="picker-icon-circle">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div class="picker-title">Choose Photo or Video</div>
+        <div class="picker-sub">Share what you're working on with friends</div>
 
-    <!-- Media preview (tap to pick from gallery) -->
-    <div class="media-preview" id="mediaPreview" onclick="document.getElementById('media').click()">
-      <div class="media-placeholder" id="mediaPlaceholder">
-        <i class="fa-regular fa-image"></i>
-        <p>Tap to select a photo or video</p>
+        <div class="media-buttons-row">
+          <button type="button" class="btn-picker-sub" onclick="event.stopPropagation(); document.getElementById('mediaInput').click();">
+            <i class="fa-regular fa-image"></i> Gallery
+          </button>
+          <button type="button" class="btn-picker-sub" onclick="event.stopPropagation(); openLiveCamera();">
+            <i class="fa-solid fa-camera"></i> Camera
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- Pick row: Gallery / Camera -->
-    <div class="pick-row">
-      <button type="button" class="pick-btn" onclick="document.getElementById('media').click()">
-        <i class="fa-regular fa-images"></i> Gallery
+      <!-- Preview Box -->
+      <div class="preview-box" id="previewBox">
+        <div id="previewMediaHolder" style="width:100%;height:100%;"></div>
+        <div class="remove-media-btn" onclick="clearSelectedMedia()">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
+      </div>
+
+      <!-- Caption -->
+      <div class="caption-box">
+        <label class="caption-label">Write a Caption</label>
+        <textarea name="caption" id="postCaption" class="caption-textarea" placeholder="Explain your drawing, project, science model, or achievement..."></textarea>
+      </div>
+
+      <!-- Content Categories -->
+      <div class="category-section">
+        <div class="category-title">Select Category</div>
+        <div class="category-chips-flow">
+          {% set categories = [
+            ('Coding', 'fa-solid fa-code'),
+            ('Robotics', 'fa-solid fa-robot'),
+            ('AI & Tech', 'fa-solid fa-brain'),
+            ('Art & Drawing', 'fa-solid fa-palette'),
+            ('Science', 'fa-solid fa-flask'),
+            ('Sports', 'fa-solid fa-futbol'),
+            ('Music', 'fa-solid fa-music'),
+            ('School Project', 'fa-solid fa-book-open'),
+            ('Gaming', 'fa-solid fa-gamepad'),
+            ('Other', 'fa-solid fa-shapes')
+          ] %}
+          {% for cat, icon in categories %}
+          <div class="cat-chip">
+            <input type="radio" id="cat_{{ loop.index }}" name="content_category" value="{{ cat }}" {% if loop.first %}checked{% endif %}>
+            <label class="cat-label" for="cat_{{ loop.index }}">
+              <i class="{{ icon }}"></i>
+              <span>{{ cat }}</span>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="button" onclick="submitPostForm()" class="btn-publish">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Scan & Share Post</span>
       </button>
-      <button type="button" class="pick-btn" onclick="openCamera()">
-        <i class="fa-solid fa-camera"></i> Camera
-      </button>
+    </form>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post active">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
     </div>
+  </nav>
 
-    <!-- Hidden file inputs -->
-    <input type="file" name="media" id="media" accept="image/*,video/*">
-    <input type="file" name="media" id="mediaCam" accept="image/*" style="display:none;">
-
-    <!-- Caption + avatar row -->
-    <div class="form-section">
-      <div class="caption-row">
-        <div class="caption-avatar" id="userAvatar">🧒</div>
-        <textarea class="caption-input" name="caption" id="captionInput" placeholder="Write a caption…" rows="3"></textarea>
-      </div>
-
-      <!-- Category -->
-      <div class="section-row" onclick="toggleCatDrawer()">
-        <div class="section-row-label">
-          <i class="fa-solid fa-layer-group"></i> Category
-        </div>
-        <div class="section-row-value" id="catDisplay">
-          Add category <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-
-      <!-- Category chips drawer -->
-      <div class="cat-drawer" id="catDrawer">
-        <div class="cat-grid">
-          <div class="cat-chip c1"  data-val="Technology">💻 Tech</div>
-          <div class="cat-chip c2"  data-val="AI">🤖 AI</div>
-          <div class="cat-chip c3"  data-val="Programming">🧑‍💻 Code</div>
-          <div class="cat-chip c4"  data-val="Robotics">🦾 Robots</div>
-          <div class="cat-chip c5"  data-val="Science">🔬 Science</div>
-          <div class="cat-chip c6"  data-val="Sports">⚽ Sports</div>
-          <div class="cat-chip c7"  data-val="Drawing">🎨 Art</div>
-          <div class="cat-chip c8"  data-val="Music">🎵 Music</div>
-          <div class="cat-chip c9"  data-val="Dance">💃 Dance</div>
-          <div class="cat-chip c10" data-val="Education">📚 Learn</div>
-          <div class="cat-chip c11" data-val="Other">✨ Other</div>
-        </div>
-      </div>
-
-      <!-- Hidden real select -->
-      <select name="content_category" id="content_category" required></select>
-
-    </div>
-
-  </form>
 </div>
 
-<!-- Live camera modal -->
-<div class="cam-overlay" id="camOverlay">
-  <div class="cam-box">
-    <div class="cam-header">
-      <span>Take a Photo</span>
-      <button class="cam-close" onclick="closeCamera()">✕</button>
+<!-- AI Safety Scanning Modal -->
+<div id="aiScanOverlay">
+  <div class="scan-card">
+    <div class="scan-radar">
+      <i class="fa-solid fa-shield-halved"></i>
     </div>
-    <video id="camVideo" autoplay playsinline muted></video>
-    <canvas id="camCanvas"></canvas>
-    <div class="cam-footer">
-      <button type="button" class="cam-snap"   id="camSnapBtn"   onclick="snapPhoto()">Snap</button>
-      <button type="button" class="cam-retake" id="camRetakeBtn" onclick="retakePhoto()">Retake</button>
-      <button type="button" class="cam-use"    id="camUseBtn"    onclick="usePhoto()">Use Photo</button>
-    </div>
+    <h3 style="font-size:20px;font-weight:900;color:var(--ln-text);margin-bottom:8px;">AI Safety Scanner</h3>
+    <p style="font-size:14px;color:var(--ln-text-muted);font-weight:700;line-height:1.5;">Checking images & text for child safety (YOLO, NudeNet, CLIP models active)...</p>
   </div>
 </div>
 
-<!-- Result modal -->
-<div class="result-modal-overlay" id="resultModal">
-  <div class="result-modal">
-    <span class="modal-icon" id="modalIcon"></span>
-    <h3 id="modalTitle"></h3>
-    <p id="modalMsg"></p>
-    <button class="modal-btn modal-btn-ok" onclick="closeModal()">Try Again</button>
-    <a href="/my-posts/" class="modal-btn modal-btn-go" id="modalGoBtn" style="display:none;">View Posts</a>
+<!-- AI Moderation Result Modal -->
+<div id="aiResultModal">
+  <div class="result-card">
+    <div id="resultIcon" style="font-size:54px;margin-bottom:14px;"></div>
+    <h2 id="resultTitle" style="font-size:22px;font-weight:900;color:var(--ln-text);margin-bottom:8px;"></h2>
+    <p id="resultMessage" style="font-size:14px;font-weight:600;color:#64748b;line-height:1.5;margin-bottom:20px;"></p>
+    <button type="button" id="resultBtn" class="ln-btn-primary" style="width:100%;"></button>
   </div>
 </div>
 
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
+<!-- Live Camera Fullscreen Modal -->
+<div id="cameraModal">
+  <div style="position:absolute;top:16px;right:16px;z-index:20;">
+    <button onclick="closeLiveCamera()" style="color:white;font-size:26px;">&times;</button>
+  </div>
+  <video id="cameraVideo" autoplay playsinline></video>
+  <canvas id="cameraCanvas" style="display:none;"></canvas>
+  <div class="camera-bottom-bar">
+    <div style="width:50px;"></div>
+    <div class="snap-btn" onclick="captureLiveSnapshot()"></div>
+    <div style="width:50px;"></div>
+  </div>
+</div>
 
 <script>
-var _capturedBlob = null;
-var _selectedCategory = '';
+  let selectedMediaBlob = null;
+  let videoStream = null;
 
-// ── File picker → preview ──
-document.getElementById('media').addEventListener('change', function(){
-  var file = this.files[0]; if(!file) return;
-  showPreview(file, URL.createObjectURL(file));
-});
-
-function showPreview(file, url){
-  var wrap = document.getElementById('mediaPreview');
-  document.getElementById('mediaPlaceholder').style.display = 'none';
-  var old = wrap.querySelector('img,video'); if(old) old.remove();
-  if(file && file.type.startsWith('video/')){
-    var vid = document.createElement('video');
-    vid.src = url; vid.controls = false; vid.muted = true; vid.autoplay = true; vid.loop = true;
-    vid.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-    wrap.appendChild(vid);
-  } else {
-    var img = document.createElement('img');
-    img.src = url;
-    wrap.appendChild(img);
-  }
-}
-
-// ── Category chips ──
-var select = document.getElementById('content_category');
-document.querySelectorAll('.cat-chip').forEach(function(chip){
-  chip.addEventListener('click', function(){
-    document.querySelectorAll('.cat-chip').forEach(function(c){ c.classList.remove('selected'); });
-    chip.classList.add('selected');
-    _selectedCategory = chip.dataset.val;
-    document.getElementById('catDisplay').innerHTML = chip.textContent + ' <i class="fa-solid fa-chevron-down"></i>';
-  });
-});
-
-function toggleCatDrawer(){
-  document.getElementById('catDrawer').classList.toggle('open');
-}
-
-// ── Camera ──
-var _camStream = null;
-
-function openCamera(){
-  _capturedBlob = null;
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
-    .then(function(stream){
-      _camStream = stream;
-      var v = document.getElementById('camVideo');
-      v.srcObject = stream; v.style.display = 'block';
-      document.getElementById('camCanvas').style.display = 'none';
-      document.getElementById('camSnapBtn').style.display = 'inline-flex';
-      document.getElementById('camRetakeBtn').style.display = 'none';
-      document.getElementById('camUseBtn').style.display = 'none';
-      document.getElementById('camOverlay').classList.add('show');
-    })
-    .catch(function(err){ alert('Cannot access camera: ' + err.message); });
-}
-
-function closeCamera(){
-  if(_camStream){ _camStream.getTracks().forEach(function(t){t.stop();}); _camStream=null; }
-  document.getElementById('camOverlay').classList.remove('show');
-}
-
-function snapPhoto(){
-  var v = document.getElementById('camVideo');
-  var c = document.getElementById('camCanvas');
-  c.width = v.videoWidth; c.height = v.videoHeight;
-  c.getContext('2d').drawImage(v,0,0);
-  c.style.display='block'; v.style.display='none';
-  document.getElementById('camSnapBtn').style.display='none';
-  document.getElementById('camRetakeBtn').style.display='inline-flex';
-  document.getElementById('camUseBtn').style.display='inline-flex';
-  c.toBlob(function(blob){ _capturedBlob = blob; }, 'image/jpeg', 0.92);
-}
-
-function retakePhoto(){
-  var v=document.getElementById('camVideo'), c=document.getElementById('camCanvas');
-  c.style.display='none'; v.style.display='block';
-  document.getElementById('camSnapBtn').style.display='inline-flex';
-  document.getElementById('camRetakeBtn').style.display='none';
-  document.getElementById('camUseBtn').style.display='none';
-  _capturedBlob = null;
-}
-
-function usePhoto(){
-  if(!_capturedBlob) return;
-  closeCamera();
-  var fakeFile = new File([_capturedBlob], 'camera_photo.jpg', {type:'image/jpeg'});
-  showPreview(fakeFile, URL.createObjectURL(_capturedBlob));
-}
-
-// ── Submit ──
-function submitPost(){
-
-  var file = document.getElementById('media').files[0];
-
-  if(!file && !_capturedBlob){
-    alert('Please pick or take a photo/video!');
-    return;
+  function handleFileSelect(input) {
+    const file = input.files[0];
+    if (!file) return;
+    selectedMediaBlob = file;
+    displayMediaPreview(file);
   }
 
-  if(!_selectedCategory){
-    alert('Please select a category!');
-    return;
-  }
+  function displayMediaPreview(file) {
+    const holder = document.getElementById('previewMediaHolder');
+    const previewBox = document.getElementById('previewBox');
+    const pickerCard = document.getElementById('pickerCard');
 
+    holder.innerHTML = '';
+    const url = URL.createObjectURL(file);
 
-  document.getElementById('uploadingOverlay').classList.add('show');
-  document.getElementById('shareBtn').disabled = true;
-
-
-  var fd = new FormData();
-
-
-  if(_capturedBlob){
-
-    fd.append(
-      'media',
-      _capturedBlob,
-      'camera_photo.jpg'
-    );
-
-  } else {
-
-    fd.append(
-      'media',
-      file,
-      file.name
-    );
-
-  }
-
-
-  fd.append(
-    'caption',
-    document.getElementById('captionInput').value
-  );
-
-  fd.append(
-    'content_category',
-    _selectedCategory
-  );
-
-
-  fetch(
-    window.location.pathname,
-    {
-      method: 'POST',
-      body: fd
+    if (file.type.startsWith('video/')) {
+      const vid = document.createElement('video');
+      vid.src = url;
+      vid.controls = true;
+      holder.appendChild(vid);
+    } else {
+      const img = document.createElement('img');
+      img.src = url;
+      holder.appendChild(img);
     }
-  )
 
-  .then(function(response){
+    pickerCard.style.display = 'none';
+    previewBox.style.display = 'block';
+  }
 
-    /*
-     * IMPORTANT:
-     * Even if Flask returns 400 because
-     * content is blocked, we still read
-     * the JSON response.
-     */
+  function clearSelectedMedia() {
+    selectedMediaBlob = null;
+    document.getElementById('mediaInput').value = '';
+    document.getElementById('previewBox').style.display = 'none';
+    document.getElementById('pickerCard').style.display = 'block';
+  }
 
-    return response.json();
+  // Live Camera
+  function openLiveCamera() {
+    const modal = document.getElementById('cameraModal');
+    const video = document.getElementById('cameraVideo');
+    modal.style.display = 'flex';
 
-  })
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
+      .then(stream => {
+        videoStream = stream;
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert("Camera permission denied or camera not available.");
+        closeLiveCamera();
+      });
+  }
 
-  .then(function(data){
+  function closeLiveCamera() {
+    if (videoStream) {
+      videoStream.getTracks().forEach(t => t.stop());
+      videoStream = null;
+    }
+    document.getElementById('cameraModal').style.display = 'none';
+  }
 
-    document.getElementById(
-      'uploadingOverlay'
-    ).classList.remove('show');
+  function captureLiveSnapshot() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    document.getElementById(
-      'shareBtn'
-    ).disabled = false;
+    canvas.toBlob(blob => {
+      selectedMediaBlob = new File([blob], "camera_snap.jpg", { type: "image/jpeg" });
+      displayMediaPreview(selectedMediaBlob);
+      closeLiveCamera();
+    }, 'image/jpeg', 0.9);
+  }
 
-
-    /*
-     * Backend says content is blocked
-     */
-
-    if(data.success === false){
-
-      showModal(
-        false,
-        data.category || 'INAPPROPRIATE'
-      );
-
+  // Submit Post with ML Review
+  function submitPostForm() {
+    if (!selectedMediaBlob) {
+      alert("Please select or capture a photo or video before posting!");
       return;
-
     }
 
+    const overlay = document.getElementById('aiScanOverlay');
+    overlay.style.display = 'flex';
 
-    /*
-     * Backend says post was successfully shared
-     */
+    const formData = new FormData();
+    formData.append('media', selectedMediaBlob);
+    formData.append('caption', document.getElementById('postCaption').value);
 
-    showModal(
-      true,
-      data.category
-    );
+    const checkedCat = document.querySelector('input[name="content_category"]:checked');
+    if (checkedCat) {
+      formData.append('content_category', checkedCat.value);
+    }
 
-  })
-
-  .catch(function(error){
-
-    console.error(
-      'Upload error:',
-      error
-    );
-
-
-    document.getElementById(
-      'uploadingOverlay'
-    ).classList.remove('show');
-
-    document.getElementById(
-      'shareBtn'
-    ).disabled = false;
-
-
-    showModal(
-      false,
-      'UNKNOWN'
-    );
-
-  });
-
-}
-
-function showModal(success, category){
- var labels = {
-
-  ADULT: {
-    emoji: '🚫',
-    title: 'Content Not Allowed',
-    text: 'This content contains adult material and cannot be posted on LittleNet.'
-  },
-
-  INAPPROPRIATE: {
-    emoji: '🚫',
-    title: 'Content Not Allowed',
-    text: 'This content is not suitable for children and cannot be posted on LittleNet.'
-  },
-
-  VIOLENCE: {
-    emoji: '⚠️',
-    title: 'Violent Content',
-    text: 'This content appears to contain violent imagery. Please choose something friendly!'
-  },
-
-  WEAPON: {
-    emoji: '🛡️',
-    title: 'Weapons Detected',
-    text: 'Weapons were detected in this content. Please upload something safe.'
-  },
-
-  DRUG: {
-    emoji: '🚷',
-    title: 'Not Allowed',
-    text: 'This content appears to show drugs or alcohol. That is not allowed on LittleNet!'
-  },
-
-  BULLYING: {
-    emoji: '💔',
-    title: 'Be Kind',
-    text: 'This content may show bullying or harassment. Be kind to each other!'
-  },
-
-  UNKNOWN: {
-    emoji: '😕',
-    title: 'Something went wrong',
-    text: 'An unexpected error occurred while checking your content. Please try again.'
+    fetch('/child/upload-post/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      overlay.style.display = 'none';
+      showAiModerationResult(data);
+    })
+    .catch(err => {
+      overlay.style.display = 'none';
+      alert("Network error while uploading. Please try again.");
+    });
   }
 
-};
-  if(success){
-    document.getElementById('modalIcon').textContent  = '🎉';
-    document.getElementById('modalTitle').textContent = 'Post Shared!';
-    document.getElementById('modalMsg').textContent   = 'Your post is now live on LittleNet! 🌟';
-    document.querySelector('.modal-btn-ok').style.display = 'none';
-    document.getElementById('modalGoBtn').style.display   = 'inline-block';
-  } else {
-    var info = labels[category] || labels['UNKNOWN'];
-    document.getElementById('modalIcon').textContent  = info.emoji;
-    document.getElementById('modalTitle').textContent = info.title;
-    document.getElementById('modalMsg').textContent   = info.text;
-    document.querySelector('.modal-btn-ok').style.display = 'inline-block';
-    document.getElementById('modalGoBtn').style.display   = 'none';
-  }
-  document.getElementById('resultModal').classList.add('show');
-}
+  function showAiModerationResult(data) {
+    const modal = document.getElementById('aiResultModal');
+    const icon = document.getElementById('resultIcon');
+    const title = document.getElementById('resultTitle');
+    const msg = document.getElementById('resultMessage');
+    const btn = document.getElementById('resultBtn');
 
-function closeModal(){
-  document.getElementById('resultModal').classList.remove('show');
-}
+    modal.style.display = 'flex';
+
+    if (data.blocked) {
+      icon.innerHTML = '🛡️';
+      title.textContent = 'Post Needs Adjustment';
+      msg.textContent = data.message || `Our AI Safety filter flagged this content (${data.category || 'safety policy'}). Please upload positive, friendly content.`;
+      btn.textContent = 'Got It, I’ll Change It';
+      btn.onclick = () => { modal.style.display = 'none'; };
+    } else {
+      icon.innerHTML = '🎉';
+      title.textContent = 'Post Approved & Shared!';
+      msg.textContent = 'Your post passed all AI Safety checks and is now visible to your friends!';
+      btn.textContent = 'Go to Feed';
+      btn.onclick = () => { window.location.href = '/child/dashboard/'; };
+    }
+  }
 </script>
+
 </body>
 </html>

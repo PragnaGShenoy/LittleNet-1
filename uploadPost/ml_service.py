@@ -249,6 +249,18 @@ VISUAL_UNSAFE_CATEGORIES = [
     "someone being bullied",
 
     # --------------------------------------------------------
+    # WEAPONS / DANGEROUS OBJECTS
+    # --------------------------------------------------------
+
+    "a photo of a knife or sharp blade",
+
+    "a sharp knife or kitchen knife",
+
+    "a dangerous weapon or firearm",
+
+    "guns or rifles",
+
+    # --------------------------------------------------------
     # OTHER UNSAFE CONTENT
     # --------------------------------------------------------
 
@@ -275,6 +287,12 @@ VISUAL_SAFE_MARGIN = 0.03
 # bullying/abuse, so bullying requires a much higher confidence.
 
 VISUAL_CATEGORY_THRESHOLDS = {
+
+    # Weapons / dangerous objects
+    "a photo of a knife or sharp blade": 0.22,
+    "a sharp knife or kitchen knife": 0.22,
+    "a dangerous weapon or firearm": 0.22,
+    "guns or rifles": 0.22,
 
     # Adult / sexual content
     "sexually explicit content": 0.20,
@@ -359,34 +377,28 @@ SUGGESTIVE_NUDE_LABELS = {
 # ============================================================
 
 COCO_WEAPON_CLASSES = {
-
-    "knife"
-
+    "knife",
+    "scissors"
 }
 
 
 OIV7_WEAPON_CLASSES = {
-
     "handgun",
-
     "gun",
-
     "rifle",
-
     "shotgun",
-
     "sword",
-
     "knife",
-
+    "kitchen knife",
     "dagger",
-
     "pistol",
-
     "firearm",
-
     "weapon",
-
+    "axe",
+    "bomb",
+    "missile",
+    "syringe",
+    "scissors"
 }
 
 
@@ -1252,18 +1264,14 @@ def check_image_safety(
 
 
         if not visual["safe"]:
-
+            visual_label = visual.get("category", "")
+            blocked_cat = "WEAPON" if any(w in visual_label.lower() for w in ["knife", "blade", "weapon", "gun", "rifle", "firearm"]) else "INAPPROPRIATE"
+            print(f"[ML] BLOCKED BY VISUAL CLASSIFIER: {blocked_cat} ('{visual_label}', score: {visual['score']}%)")
             result.update(
-
                 safe=False,
-
-                category="INAPPROPRIATE",
-
+                category=blocked_cat,
                 score=visual["score"]
-
             )
-
-
             return result
 
 
@@ -1272,155 +1280,75 @@ def check_image_safety(
         # ====================================================
 
         try:
-
             detections = yolo_coco(
-
                 small_path,
-
+                conf=0.25,
                 verbose=False
-
             )
 
-
             for r in detections:
-
                 for box in r.boxes:
-
                     label = (
                         yolo_coco.names[
                             int(box.cls)
                         ].lower()
                     )
+                    confidence = float(box.conf)
+                    xyxy = [round(float(coord), 1) for coord in box.xyxy[0].tolist()]
 
+                    print(f"[ML DEBUG] YOLO COCO detected: '{label}' | Confidence: {confidence:.3f} | Box: {xyxy}")
 
-                    confidence = float(
-                        box.conf
-                    )
+                    if confidence >= 0.25:
+                        result["objects"].append(label)
 
-
-                    if confidence >= 0.40:
-
-                        result[
-                            "objects"
-                        ].append(
-                            label
-                        )
-
-
-                        if (
-                            label
-                            in COCO_WEAPON_CLASSES
-                        ):
-
-                            print(
-                                "[ML] BLOCKED: "
-                                "WEAPON"
-                            )
-
-
+                        if label in COCO_WEAPON_CLASSES:
+                            print(f"[ML] BLOCKED BY YOLO COCO: WEAPON ('{label}', conf: {confidence:.3f})")
                             result.update(
-
                                 safe=False,
-
                                 category="WEAPON",
-
-                                score=round(
-                                    confidence * 100,
-                                    2
-                                )
-
+                                score=round(confidence * 100, 2)
                             )
-
-
                             return result
 
-
         except Exception as e:
-
-            print(
-                f"[ML] COCO YOLO error: {e}"
-            )
-
+            print(f"[ML] COCO YOLO error: {e}")
 
         # ====================================================
         # 5. YOLO OIV7
         # ====================================================
 
         if OIV7_AVAILABLE:
-
             try:
-
                 detections = yolo_oiv7(
-
                     small_path,
-
+                    conf=0.25,
                     verbose=False
-
                 )
 
-
                 for r in detections:
-
                     for box in r.boxes:
-
                         label = (
                             yolo_oiv7.names[
                                 int(box.cls)
                             ].lower()
                         )
+                        confidence = float(box.conf)
+                        xyxy = [round(float(coord), 1) for coord in box.xyxy[0].tolist()]
 
+                        print(f"[ML DEBUG] YOLO OIV7 detected: '{label}' | Confidence: {confidence:.3f} | Box: {xyxy}")
 
-                        confidence = float(
-                            box.conf
-                        )
-
-
-                        if (
-
-                            confidence >= 0.40
-
-                            and
-
-                            label
-                            in OIV7_WEAPON_CLASSES
-
-                        ):
-
-                            print(
-                                "[ML] BLOCKED: "
-                                "WEAPON"
-                            )
-
-
-                            result[
-                                "objects"
-                            ].append(
-                                label
-                            )
-
-
+                        if confidence >= 0.25 and label in OIV7_WEAPON_CLASSES:
+                            print(f"[ML] BLOCKED BY YOLO OIV7: WEAPON ('{label}', conf: {confidence:.3f})")
+                            result["objects"].append(label)
                             result.update(
-
                                 safe=False,
-
                                 category="WEAPON",
-
-                                score=round(
-                                    confidence * 100,
-                                    2
-                                )
-
+                                score=round(confidence * 100, 2)
                             )
-
-
                             return result
 
-
             except Exception as e:
-
-                print(
-                    f"[ML] OIV7 error: {e}"
-                )
+                print(f"[ML] OIV7 error: {e}")
 
 
     finally:

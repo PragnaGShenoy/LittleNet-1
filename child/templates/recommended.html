@@ -1,650 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>For You | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;
-}
-.ig-logo{
-  font-size:22px;font-weight:900;
-  background:linear-gradient(135deg,#f9844a,#e76f51);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.ig-header-right{display:flex;gap:20px;align-items:center;}
-.ig-header-right a{font-size:22px;color:#262626;transition:.2s;}
-.ig-header-right a:hover{color:#e76f51;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Feed card (Instagram style) ── */
-.feed-card{
-  background:white;
-  border-bottom:1px solid #dbdbdb;
-  max-width:470px;margin:0 auto;
-}
+  <style>
+    .recommended-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
 
-/* Card header */
-.feed-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px;
-}
-.feed-user{display:flex;align-items:center;gap:10px;cursor:pointer;}
-.feed-avatar{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.feed-avatar img{width:100%;height:100%;object-fit:cover;}
-.feed-username{font-size:14px;font-weight:900;color:#262626;}
-.feed-category{font-size:12px;color:#8e8e8e;font-weight:600;margin-top:1px;}
-.feed-more{font-size:18px;color:#262626;cursor:pointer;letter-spacing:1px;}
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* Media */
-.feed-media{width:100%;aspect-ratio:1/1;background:#fafafa;overflow:hidden;}
-.feed-media img,.feed-media video{width:100%;height:100%;object-fit:cover;display:block;}
+    .header-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ln-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-/* Actions row */
-.feed-actions{
-  display:flex;align-items:center;padding:8px 14px 4px;gap:14px;
-}
-.act-btn{
-  background:none;border:none;cursor:pointer;
-  font-size:24px;color:#262626;padding:2px;transition:.2s;
-  display:flex;align-items:center;
-}
-.act-btn:hover{transform:scale(1.12);}
-.act-save{margin-left:auto;}
+    .header-title i {
+      color: var(--ln-coral);
+    }
 
-.liked-heart{color:#e0245e;}
-@keyframes heartPop{0%{transform:scale(1);}40%{transform:scale(1.5);}100%{transform:scale(1);}}
-.heart-pop{animation:heartPop .35s ease;}
+    /* Feed Post Card */
+    .post-card {
+      background: white;
+      border-bottom: 1px solid var(--ln-border-light);
+      margin-bottom: 12px;
+    }
 
-/* Likes & caption */
-.feed-likes{font-size:14px;font-weight:800;color:#262626;padding:4px 14px 2px;}
-.feed-caption{font-size:14px;color:#262626;padding:2px 14px 6px;line-height:1.5;}
-.feed-caption .uname{font-weight:900;margin-right:5px;}
-.feed-view-comments{font-size:14px;color:#8e8e8e;font-weight:600;padding:0 14px 6px;display:block;cursor:pointer;}
+    .post-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
 
-/* Comments section */
-.comments-section{display:none;padding:0 14px 10px;}
-.comments-section.open{display:block;}
-.comments-list{margin-bottom:8px;}
-.comment-item{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
-.ci-name{font-weight:900;color:#262626;margin-right:4px;}
-.ci-text{color:#262626;font-weight:600;}
-.comment-input-row{
-  display:flex;align-items:center;gap:8px;
-  border-top:1px solid #efefef;padding-top:8px;
-}
-.comment-input-row input{
-  flex:1;border:none;outline:none;font-size:14px;font-weight:600;
-  background:transparent;font-family:'Nunito',sans-serif;color:#262626;
-}
-.comment-input-row input::placeholder{color:#8e8e8e;}
-.ci-send{
-  background:none;border:none;color:#0095f6;font-size:13px;
-  font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;
-}
-.ci-send:hover{color:#0081d6;}
+    .post-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* ── Quiz card ── */
-.quiz-card{
-  background:white;max-width:470px;margin:0 auto 0;
-  border-bottom:1px solid #dbdbdb;
-  padding:20px 16px;
-}
-.quiz-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:#fef3c7;color:#78350f;
-  font-size:13px;font-weight:900;
-  padding:5px 14px;border-radius:50px;margin-bottom:14px;
-}
-.quiz-question{font-size:15px;font-weight:800;color:#262626;margin-bottom:14px;line-height:1.55;}
-.quiz-option{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border:1.5px solid #dbdbdb;
-  border-radius:12px;margin-bottom:9px;cursor:pointer;
-  transition:.2s;font-size:14px;font-weight:700;color:#262626;
-}
-.quiz-option:hover{border-color:#0095f6;background:#f0f9ff;}
-.quiz-option input{accent-color:#0095f6;}
-.quiz-submit{
-  width:100%;padding:13px;
-  background:#0095f6;border:none;border-radius:12px;
-  color:white;font-size:14px;font-weight:900;
-  cursor:pointer;margin-top:4px;transition:.2s;
-  font-family:'Nunito',sans-serif;
-}
-.quiz-submit:hover{background:#0081d6;}
-.quiz-result{
-  margin-top:12px;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:800;
-}
-.quiz-result.correct{background:#d1fae5;color:#065f46;}
-.quiz-result.wrong{background:#fee2e2;color:#991b1b;}
-.skip-link{
-  display:block;text-align:center;margin-top:10px;
-  color:#0095f6;font-size:14px;font-weight:800;
-}
+    .post-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      overflow: hidden;
+    }
 
-/* ── Load more ── */
-.load-more{
-  display:block;text-align:center;margin:18px auto 30px;
-  max-width:470px;padding:13px;background:white;
-  border:1.5px solid #dbdbdb;border-radius:10px;
-  color:#262626;font-weight:800;font-size:14px;transition:.2s;
-}
-.load-more:hover{background:#efefef;}
+    .post-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* ── Empty state ── */
-.empty-feed{
-  max-width:470px;margin:60px auto;text-align:center;padding:0 20px;
-}
-.empty-feed .icon{font-size:52px;margin-bottom:12px;}
-.empty-feed p{font-size:14px;font-weight:700;color:#8e8e8e;margin-bottom:16px;}
-.empty-btn{
-  display:inline-block;padding:11px 24px;
-  background:#0095f6;color:white;border-radius:10px;
-  font-size:14px;font-weight:900;
-}
+    .post-media-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #000000;
+    }
 
-/* ── Share modal ── */
-.share-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
-  z-index:8000;align-items:flex-end;justify-content:center;
-}
-.share-overlay.show{display:flex;}
-.share-sheet{
-  background:white;width:100%;max-width:470px;
-  border-radius:24px 24px 0 0;padding:0 0 28px;
-  animation:slideUp .28s ease;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.share-handle{width:40px;height:4px;border-radius:4px;background:#dbdbdb;margin:12px auto 14px;}
-.share-title{font-size:16px;font-weight:900;color:#262626;text-align:center;padding-bottom:14px;border-bottom:1px solid #efefef;}
-.share-row{
-  display:flex;gap:18px;overflow-x:auto;padding:16px 16px 0;
-  scrollbar-width:none;
-}
-.share-row::-webkit-scrollbar{display:none;}
-.share-friend{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  cursor:pointer;flex-shrink:0;
-}
-.sf-avatar{
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:900;color:#7c3700;transition:.2s;
-}
-.sf-avatar.sent{background:#d1fae5;color:#065f46;}
-.sf-name{font-size:12px;font-weight:700;color:#262626;max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.share-actions{display:flex;gap:10px;padding:14px 16px 0;}
-.share-action-btn{
-  flex:1;padding:12px;border-radius:12px;border:1.5px solid #dbdbdb;
-  background:white;font-size:13px;font-weight:800;cursor:pointer;
-  color:#262626;font-family:'Nunito',sans-serif;transition:.2s;
-}
-.share-action-btn:hover{background:#efefef;}
-.share-cancel{
-  display:block;width:calc(100% - 32px);margin:10px 16px 0;
-  padding:12px;border-radius:12px;border:none;
-  background:#efefef;color:#262626;font-size:14px;font-weight:900;cursor:pointer;
-  font-family:'Nunito',sans-serif;
-}
-.copy-toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
-  background:#262626;color:white;padding:10px 20px;border-radius:10px;
-  font-size:13px;font-weight:800;pointer-events:none;
-  opacity:0;transition:opacity .3s;z-index:9999;
-}
-.copy-toast.show{opacity:1;}
+    .post-media-box img,
+    .post-media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-</style>
+    .post-actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px 4px;
+    }
+
+    .action-icon {
+      font-size: 22px;
+      color: var(--ln-text);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .action-icon:hover {
+      transform: scale(1.18);
+      color: var(--ln-coral);
+    }
+
+    .post-likes-text {
+      font-size: 14px;
+      font-weight: 900;
+      padding: 2px 16px 4px;
+      color: var(--ln-text);
+    }
+
+    .post-caption-box {
+      font-size: 14px;
+      padding: 2px 16px 12px;
+      line-height: 1.5;
+    }
+
+    .post-caption-box strong {
+      margin-right: 6px;
+      font-weight: 900;
+    }
+
+    /* Inline Gamified Quiz Card in Feed */
+    .inline-quiz-card {
+      background: linear-gradient(135deg, #fff9db 0%, #fff3bf 100%);
+      border: 1.5px solid #fcc419;
+      border-radius: 24px;
+      margin: 16px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 25px rgba(252, 196, 25, 0.2);
+    }
+
+    .quiz-badge-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .quiz-pill {
+      background: #fcc419;
+      color: #744210;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quiz-question-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #432800;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .quiz-option-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      border: 1.5px solid #ffe066;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      transition: all 0.2s;
+    }
+
+    .quiz-option-item:hover {
+      border-color: #fcc419;
+      background: #fffdf5;
+      transform: translateX(4px);
+    }
+
+    .quiz-option-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #f59f00;
+    }
+
+    .btn-submit-quiz {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #fcc419 0%, #f59f00 100%);
+      color: #432800;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(245, 159, 0, 0.25);
+      margin-top: 14px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <div class="ig-logo">✨ For You</div>
-    <div class="ig-header-right">
-      <a href="/messages/"><i class="fa-regular fa-paper-plane"></i></a>
+<div class="recommended-wrap">
+
+  <div class="top-header">
+    <div class="header-title">
+      <i class="fa-solid fa-sparkles"></i>
+      <span>For You</span>
+    </div>
+    <div>
+      <a href="/quiz/start/" style="font-size:13px;font-weight:800;color:var(--ln-purple);display:flex;align-items:center;gap:4px;">
+        <i class="fa-solid fa-brain"></i> Quizzes
+      </a>
     </div>
   </div>
+
+  <main>
+    {% if feed_items %}
+      {% for item in feed_items %}
+        
+        {# Regular Post item #}
+        {% if item.type == 'post' or item.post_id is defined %}
+        <article class="post-card">
+          <div class="post-head">
+            <a href="/child/view-profile/{{ item.child_id }}/" class="post-user-info">
+              <div class="post-avatar">
+                {% if item.profile_picture %}
+                  <img src="/{{ item.profile_picture|replace('\\','/') }}" alt="">
+                {% else %}
+                  {{ item.full_name[0]|upper if item.full_name else '?' }}
+                {% endif %}
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:800;color:var(--ln-text);">{{ item.full_name }}</div>
+                {% if item.content_category %}
+                  <div style="font-size:11px;font-weight:700;color:var(--ln-purple);"><i class="fa-solid fa-tag"></i> {{ item.content_category }}</div>
+                {% endif %}
+              </div>
+            </a>
+          </div>
+
+          <div class="post-media-box">
+            {% if item.media_type == 'VIDEO' %}
+              <video controls playsinline src="/{{ item.media_path|replace('\\','/') }}"></video>
+            {% else %}
+              <img src="/{{ item.media_path|replace('\\','/') }}" loading="lazy" alt="Post">
+            {% endif %}
+          </div>
+
+          <div class="post-actions-bar">
+            <span class="action-icon"><i class="fa-regular fa-heart"></i></span>
+            <span class="action-icon"><i class="fa-regular fa-comment"></i></span>
+            <span class="action-icon"><i class="fa-regular fa-paper-plane"></i></span>
+          </div>
+
+          <div class="post-likes-text">{{ item.likes_count if item.likes_count is defined else (item.likes if item.likes is defined else 0) }} likes</div>
+
+          <div class="post-caption-box">
+            <strong>{{ item.full_name }}</strong>
+            <span>{{ item.caption }}</span>
+          </div>
+        </article>
+
+        {# Inline Quiz Card #}
+        {% elif item.type == 'quiz' or item.question is defined %}
+        <div class="inline-quiz-card">
+          <div class="quiz-badge-header">
+            <span class="quiz-pill"><i class="fa-solid fa-brain"></i> Quiz Time!</span>
+            <span style="font-size:12px;font-weight:800;color:#854d0e;">Bonus Learning</span>
+          </div>
+
+          <div class="quiz-question-title">❓ {{ item.question }}</div>
+
+          <form action="/quiz/submit/" method="POST">
+            <input type="hidden" name="quiz_id" value="{{ item.quiz_id if item.quiz_id is defined else '' }}">
+            
+            {% if item.options %}
+              {% for opt in item.options %}
+              <label class="quiz-option-item">
+                <input type="radio" name="selected_answer" value="{{ opt }}" required>
+                <span>{{ opt }}</span>
+              </label>
+              {% endfor %}
+            {% else %}
+              <label class="quiz-option-item"><input type="radio" name="selected_answer" value="{{ item.option_a }}"> <span>{{ item.option_a }}</span></label>
+              <label class="quiz-option-item"><input type="radio" name="selected_answer" value="{{ item.option_b }}"> <span>{{ item.option_b }}</span></label>
+              <label class="quiz-option-item"><input type="radio" name="selected_answer" value="{{ item.option_c }}"> <span>{{ item.option_c }}</span></label>
+              <label class="quiz-option-item"><input type="radio" name="selected_answer" value="{{ item.option_d }}"> <span>{{ item.option_d }}</span></label>
+            {% endif %}
+
+            <button type="submit" class="btn-submit-quiz">
+              <i class="fa-solid fa-check"></i>
+              <span>Submit Answer</span>
+            </button>
+          </form>
+        </div>
+        {% endif %}
+
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--ln-text-muted);">
+        <i class="fa-solid fa-wand-magic-sparkles" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+        <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">Your feed is getting personalized!</h3>
+        <p style="font-size:14px;font-weight:700;">Connect with other children and explore categories to see great posts here.</p>
+      </div>
+    {% endif %}
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
 </div>
 
-<!-- Feed items -->
-{% if feed_items %}
-  {% for item in feed_items %}
-
-  {% if item.type == "POST" %}
-  {% set post = item.data %}
-  <div class="feed-card" id="post-{{ post.post_id }}" data-post-id="{{ post.post_id }}">
-
-    <!-- Header: avatar + name clickable to profile -->
-    <div class="feed-head">
-      <div class="feed-user" onclick="window.location.href='/child/view-profile/{{ post.child_id }}/'">
-        <div class="feed-avatar">
-          {% if post.profile_picture %}
-            <img src="/{{ post.profile_picture | replace('\\', '/') }}" alt="dp">
-          {% else %}
-            {{ post.full_name[0]|upper if post.full_name else '?' }}
-          {% endif %}
-        </div>
-        <div>
-          <div class="feed-username">{{ post.full_name }}</div>
-          {% if post.content_category %}
-          <div class="feed-category">{{ post.content_category }}</div>
-          {% endif %}
-        </div>
-      </div>
-      <div class="feed-more">···</div>
-    </div>
-
-    <!-- Media -->
-    <div class="feed-media">
-      {% if post.media_type == "IMAGE" %}
-        <img src="/{{ post.media_path | replace('\\', '/') }}" alt="post" loading="lazy">
-      {% elif post.media_type == "VIDEO" %}
-        <video src="/{{ post.media_path | replace('\\', '/') }}" muted loop playsinline></video>
-      {% endif %}
-    </div>
-
-    <!-- Actions -->
-    <div class="feed-actions">
-      <button class="act-btn like-btn" title="Like">
-        <i class="fa-regular fa-heart" id="heart-{{ post.post_id }}"></i>
-      </button>
-      <button class="act-btn comment-toggle-btn" title="Comment">
-        <i class="fa-regular fa-comment"></i>
-      </button>
-      <button class="act-btn share-btn" title="Share"
-              data-pid="{{ post.post_id }}"
-              data-name="{{ post.full_name | e }}"
-              data-path="{{ post.media_path | replace('\\', '/') }}"
-              data-mtype="{{ post.media_type }}"
-              data-caption="{{ (post.caption or '') | truncate(80, True, '…') | e }}">
-        <i class="fa-regular fa-paper-plane"></i>
-      </button>
-      <button class="act-btn act-save"><i class="fa-regular fa-bookmark"></i></button>
-    </div>
-
-    <div class="feed-likes" id="likes-{{ post.post_id }}">
-      {{ post.likes }} like{{ 's' if post.likes != 1 else '' }}
-    </div>
-
-    {% if post.caption %}
-    <div class="feed-caption">
-      <span class="uname" style="cursor:pointer;" onclick="window.location.href='/child/view-profile/{{ post.child_id }}/'">{{ post.full_name }}</span>{{ post.caption }}
-    </div>
-    {% endif %}
-
-    {% if post.comments %}
-    <span class="feed-view-comments comment-toggle-btn">View {{ post.comments | length }} comment{{ 's' if post.comments | length != 1 else '' }}</span>
-    {% endif %}
-
-    <!-- Comments section (AJAX) -->
-    <div class="comments-section" id="cmt-{{ post.post_id }}">
-      <div class="comments-list" id="clist-{{ post.post_id }}">
-        {% for c in post.comments %}
-        <div class="comment-item">
-          <span class="ci-name">{{ c.full_name }}</span>
-          <span class="ci-text">{{ c.comment_text }}</span>
-        </div>
-        {% endfor %}
-      </div>
-      <div class="comment-input-row">
-        <input type="text" placeholder="Add a comment…" id="cinput-{{ post.post_id }}">
-        <button class="ci-send" data-pid="{{ post.post_id }}">Post</button>
-      </div>
-    </div>
-
-  </div>
-  {% endif %}
-
-  
-
-  {% endfor %}
-{% else %}
-  <div class="empty-feed">
-    <div class="icon">📭</div>
-    <p>No posts yet.<br>Follow friends and explore content!</p>
-    <a class="empty-btn" href="/discover/">Find Friends</a>
-  </div>
-{% endif %}
-
-<!-- ================= QUIZ ================= -->
-
-{% if quiz %}
-  <div class="quiz-card">
-
-    <div class="quiz-badge">
-      🧠 Quiz Time!
-    </div>
-
-    <div class="quiz-question">
-      {{ quiz.question }}
-    </div>
-
-    <form action="/quiz/submit/" method="POST">
-
-      <input
-        type="hidden"
-        name="quiz_id"
-        value="{{ quiz.quiz_id }}"
-      >
-
-      <label class="quiz-option">
-        <input
-          type="radio"
-          name="answer"
-          value="{{ quiz.option_a }}"
-          required
-        >
-        {{ quiz.option_a }}
-      </label>
-
-      <label class="quiz-option">
-        <input
-          type="radio"
-          name="answer"
-          value="{{ quiz.option_b }}"
-        >
-        {{ quiz.option_b }}
-      </label>
-
-      <label class="quiz-option">
-        <input
-          type="radio"
-          name="answer"
-          value="{{ quiz.option_c }}"
-        >
-        {{ quiz.option_c }}
-      </label>
-
-      <label class="quiz-option">
-        <input
-          type="radio"
-          name="answer"
-          value="{{ quiz.option_d }}"
-        >
-        {{ quiz.option_d }}
-      </label>
-
-      <button
-        type="submit"
-        class="quiz-submit"
-      >
-        ✅ Submit Answer
-      </button>
-
-    </form>
-
-  </div>
-{% endif %}
-
-<a
-  class="load-more"
-  href="/recommended/?page={{ page + 1 }}"
->
-  Load more
-</a>
-
-<!-- Share modal -->
-<div class="share-overlay" id="shareOverlay" onclick="closeShare(event)">
-  <div class="share-sheet" onclick="event.stopPropagation()">
-    <div class="share-handle"></div>
-    <div class="share-title">Share Post</div>
-    <div class="share-row" id="friendsRow">
-      <div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Loading friends…</div>
-    </div>
-    <div class="share-actions">
-      <button class="share-action-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Link</button>
-      <button class="share-action-btn" onclick="shareNative()"><i class="fa-solid fa-share-nodes"></i> More</button>
-    </div>
-    <button class="share-cancel" onclick="closeShare()">Cancel</button>
-  </div>
-</div>
-<div class="copy-toast" id="copyToast">🔗 Link copied!</div>
-
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
-
-  <!-- Home -->
-  <a class="nav-item" href="/child/dashboard/">
-    <i class="fa-solid fa-house"></i>
-  </a>
-
-  <!-- Discover -->
-  <a class="nav-item" href="/discover/">
-    <i class="fa-solid fa-magnifying-glass"></i>
-  </a>
-
-  <!-- Create Post -->
-  <a class="nav-item" href="/child/upload-post/">
-    <i class="fa-solid fa-square-plus"></i>
-  </a>
-
-  <!-- Quiz -->
-  <a href="/quiz/start/"
-   onclick="window.location.href='/quiz/start/'; return false;"
-   style="cursor:pointer;">
-    <i class="fa-solid fa-graduation-cap"></i>
-  </a>
-
-  <!-- For You -->
-  <a class="nav-item active" href="/recommended/">
-    <i class="fa-regular fa-brain"></i>
-  </a>
-
-  <!-- Profile -->
-  <a class="nav-item" href="/child/profile/">
-    <i class="fa-solid fa-user"></i>
-  </a>
-
-</nav>
-
-<script>
-// Wire up each post card
-document.querySelectorAll('.feed-card').forEach(function(card){
-  var postId = parseInt(card.dataset.postId);
-
-  // Like state from server (liked class already set below if applicable)
-  var liked = card.querySelector('#heart-'+postId).classList.contains('fa-solid');
-
-  // Like button
-  card.querySelector('.like-btn').addEventListener('click', function(){
-    fetch('/api/like/'+postId+'/', {method:'POST', credentials:'same-origin'})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        liked = d.liked;
-        var heartEl = document.getElementById('heart-'+postId);
-        heartEl.className = 'fa-heart ' + (d.liked ? 'fa-solid liked-heart' : 'fa-regular');
-        heartEl.classList.add('heart-pop');
-        setTimeout(function(){heartEl.classList.remove('heart-pop');}, 400);
-        var lEl = document.getElementById('likes-'+postId);
-        if(lEl) lEl.textContent = d.count + ' like' + (d.count!==1?'s':'');
-      }).catch(function(){});
-  });
-
-  // Comment toggle
-  card.querySelectorAll('.comment-toggle-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var sec = document.getElementById('cmt-'+postId);
-      sec.classList.toggle('open');
-    });
-  });
-
-  // Submit comment
-  var sendBtn = card.querySelector('.ci-send');
-  if(sendBtn){
-    sendBtn.addEventListener('click', function(){ submitComment(postId); });
-  }
-  var inp = document.getElementById('cinput-'+postId);
-  if(inp){
-    inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submitComment(postId); });
-  }
-
-  // Share button
-  var shareBtn = card.querySelector('.share-btn');
-  if(shareBtn){
-    shareBtn.addEventListener('click', function(){
-      openShare(
-        shareBtn.dataset.pid,
-        shareBtn.dataset.name,
-        shareBtn.dataset.path,
-        shareBtn.dataset.mtype,
-        shareBtn.dataset.caption
-      );
-    });
-  }
-});
-
-function submitComment(postId){
-  var inp = document.getElementById('cinput-'+postId);
-  var text = (inp.value||'').trim(); if(!text) return;
-  inp.value = '';
-  fetch('/api/comment/'+postId+'/', {
-    method:'POST', credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text:text})
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.ok) return;
-    var list = document.getElementById('clist-'+postId);
-    var item = document.createElement('div'); item.className='comment-item';
-    item.innerHTML='<span class="ci-name">'+escHtml(d.full_name||'You')+'</span><span class="ci-text">'+escHtml(d.text)+'</span>';
-    list.appendChild(item);
-    var sec = document.getElementById('cmt-'+postId);
-    sec.classList.add('open');
-  }).catch(function(){});
-}
-
-function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// Video autoplay on scroll
-(function(){
-  var vids = document.querySelectorAll('.feed-media video');
-  if(!vids.length || !('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting) e.target.play(); else e.target.pause(); });
-  }, {threshold:.5});
-  vids.forEach(function(v){ io.observe(v); });
-})();
-
-// ── Share modal ──
-var _sharePostId=null, _friends=null;
-function openShare(postId, name, path, mtype, caption){
-  _sharePostId=postId;
-  document.getElementById('shareOverlay').classList.add('show');
-  if(_friends===null) loadShareFriends();
-}
-function closeShare(e){
-  if(!e || e.target===document.getElementById('shareOverlay') || !e.target){
-    document.getElementById('shareOverlay').classList.remove('show');
-  }
-}
-function loadShareFriends(){
-  fetch('/api/following/', {credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(data){_friends=data; renderShareFriends();})
-    .catch(function(){});
-}
-function renderShareFriends(){
-  var row = document.getElementById('friendsRow');
-  if(!_friends||!_friends.length){
-    row.innerHTML='<div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Follow friends to share with them!</div>';
-    return;
-  }
-  row.innerHTML='';
-  _friends.forEach(function(f){
-    var div=document.createElement('div'); div.className='share-friend';
-    div.innerHTML='<div class="sf-avatar" id="sf-'+f.user_id+'">'+f.full_name[0].toUpperCase()+'</div><span class="sf-name">'+escHtml(f.full_name)+'</span>';
-    div.onclick=function(){sendToFriend(f.user_id, f.full_name, div.querySelector('.sf-avatar'));};
-    row.appendChild(div);
-  });
-}
-function sendToFriend(userId, name, el){
-  if(el.classList.contains('sent')) return;
-  fetch('/api/share-post/', {
-    method:'POST', credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({receiver_id:userId, post_id:_sharePostId})
-  }).then(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');})
-    .catch(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');});
-}
-function copyLink(){
-  var url = window.location.origin+'/recommended/?from='+(_sharePostId||'');
-  if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){showToast('🔗 Link copied!');});
-  else { var t=document.createElement('textarea');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('🔗 Link copied!'); }
-  closeShare();
-}
-function shareNative(){
-  var url=window.location.origin+'/recommended/?from='+(_sharePostId||'');
-  if(navigator.share) navigator.share({title:'LittleNet',url:url}).catch(function(){});
-  else copyLink();
-}
-function showToast(msg){
-  var t=document.getElementById('copyToast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');}, 2500);
-}
-</script>
 </body>
 </html>

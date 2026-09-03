@@ -1,375 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>LittleNet | Login</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
-    <link rel="manifest" href="/static/manifest.json">
-
-    <meta name="theme-color" content="#4F46E5">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-
-    <style>
-
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Inter',sans-serif;
-        }
-
-        body{
-
-            background:linear-gradient(135deg,#EEF2FF,#E0F2FE,#FFFFFF);
-
-            min-height:100vh;
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
-            padding:20px;
-
-        }
-
-        .login-container{
-
-            width:100%;
-            max-width:420px;
-
-        }
-
-        .card{
-
-            background:#fff;
-
-            border-radius:24px;
-
-            padding:40px 35px;
-
-            box-shadow:
-            0 15px 40px rgba(0,0,0,.08);
-
-            animation:fade .6s ease;
-
-        }
-
-        @keyframes fade{
-
-            from{
-                opacity:0;
-                transform:translateY(20px);
-            }
-
-            to{
-                opacity:1;
-                transform:translateY(0);
-            }
-
-        }
-
-        .logo{
-
-            width:80px;
-            height:80px;
-
-            margin:auto;
-
-            border-radius:22px;
-
-            background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-            display:flex;
-
-            justify-content:center;
-
-            align-items:center;
-
-            color:white;
-
-            font-size:32px;
-
-            margin-bottom:18px;
-
-        }
-
-        h1{
-
-            text-align:center;
-
-            font-size:30px;
-
-            color:#111827;
-
-            margin-bottom:8px;
-
-        }
-
-        .subtitle{
-
-            text-align:center;
-
-            color:#6B7280;
-
-            margin-bottom:30px;
-
-            font-size:15px;
-
-        }
-
-        .input-group{
-
-            position:relative;
-
-            margin-bottom:18px;
-
-        }
-
-        .input-group i{
-
-            position:absolute;
-
-            left:16px;
-
-            top:17px;
-
-            color:#9CA3AF;
-
-        }
-
-        .input-group input{
-
-            width:100%;
-
-            height:54px;
-
-            border:1px solid #E5E7EB;
-
-            border-radius:14px;
-
-            padding-left:46px;
-
-            font-size:15px;
-
-            outline:none;
-
-            transition:.3s;
-
-        }
-
-        .input-group input:focus{
-
-            border-color:#4F46E5;
-
-            box-shadow:0 0 0 4px rgba(79,70,229,.12);
-
-        }
-
-        button{
-
-            width:100%;
-
-            height:54px;
-
-            border:none;
-
-            border-radius:14px;
-
-            background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-            color:white;
-
-            font-size:16px;
-
-            font-weight:600;
-
-            cursor:pointer;
-
-            transition:.3s;
-
-        }
-
-        button:hover{
-
-            transform:translateY(-2px);
-
-            box-shadow:0 12px 25px rgba(37,99,235,.30);
-
-        }
-
-        .register{
-
-            text-align:center;
-
-            margin-top:24px;
-
-            color:#6B7280;
-
-            font-size:15px;
-
-        }
-
-        .register a{
-
-            color:#2563EB;
-
-            text-decoration:none;
-
-            font-weight:600;
-
-        }
-
-        .register a:hover{
-
-            text-decoration:underline;
-
-        }
-
-        .footer{
-
-            text-align:center;
-
-            margin-top:25px;
-
-            font-size:13px;
-
-            color:#9CA3AF;
-
-        }
-
-        @media(max-width:480px){
-
-            .card{
-
-                padding:28px 22px;
-
-                border-radius:20px;
-
-            }
-
-            h1{
-
-                font-size:26px;
-
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to LittleNet | Safe Social Media for Kids</title>
+  
+  <meta name="theme-color" content="#FF6B6B">
+  <link rel="manifest" href="/static/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(255, 235, 235, 0.8) 0%, rgba(243, 240, 255, 0.7) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #1e293b;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 420px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .auth-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 40px 32px 36px;
+      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff7e67, #ff6b6b, #9775fa, #20c997);
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .brand-logo-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 45%, #9775fa 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.28);
+      transform: rotate(-3deg);
+      transition: transform 0.3s ease;
+    }
+
+    .brand-logo-icon:hover {
+      transform: rotate(3deg) scale(1.05);
+    }
+
+    .brand-title {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #7950f2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .brand-tagline {
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .safety-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #f3f0ff;
+      color: #7048e8;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      margin: 12px auto 0;
+    }
+
+    .safety-pill i {
+      color: #20c997;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      color: #94a3b8;
+      font-size: 16px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 52px;
+      padding: 0 46px 0 46px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .form-input:focus {
+      background: #ffffff;
+      border-color: #ff6b6b;
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
+    }
+
+    .form-input:focus + .input-icon {
+      color: #ff6b6b;
+    }
+
+    .toggle-pwd {
+      position: absolute;
+      right: 14px;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 6px;
+      transition: color 0.2s;
+    }
+
+    .toggle-pwd:hover {
+      color: #64748b;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #9775fa 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.28);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 24px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 107, 0.35);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .auth-footer a {
+      color: #ff6b6b;
+      font-weight: 900;
+      transition: color 0.2s;
+    }
+
+    .auth-footer a:hover {
+      color: #fa5252;
+      text-decoration: underline;
+    }
+
+    .copyright-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 32px 22px 28px;
+        border-radius: 24px;
+      }
+      .brand-title {
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="login-container">
+<div class="auth-container">
+  <div class="auth-card">
+    
+    <div class="brand-header">
+      <div class="brand-logo-icon">
+        <i class="fa-solid fa-child-reaching"></i>
+      </div>
+      <h1 class="brand-title">LittleNet</h1>
+      <p class="brand-tagline">Safe, Friendly Social Media for Kids</p>
+      
+    {% if error %}
+    <div style="background: #fef2f2; border: 1.5px solid #fecaca; border-radius: 14px; padding: 12px 14px; font-size: 13px; font-weight: 700; color: #b91c1c; display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span>{{ error }}</span>
+    </div>
+    {% endif %}
 
-<div class="card">
+    <form method="POST" action="/login/">
+      <input type="hidden" name="next" value="{{ next_url | default('') }}">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input
+            type="email"
+            name="email"
+            class="form-input"
+            placeholder="name@example.com"
+            required
+            autocomplete="email"
+          >
+        </div>
+      </div>
 
-<div class="logo">
-<i class="fa-solid fa-child-reaching"></i>
-</div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input
+            type="password"
+            name="password"
+            id="passwordInput"
+            class="form-input"
+            placeholder="Enter your password"
+            required
+          >
+          <span class="toggle-pwd" onclick="togglePasswordVisibility()">
+            <i class="fa-regular fa-eye" id="toggleIcon"></i>
+          </span>
+        </div>
+      </div>
 
-<h1>LittleNet</h1>
+      <button type="submit" class="btn-submit">
+        <span>Log In</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
 
-<p class="subtitle">
-A Safe Social Network for Kids
-</p>
+    <div class="auth-footer">
+      New here? <a href="/register-child">Create Child Account</a>
+    </div>
 
-<form method="POST">
-
-<div class="input-group">
-
-<i class="fa-solid fa-envelope"></i>
-
-<input
-type="email"
-name="email"
-placeholder="Email Address"
-required>
-
-</div>
-
-<div class="input-group">
-
-<i class="fa-solid fa-lock"></i>
-
-<input
-type="password"
-name="password"
-placeholder="Password"
-required>
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-right-to-bracket"></i>
-
-&nbsp;
-
-Login
-
-</button>
-
-</form>
-
-<div class="register">
-
-New Child User?
-
-<a href="/register-child">
-
-Create Account
-
-</a>
-
-</div>
-
-<div class="footer">
-
-© 2026 LittleNet
-
-</div>
-
-</div>
-
+    <div class="copyright-note">
+      🔒 Protected by LittleNet AI Child Safety &bull; &copy; 2026
+    </div>
+  </div>
 </div>
 
 <script>
-
-if ('serviceWorker' in navigator) {
-
-navigator.serviceWorker.register('/static/sw.js')
-
-.then(function () {
-
-console.log("Service Worker Registered");
-
-})
-
-.catch(function (err) {
-
-console.log(err);
-
-});
-
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById('passwordInput');
+  const toggleIcon = document.getElementById('toggleIcon');
+  if (pwdInput.type === 'password') {
+    pwdInput.type = 'text';
+    toggleIcon.className = 'fa-regular fa-eye-slash';
+  } else {
+    pwdInput.type = 'password';
+    toggleIcon.className = 'fa-regular fa-eye';
+  }
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/static/sw.js')
+    .then(function () { console.log("Service Worker Registered"); })
+    .catch(function (err) { console.log(err); });
+}
 </script>
 
 </body>
-
 </html>

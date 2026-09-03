@@ -1,357 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Quiz Settings | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#f5f7fb;
-color:#222;
-padding:20px;
-
-}
-
-.container{
-
-max-width:700px;
-margin:auto;
-
-}
-
-.header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
-}
-
-.card{
-
-background:white;
-padding:35px;
-border-radius:22px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-.icon{
-
-width:90px;
-height:90px;
-margin:auto;
-margin-bottom:20px;
-border-radius:50%;
-background:#EEF4FF;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-font-size:42px;
-color:#2563EB;
-
-}
-
-h1{
-
-text-align:center;
-margin-bottom:10px;
-
-}
-
-.subtitle{
-
-text-align:center;
-color:#777;
-margin-bottom:30px;
-
-}
-
-.group{
-
-margin-bottom:25px;
-
-}
-
-.group label{
-
-display:block;
-font-weight:600;
-margin-bottom:10px;
-
-}
-
-select{
-
-width:100%;
-padding:15px;
-font-size:16px;
-border-radius:12px;
-border:1px solid #ddd;
-outline:none;
-
-}
-
-select:focus{
-
-border-color:#2563EB;
-
-}
-
-.switch{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:18px;
-
-background:#f8f9fc;
-
-border-radius:14px;
-
-}
-
-.switch label{
-
-font-weight:600;
-
-}
-
-.switch input{
-
-width:22px;
-height:22px;
-accent-color:#2563EB;
-
-}
-
-.info{
-
-margin-top:20px;
-
-padding:18px;
-
-background:#EEF4FF;
-
-border-left:5px solid #2563EB;
-
-border-radius:12px;
-
-line-height:1.7;
-color:#444;
-
-}
-
-button{
-
-width:100%;
-
-margin-top:30px;
-
-padding:16px;
-
-border:none;
-
-border-radius:14px;
-
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-color:white;
-
-font-size:17px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.30);
-
-}
-
-@media(max-width:768px){
-
-.card{
-
-padding:25px;
-
-}
-
-.logo{
-
-font-size:24px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Settings | Parent Portal</title>
+
+  <meta name="theme-color" content="#845EF7">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+    }
+
+    .icon-hero {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      border-radius: 22px;
+      background: #f3f0ff;
+      color: #7950f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .select-field {
+      width: 100%;
+      height: 50px;
+      padding: 0 16px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .select-field:focus {
+      background: white;
+      border-color: #7950f2;
+      box-shadow: 0 0 0 3.5px rgba(121, 80, 242, 0.12);
+    }
+
+    .switch-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .switch-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .switch-desc {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .switch-card input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: #7950f2;
+      cursor: pointer;
+    }
+
+    .info-callout {
+      background: #f3f0ff;
+      border-left: 4px solid #7950f2;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4c1d95;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(121, 80, 242, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(121, 80, 242, 0.35);
+    }
+  </style>
 </head>
-
 <body>
 
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Educational Quizzes</div>
+  <div style="width:50px;"></div>
+</nav>
+
 <div class="container">
+  <div class="card">
+    
+    <div class="icon-hero">
+      <i class="fa-solid fa-graduation-cap"></i>
+    </div>
 
-<div class="header">
+    <h1 class="page-title">Quiz Configuration</h1>
+    <p class="page-sub">Configure how often interactive questions appear in your child's feed.</p>
 
-<div class="logo">
+    <form method="POST" action="/quiz/save-settings/">
+      <div class="form-group">
+        <label class="form-label">Quiz Frequency in Feed</label>
+        <select name="quiz_frequency" class="select-field">
+          {% for i in range(3, 11) %}
+          <option value="{{ i }}" {% if settings and settings.quiz_frequency == i %}selected{% endif %}>
+            Show 1 Quiz after every {{ i }} feed posts
+          </option>
+          {% endfor %}
+        </select>
+      </div>
 
-LittleNet
+      <div class="switch-card">
+        <div>
+          <div class="switch-title">Mandatory Quiz Mode</div>
+          <div class="switch-desc">Child must answer before scrolling to subsequent posts.</div>
+        </div>
+        <input
+          type="checkbox"
+          name="mandatory_quiz"
+          {% if settings and settings.mandatory_quiz %}checked{% endif %}
+        >
+      </div>
 
-</div>
+      <div class="info-callout">
+        <strong>🧠 Educational Engagement:</strong><br>
+        LittleNet serves age-appropriate STEM, Logic, and Creative questions to keep screen-time productive and enriching.
+      </div>
 
-<a href="/parent/dashboard/" class="back">
+      <button type="submit" class="btn-submit">
+        <i class="fa-solid fa-floppy-disk"></i>
+        <span>Save Quiz Settings</span>
+      </button>
+    </form>
 
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
-
-<div class="card">
-
-<div class="icon">
-
-<i class="fa-solid fa-graduation-cap"></i>
-
-</div>
-
-<h1>
-
-Quiz Settings
-
-</h1>
-
-<p class="subtitle">
-
-Configure how educational quizzes are shown to your child.
-
-</p>
-
-<form
-method="POST"
-action="/quiz/save-settings/">
-
-<div class="group">
-
-<label>
-
-Quiz Frequency
-
-</label>
-
-<select
-name="quiz_frequency">
-
-{% for i in range(3,11) %}
-
-<option
-value="{{ i }}"
-
-{% if settings and settings.quiz_frequency == i %}
-selected
-{% endif %}>
-
-{{ i }} slide
-
-</option>
-
-{% endfor %}
-
-</select>
-
-</div>
-
-<div class="switch">
-
-<label>
-
-Mandatory Quiz
-
-</label>
-
-<input
-type="checkbox"
-name="mandatory_quiz"
-
-{% if settings and settings.mandatory_quiz %}
-checked
-{% endif %}>
-
-</div>
-
-<div class="info">
-
-<strong>Quiz Frequency</strong> determines how often quizzes appear in your child's feed (after every 3–10 slides).<br><br>
-
-If <strong>Mandatory Quiz</strong> is enabled, your child must answer each quiz before continuing to browse the feed.
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-floppy-disk"></i>
-
-Save Settings
-
-</button>
-
-</form>
-
-</div>
-
+  </div>
 </div>
 
 </body>
-
 </html>

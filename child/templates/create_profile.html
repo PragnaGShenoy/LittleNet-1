@@ -1,559 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Create LittleNet Profile</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:linear-gradient(135deg,#EEF4FF,#F8FAFC,#FFFFFF);
-
-min-height:100vh;
-
-padding:30px 15px;
-
-display:flex;
-
-justify-content:center;
-
-}
-
-.container{
-
-width:100%;
-
-max-width:700px;
-
-}
-
-.card{
-
-background:white;
-
-border-radius:24px;
-
-padding:35px;
-
-box-shadow:0 10px 35px rgba(0,0,0,.08);
-
-animation:fade .5s;
-
-}
-
-@keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(25px);
-
-}
-
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-}
-
-.logo{
-
-width:90px;
-
-height:90px;
-
-margin:auto;
-
-border-radius:24px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-color:white;
-
-font-size:36px;
-
-margin-bottom:20px;
-
-}
-
-h1{
-
-text-align:center;
-
-font-size:32px;
-
-color:#111827;
-
-margin-bottom:10px;
-
-}
-
-.subtitle{
-
-text-align:center;
-
-color:#6B7280;
-
-margin-bottom:35px;
-
-line-height:1.6;
-
-}
-
-.section{
-
-margin-top:30px;
-
-margin-bottom:18px;
-
-font-size:18px;
-
-font-weight:700;
-
-color:#2563EB;
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-}
-
-.input-group{
-
-margin-bottom:18px;
-
-}
-
-.input-group label{
-
-display:block;
-
-margin-bottom:8px;
-
-font-weight:600;
-
-color:#374151;
-
-}
-
-.input-group input,
-
-textarea{
-
-width:100%;
-
-padding:15px;
-
-border:1px solid #E5E7EB;
-
-border-radius:14px;
-
-font-size:15px;
-
-outline:none;
-
-transition:.3s;
-
-}
-
-.input-group input:focus,
-
-textarea:focus{
-
-border-color:#2563EB;
-
-box-shadow:0 0 0 4px rgba(37,99,235,.10);
-
-}
-
-textarea{
-
-resize:vertical;
-
-min-height:120px;
-
-}
-
-.option-grid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-
-gap:15px;
-
-}
-
-.option{
-
-background:#F9FAFB;
-
-border:1px solid #E5E7EB;
-
-padding:14px;
-
-border-radius:14px;
-
-transition:.3s;
-
-cursor:pointer;
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-}
-
-.option:hover{
-
-background:#EEF4FF;
-
-border-color:#2563EB;
-
-}
-
-.option input{
-
-width:18px;
-
-height:18px;
-
-}
-
-button{
-
-width:100%;
-
-margin-top:35px;
-
-padding:16px;
-
-border:none;
-
-border-radius:14px;
-
-background:linear-gradient(135deg,#4F46E5,#2563EB);
-
-color:white;
-
-font-size:17px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 25px rgba(37,99,235,.25);
-
-}
-
-@media(max-width:768px){
-
-.card{
-
-padding:25px;
-
-border-radius:18px;
-
-}
-
-h1{
-
-font-size:28px;
-
-}
-
-.option-grid{
-
-grid-template-columns:1fr;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Profile | LittleNet</title>
+  
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+    
+    body {
+      background: #f8f9fd;
+      color: #1e293b;
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header-card {
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #9775fa 100%);
+      border-radius: 28px;
+      padding: 36px 28px;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: 0 15px 35px rgba(255, 107, 107, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-card .sparkle {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: float 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
+    }
+
+    .header-card h1 {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .header-card p {
+      font-size: 15px;
+      font-weight: 700;
+      opacity: 0.92;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .form-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+      border: 1px solid #e9ecef;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #1e293b;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i {
+      color: #ff6b6b;
+    }
+
+    .section-title.purple i {
+      color: #7950f2;
+    }
+
+    .section-title.teal i {
+      color: #20c997;
+    }
+
+    .section-title.gold i {
+      color: #fcc419;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      background: #ffffff;
+      border-color: #ff6b6b;
+      box-shadow: 0 0 0 3.5px rgba(255, 107, 107, 0.12);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    /* Interactive Tag Selection Chips */
+    .chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip-item {
+      position: relative;
+    }
+
+    .chip-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .chip-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      background: #f1f3f9;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .chip-label:hover {
+      background: #e9ecef;
+      transform: translateY(-1px);
+    }
+
+    .chip-item input[type="checkbox"]:checked + .chip-label {
+      background: #fff5f5;
+      border-color: #ff6b6b;
+      color: #fa5252;
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.18);
+      transform: scale(1.03);
+    }
+
+    .chip-item.purple input[type="checkbox"]:checked + .chip-label {
+      background: #f3f0ff;
+      border-color: #845ef7;
+      color: #7048e8;
+      box-shadow: 0 4px 12px rgba(132, 94, 247, 0.18);
+    }
+
+    .chip-item.gold input[type="checkbox"]:checked + .chip-label {
+      background: #fff9db;
+      border-color: #fcc419;
+      color: #f59f00;
+      box-shadow: 0 4px 12px rgba(245, 159, 0, 0.18);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 56px;
+      background: linear-gradient(135deg, #ff7e67 0%, #ff6b6b 40%, #9775fa 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 18px;
+      font-size: 17px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 28px rgba(255, 107, 107, 0.3);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(255, 107, 107, 0.38);
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-card {
+        padding: 24px 18px;
+      }
+      .header-card {
+        padding: 28px 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
 <div class="container">
-
-<div class="card">
-
-<div class="logo">
-
-<i class="fa-solid fa-user-astronaut"></i>
-
-</div>
-
-<h1>Create Your Profile</h1>
-
-<p class="subtitle">
-
-Tell everyone about yourself and make your LittleNet profile unique.
-
-</p>
-
-<form method="POST">
-
-<div class="section">
-
-<i class="fa-solid fa-user"></i>
-
-Basic Information
-
-</div>
-
-<div class="input-group">
-
-<label>Full Name</label>
-
-<input
-type="text"
-name="full_name"
-required>
-
-</div>
-
-<div class="input-group">
-
-<label>Date of Birth</label>
-
-<input
-type="date"
-name="date_of_birth"
-required>
-
-</div>
-
-<div class="input-group">
-
-<label>School Name</label>
-
-<input
-type="text"
-name="school_name">
-
-</div>
-
-<div class="input-group">
-
-<label>Location</label>
-
-<input
-type="text"
-name="location">
-
-</div>
-
-<div class="input-group">
-
-<label>Current Class</label>
-
-<input
-type="text"
-name="current_class">
-
-</div>
-
-<div class="input-group">
-
-<label>Bio</label>
-
-<textarea
-name="bio"
-placeholder="Tell everyone about yourself..."></textarea>
-
-</div>
-
-<div class="section">
-
-<i class="fa-solid fa-code"></i>
-
-Skills
-
-</div>
-
-<div class="option-grid">
-
-<label class="option">
-
-<input type="checkbox" name="skills" value="Coding">
-
-Coding
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="skills" value="Drawing">
-
-Drawing
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="skills" value="Football">
-
-Football
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="skills" value="Music">
-
-Music
-
-</label>
-
-</div>
-
-<div class="section">
-
-<i class="fa-solid fa-heart"></i>
-
-Interests
-
-</div>
-
-<div class="option-grid">
-
-<label class="option">
-
-<input type="checkbox" name="interests" value="AI">
-
-Artificial Intelligence
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="interests" value="Science">
-
-Science
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="interests" value="Space">
-
-Space
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="interests" value="Sports">
-
-Sports
-
-</label>
-
-</div>
-
-<div class="section">
-
-<i class="fa-solid fa-star"></i>
-
-Future Ambitions
-
-</div>
-
-<div class="option-grid">
-
-<label class="option">
-
-<input type="checkbox" name="ambitions" value="Engineer">
-
-Engineer
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="ambitions" value="Doctor">
-
-Doctor
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="ambitions" value="Scientist">
-
-Scientist
-
-</label>
-
-<label class="option">
-
-<input type="checkbox" name="ambitions" value="Artist">
-
-Artist
-
-</label>
-
-</div>
-
-<button type="submit">
-
-<i class="fa-solid fa-circle-check"></i>
-
-&nbsp;
-
-Create My Profile
-
-</button>
-
-</form>
-
-</div>
-
+  
+  <div class="header-card">
+    <div class="sparkle">✨</div>
+    <h1>Let's Set Up Your Profile!</h1>
+    <p>Tell your friends about yourself, your hobbies, and what you want to become.</p>
+  </div>
+
+  <form method="POST" action="/child/create-profile/">
+    
+    <!-- Basic Details Card -->
+    <div class="form-card">
+      <div class="section-title">
+        <i class="fa-solid fa-user-astronaut"></i>
+        <span>Basic Information</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="full_name" class="form-input" placeholder="Your Name" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" name="date_of_birth" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">School Name</label>
+          <input type="text" name="school_name" class="form-input" placeholder="e.g. Green Valley High" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Current Grade / Class</label>
+          <input type="text" name="current_class" class="form-input" placeholder="e.g. Grade 5" required>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Location / City</label>
+          <input type="text" name="location" class="form-input" placeholder="e.g. San Francisco, CA" required>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Bio (Introduce yourself to friends!)</label>
+          <textarea name="bio" class="form-textarea" placeholder="Hi! I love building LEGO, coding games, and playing soccer..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Card -->
+    <div class="form-card">
+      <div class="section-title purple">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Your Skills & Talents</span>
+      </div>
+      <p style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:12px;">Select what you are good at or learning:</p>
+      
+      <div class="chip-grid">
+        {% set skill_options = [
+          ('Python', 'fa-brands fa-python'),
+          ('Scratch', 'fa-solid fa-cat'),
+          ('Web Development', 'fa-solid fa-code'),
+          ('Drawing', 'fa-solid fa-paintbrush'),
+          ('Painting', 'fa-solid fa-palette'),
+          ('Chess', 'fa-solid fa-chess-knight'),
+          ('Public Speaking', 'fa-solid fa-microphone-lines'),
+          ('Creative Writing', 'fa-solid fa-book-open'),
+          ('Football', 'fa-solid fa-futbol'),
+          ('Basketball', 'fa-solid fa-basketball'),
+          ('Cricket', 'fa-solid fa-baseball-bat-ball'),
+          ('Music', 'fa-solid fa-music'),
+          ('Robotics', 'fa-solid fa-robot'),
+          ('Science Experiments', 'fa-solid fa-flask'),
+          ('Dance', 'fa-solid fa-person-running'),
+          ('Gaming', 'fa-solid fa-gamepad')
+        ] %}
+        {% for skill, icon in skill_options %}
+        <div class="chip-item">
+          <input type="checkbox" id="skill_{{ loop.index }}" name="skills" value="{{ skill }}">
+          <label class="chip-label" for="skill_{{ loop.index }}">
+            <i class="{{ icon }}"></i>
+            <span>{{ skill }}</span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Interests Card -->
+    <div class="form-card">
+      <div class="section-title teal">
+        <i class="fa-solid fa-heart"></i>
+        <span>Interests & Hobbies</span>
+      </div>
+      <p style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:12px;">What topics excite you most?</p>
+
+      <div class="chip-grid">
+        {% set interest_options = [
+          ('Technology', 'fa-solid fa-laptop-code'),
+          ('Artificial Intelligence', 'fa-solid fa-brain'),
+          ('Space & Astronomy', 'fa-solid fa-rocket'),
+          ('Animals & Wildlife', 'fa-solid fa-paw'),
+          ('Gaming & Esports', 'fa-solid fa-headset'),
+          ('Arts & Crafts', 'fa-solid fa-scissors'),
+          ('Sports & Fitness', 'fa-solid fa-medal'),
+          ('Music & Singing', 'fa-solid fa-guitar'),
+          ('Reading Books', 'fa-solid fa-book'),
+          ('Science & Discovery', 'fa-solid fa-atom'),
+          ('Photography', 'fa-solid fa-camera'),
+          ('Cooking & Baking', 'fa-solid fa-cookie'),
+          ('Anime & Cartoons', 'fa-solid fa-tv'),
+          ('Travel & Adventure', 'fa-solid fa-compass')
+        ] %}
+        {% for interest, icon in interest_options %}
+        <div class="chip-item purple">
+          <input type="checkbox" id="interest_{{ loop.index }}" name="interests" value="{{ interest }}">
+          <label class="chip-label" for="interest_{{ loop.index }}">
+            <i class="{{ icon }}"></i>
+            <span>{{ interest }}</span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Ambitions Card -->
+    <div class="form-card">
+      <div class="section-title gold">
+        <i class="fa-solid fa-star"></i>
+        <span>Future Ambitions</span>
+      </div>
+      <p style="font-size:13px;color:#64748b;font-weight:700;margin-bottom:12px;">What do you want to become when you grow up?</p>
+
+      <div class="chip-grid">
+        {% set ambition_options = [
+          ('Software Engineer', '💻'),
+          ('AI Scientist', '🤖'),
+          ('Doctor', '🩺'),
+          ('Astronaut', '🚀'),
+          ('Game Developer', '🎮'),
+          ('Artist / Animator', '🎨'),
+          ('Cyber Security Expert', '🛡️'),
+          ('Pilot', '✈️'),
+          ('Teacher', '📚'),
+          ('Entrepreneur', '💡'),
+          ('Scientist', '🔬'),
+          ('Author / Writer', '✍️'),
+          ('Athlete', '🏆'),
+          ('Musician', '🎵')
+        ] %}
+        {% for ambition, emoji in ambition_options %}
+        <div class="chip-item gold">
+          <input type="checkbox" id="ambition_{{ loop.index }}" name="ambitions" value="{{ ambition }}">
+          <label class="chip-label" for="ambition_{{ loop.index }}">
+            <span>{{ emoji }}</span>
+            <span>{{ ambition }}</span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit">
+      <span>Save Profile & Enter LittleNet</span>
+      <i class="fa-solid fa-rocket"></i>
+    </button>
+  </form>
 </div>
 
 </body>
-
 </html>

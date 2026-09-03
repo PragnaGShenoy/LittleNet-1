@@ -1,239 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Messages | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fff;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Messages | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;
-}
-.ig-back{font-size:21px;color:#262626;}
-.ig-back:hover{color:#e76f51;}
-.ig-title{font-size:17px;font-weight:900;color:#262626;}
-.ig-compose{font-size:22px;color:#262626;cursor:pointer;}
-.ig-compose:hover{color:#e76f51;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Search ── */
-.search-wrap{
-  max-width:470px;margin:0 auto;
-  padding:10px 14px;
-}
-.search-inner{
-  display:flex;align-items:center;gap:10px;
-  background:#efefef;border-radius:12px;padding:9px 14px;
-}
-.search-inner i{font-size:14px;color:#8e8e8e;}
-.search-inner input{
-  flex:1;border:none;outline:none;background:transparent;
-  font-size:15px;font-weight:600;color:#262626;
-  font-family:'Nunito',sans-serif;
-}
-.search-inner input::placeholder{color:#8e8e8e;}
+  <style>
+    .messages-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
 
-/* ── Page ── */
-.page{max-width:470px;margin:0 auto;}
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* ── Section label ── */
-.section-label{
-  font-size:13px;font-weight:900;color:#262626;
-  padding:12px 16px 6px;
-}
+    .header-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ln-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-/* ── DM row ── */
-.dm-row{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 16px;transition:.15s;cursor:pointer;
-}
-.dm-row:hover{background:#fafafa;}
-.dm-row.hidden{display:none;}
+    /* Search Box */
+    .search-box-wrap {
+      padding: 12px 16px;
+      background: white;
+    }
 
-.dm-avatar{
-  width:56px;height:56px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:900;color:#7c3700;overflow:hidden;
-  position:relative;
-}
-.dm-avatar img{width:100%;height:100%;object-fit:cover;}
-.online-dot{
-  position:absolute;bottom:2px;right:2px;
-  width:14px;height:14px;border-radius:50%;
-  background:#31c354;border:2px solid white;
-}
+    .search-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-.dm-info{flex:1;min-width:0;}
-.dm-name{font-size:15px;font-weight:800;color:#262626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.dm-preview{font-size:13px;color:#8e8e8e;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .search-inner i {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
 
-.dm-time{font-size:12px;color:#8e8e8e;font-weight:600;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:3px;}
+    .search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 16px 0 40px;
+      background: #f1f5f9;
+      border: 1.5px solid transparent;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ln-text);
+    }
 
-/* ── Empty ── */
-.empty-state{text-align:center;padding:60px 20px;}
-.empty-state .icon{font-size:52px;margin-bottom:12px;}
-.empty-state h3{font-size:17px;font-weight:900;color:#262626;margin-bottom:6px;}
-.empty-state p{font-size:14px;color:#8e8e8e;font-weight:600;}
-#searchEmpty{display:none;}
+    .search-input:focus {
+      background: white;
+      border-color: var(--ln-coral);
+      box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12);
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-</style>
+    /* Conversation Items */
+    .section-title {
+      padding: 12px 16px 6px;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--ln-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .chat-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      transition: background 0.15s;
+    }
+
+    .chat-row:hover {
+      background: #f8fafc;
+    }
+
+    .chat-avatar-wrap {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .chat-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+      overflow: hidden;
+      border: 2px solid white;
+      box-shadow: var(--ln-shadow-xs);
+    }
+
+    .chat-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .online-indicator {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #20c997;
+      border: 2px solid white;
+    }
+
+    .chat-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-top-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .chat-name {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--ln-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-time {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ln-text-muted);
+    }
+
+    .chat-snippet {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .empty-state-box {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--ln-text-muted);
+    }
+
+    .empty-state-box i {
+      font-size: 48px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <a class="ig-back" href="/child/dashboard/"><i class="fa-solid fa-arrow-left"></i></a>
-    <div class="ig-title">Messages</div>
-    <a class="ig-compose" href="/discover/" title="New message"><i class="fa-solid fa-pen-to-square"></i></a>
+<div class="messages-wrap">
+
+  <div class="top-header">
+    <a href="/child/dashboard/" style="color:var(--ln-text);font-size:20px;padding:4px;">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="header-title">
+      <i class="fa-regular fa-paper-plane" style="color:var(--ln-coral);"></i>
+      <span>Messages</span>
+    </div>
+    <div style="width:24px;"></div>
   </div>
-</div>
 
-<!-- Search -->
-<div class="search-wrap">
-  <div class="search-inner">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <input type="text" id="searchInput" placeholder="Search" autocomplete="off" oninput="filterRows(this.value)">
+  <div class="search-box-wrap">
+    <div class="search-inner">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="chatSearchInput" class="search-input" placeholder="Search chats and friends..." onkeyup="filterChats()">
+    </div>
   </div>
-</div>
 
-<div class="page">
-
-  <!-- Recent conversations -->
+  <!-- Active Conversations -->
   {% if recent %}
-  <div class="section-label">Recent</div>
-  {% for r in recent %}
-  <a href="/chat/{{ r.user_id }}/" class="dm-row" data-name="{{ r.full_name|lower }}">
-    <div class="dm-avatar">
-      {% if r.profile_picture %}
-        <img src="/{{ r.profile_picture|replace('\\','/') }}" alt="dp">
-      {% else %}
-        {{ r.full_name[0]|upper if r.full_name else '?' }}
-      {% endif %}
+    <div class="section-title">Recent Chats</div>
+    <div id="recentChatsContainer">
+      {% for chat in recent %}
+      <a href="/chat/{{ chat.child_id }}/" class="chat-row chat-item-card" data-name="{{ chat.full_name|lower }}">
+        <div class="chat-avatar-wrap">
+          <div class="chat-avatar">
+            {% if chat.profile_picture %}
+              <img src="/{{ chat.profile_picture|replace('\\','/') }}" alt="">
+            {% else %}
+              {{ chat.full_name[0]|upper if chat.full_name else '?' }}
+            {% endif %}
+          </div>
+          <div class="online-indicator"></div>
+        </div>
+
+        <div class="chat-body">
+          <div class="chat-top-line">
+            <span class="chat-name">{{ chat.full_name }}</span>
+            <span class="chat-time">{{ chat.time if chat.time else '' }}</span>
+          </div>
+          <div class="chat-snippet">
+            {% if chat.message_type == 'IMAGE' %}
+              <i class="fa-regular fa-image" style="color:var(--ln-coral);"></i> <span>Photo</span>
+            {% elif chat.message_type == 'VIDEO' %}
+              <i class="fa-solid fa-video" style="color:var(--ln-purple);"></i> <span>Video</span>
+            {% elif chat.message_type == 'AUDIO' or chat.message_type == 'VOICE' %}
+              <i class="fa-solid fa-microphone" style="color:var(--ln-mint);"></i> <span>Voice Note</span>
+            {% else %}
+              <span>{{ chat.last_message or 'Say hello 👋' }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
     </div>
-    <div class="dm-info">
-      <div class="dm-name">{{ r.full_name }}</div>
-      <div class="dm-preview">
-        {% if r.message_type == "IMAGE" %}<i class="fa-solid fa-image" style="font-size:11px;"></i> Photo
-        {% elif r.message_type == "VIDEO" %}<i class="fa-solid fa-video" style="font-size:11px;"></i> Video
-        {% elif r.message_type == "VOICE" %}<i class="fa-solid fa-microphone" style="font-size:11px;"></i> Voice message
-        {% elif r.message_type == "FILE" %}<i class="fa-solid fa-file" style="font-size:11px;"></i> File
-        {% elif r.message_text %}{{ r.message_text|truncate(40,True,'…') }}
-        {% else %}Say hi 👋
-        {% endif %}
-      </div>
-    </div>
-    {% if r.sent_at %}
-    <div class="dm-time">{{ r.sent_at.strftime('%H:%M') }}</div>
-    {% endif %}
-  </a>
-  {% endfor %}
   {% endif %}
 
-  <!-- Other friends (no conversation yet) -->
+  <!-- Start New Chat with Friends -->
   {% if children %}
-  <div class="section-label">{% if recent %}More Friends{% else %}Friends{% endif %}</div>
-  {% for child in children %}
-  <a href="/chat/{{ child.user_id }}/" class="dm-row" data-name="{{ child.full_name|lower }}">
-    <div class="dm-avatar">
-      {% if child.profile_picture %}
-        <img src="/{{ child.profile_picture|replace('\\','/') }}" alt="dp">
-      {% else %}
-        {{ child.full_name[0]|upper if child.full_name else '?' }}
-      {% endif %}
+    <div class="section-title">Start a Conversation</div>
+    <div id="newChatsContainer">
+      {% for child in children %}
+      <a href="/chat/{{ child.user_id }}/" class="chat-row chat-item-card" data-name="{{ child.full_name|lower }}">
+        <div class="chat-avatar-wrap">
+          <div class="chat-avatar">
+            {% if child.profile_picture %}
+              <img src="/{{ child.profile_picture|replace('\\','/') }}" alt="">
+            {% else %}
+              {{ child.full_name[0]|upper if child.full_name else '?' }}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="chat-body">
+          <div class="chat-top-line">
+            <span class="chat-name">{{ child.full_name }}</span>
+          </div>
+          <div class="chat-snippet">
+            <span>Tap to send a friendly message</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
     </div>
-    <div class="dm-info">
-      <div class="dm-name">{{ child.full_name }}</div>
-      <div class="dm-preview">Send a message</div>
-    </div>
-  </a>
-  {% endfor %}
   {% endif %}
 
   {% if not recent and not children %}
-  <div class="empty-state">
-    <div class="icon">💬</div>
-    <h3>No messages yet</h3>
-    <p>Follow friends to start chatting with them.</p>
-  </div>
+    <div class="empty-state-box">
+      <i class="fa-solid fa-comments"></i>
+      <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">No messages yet</h3>
+      <p style="font-size:14px;font-weight:700;">Connect with friends on LittleNet to start safe and positive chats!</p>
+      <a href="/discover/" class="ln-btn-primary" style="margin-top:16px;display:inline-flex;">Discover Friends</a>
+    </div>
   {% endif %}
 
-  <div class="empty-state" id="searchEmpty">
-    <div class="icon">🔍</div>
-    <h3>No results</h3>
-    <p>Try a different name.</p>
-  </div>
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
 </div>
 
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
-
 <script>
-function filterRows(q){
-  q = q.toLowerCase().trim();
-  var rows = document.querySelectorAll('.dm-row');
-  var visible = 0;
-  rows.forEach(function(r){
-    var match = r.dataset.name.includes(q);
-    r.classList.toggle('hidden', !match);
-    if(match) visible++;
+function filterChats() {
+  const query = document.getElementById('chatSearchInput').value.toLowerCase().trim();
+  const rows = document.querySelectorAll('.chat-item-card');
+  rows.forEach(row => {
+    const name = row.getAttribute('data-name') || '';
+    row.style.display = name.includes(query) ? 'flex' : 'none';
   });
-  document.getElementById('searchEmpty').style.display =
-    (rows.length > 0 && visible === 0) ? 'block' : 'none';
 }
 </script>
+
 </body>
 </html>

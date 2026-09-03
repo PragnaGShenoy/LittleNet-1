@@ -1,1686 +1,996 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LittleNet | Safe Social World</title>
 
-/* ── Desktop centering wrapper ── */
-.ig-wrap{max-width:470px;margin:0 auto;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link rel="manifest" href="/static/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ══ HEADER ══ */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 16px;
-}
-/* Header icons */
-.ig-header-right {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-}
+  <style>
+    /* =========================================================
+       CHILD DASHBOARD SPECIFIC STYLES
+       ========================================================= */
+    .dashboard-container {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      position: relative;
+    }
 
-.header-icon {
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: 0.2s ease;
-}
+    /* Screen Time Progress Bar Header */
+    .screen-time-banner {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--ln-border-light);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-/* Messages */
-.message-icon {
-    color: #8e44ad;
-    background: #f3ddff;
-}
+    .time-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ln-text-muted);
+    }
 
-.message-icon i {
-    font-size: 23px;
-}
+    .time-info i {
+      color: var(--ln-coral);
+    }
 
-/* Logout */
-.logout-icon {
-    color: #e85d3f;
-    background: #ffe0d6;
-}
+    .time-progress-wrap {
+      flex: 1;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
 
-.logout-icon i {
-    font-size: 22px;
-}
+    .time-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #20c997, #fcc419, #ff6b6b);
+      border-radius: 9999px;
+      transition: width 1s linear;
+      width: 100%;
+    }
 
-/* Hover */
-.header-icon:hover {
-    transform: scale(1.1);
-}
-.ig-logo{
-  font-size:24px;font-weight:900;
-  background:linear-gradient(135deg,#f9844a,#e76f51);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.ig-header-right{display:flex;gap:20px;align-items:center;}
-.ig-header-right a{font-size:22px;color:#262626;transition:.2s;}
-.ig-header-right a:hover{color:#e76f51;}
+    .time-clock-badge {
+      font-size: 11px;
+      font-weight: 900;
+      padding: 2px 8px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      color: var(--ln-text);
+      letter-spacing: 0.5px;
+    }
 
-/* ══ STORIES BAR ══ */
-.stories-outer{background:white;border-bottom:1px solid #dbdbdb;}
-.stories-bar{
-  max-width:470px;margin:0 auto;
-  padding:12px 0 12px 12px;
-  overflow-x:auto;display:flex;gap:14px;
-  scrollbar-width:none;
-}
-.stories-bar::-webkit-scrollbar{display:none;}
-.story-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer;}
-.story-ring{
-  width:66px;height:66px;border-radius:50%;padding:3px;
-  background:linear-gradient(135deg,#f9844a,#e76f51,#c3b1e1);
-  transition:transform .2s;position:relative;
-}
-.story-ring:hover{transform:scale(1.07);}
-.story-ring.seen{background:linear-gradient(135deg,#d1d5db,#9ca3af);}
-.story-ring.mine-ring{background:linear-gradient(135deg,#d1fae5,#34d399);}
-.story-ring.add-ring{background:none;border:2px dashed #d1d5db;}
-.story-inner{
-  width:100%;height:100%;border-radius:50%;background:white;
-  display:flex;align-items:center;justify-content:center;font-size:24px;
-  overflow:hidden;
-}
-.story-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-/* + badge on own story ring */
-.story-ring .add-badge{
-  position:absolute;bottom:0;right:0;
-  width:20px;height:20px;border-radius:50%;
-  background:#e76f51;border:2px solid white;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:white;font-weight:900;line-height:1;
-}
-/* share-story friends modal */
-.sv-share-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:21000;display:none;align-items:flex-end;justify-content:center;}
-.sv-share-overlay.show{display:flex;}
-.sv-share-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-width:470px;padding:16px 0 24px;max-height:70vh;display:flex;flex-direction:column;}
-.sv-share-handle{width:40px;height:4px;background:#d1d5db;border-radius:4px;margin:0 auto 14px;}
-.sv-share-title{font-size:15px;font-weight:900;color:#262626;padding:0 16px 12px;border-bottom:1px solid #efefef;}
-.sv-share-friends-row{display:flex;gap:10px;overflow-x:auto;padding:14px 16px;scrollbar-width:none;flex:1;}
-.sv-share-friends-row::-webkit-scrollbar{display:none;}
-.sv-share-friend{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;min-width:64px;}
-.sv-share-friend-av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f9844a,#e76f51);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:white;overflow:hidden;border:2px solid #efefef;}
-.sv-share-friend-av img{width:100%;height:100%;object-fit:cover;}
-.sv-share-friend-name{font-size:11px;font-weight:700;color:#262626;text-align:center;max-width:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sv-share-friend.sent .sv-share-friend-av{border-color:#0095f6;}
-.sv-share-close-btn{margin:8px 16px 0;padding:12px;border-radius:12px;border:1.5px solid #dbdbdb;background:white;font-size:14px;font-weight:800;cursor:pointer;color:#262626;}
-/* count badge (multiple stories) */
-.story-ring .count-badge{
-  position:absolute;bottom:0;right:0;
-  min-width:20px;height:20px;border-radius:10px;
-  background:#0095f6;border:2px solid white;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:white;font-weight:900;padding:0 4px;
-}
-.story-label{font-size:11px;font-weight:700;color:#262626;max-width:68px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    /* Welcome Hero Banner */
+    .welcome-bar {
+      padding: 12px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* ══ STORY VIEWER (full-screen) ══ */
-.sv-overlay{
-  display:none;position:fixed;inset:0;z-index:20000;
-  background:black;flex-direction:column;
-}
-.sv-overlay.show{display:flex;}
-.sv-progress{
-  display:flex;gap:4px;padding:10px 10px 0;position:absolute;top:0;left:0;right:0;z-index:2;
-}
-.sv-seg{flex:1;height:3px;background:rgba(255,255,255,.35);border-radius:3px;overflow:hidden;}
-.sv-seg-fill{height:100%;background:white;width:0%;transition:none;}
-.sv-seg-fill.active{transition:width linear;}
-.sv-header{
-  position:absolute;top:22px;left:0;right:0;z-index:8;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 14px;
-}
-.sv-user{display:flex;align-items:center;gap:10px;}
-.sv-avatar{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:900;color:#7c3700;
-  border:2px solid rgba(255,255,255,.6);overflow:hidden;
-}
-.sv-avatar img{width:100%;height:100%;object-fit:cover;}
-.sv-name{font-size:14px;font-weight:800;color:white;}
-.sv-age{font-size:11px;color:rgba(255,255,255,.7);font-weight:600;}
-.sv-close{font-size:24px;color:white;cursor:pointer;padding:4px;}
-.sv-media{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-.sv-media img,.sv-media video{max-width:100%;max-height:100%;object-fit:contain;}
-/* tap zones — contained inside sv-media via position:relative above */
-.sv-tap-left,.sv-tap-right{position:absolute;top:0;bottom:0;width:35%;z-index:5;cursor:pointer;}
-.sv-tap-left{left:0;}
-.sv-tap-right{right:0;}
-.sv-caption{
-  position:absolute;bottom:0;left:0;right:0;z-index:3;
-  padding:20px 16px;
-  background:linear-gradient(to top,rgba(0,0,0,.6),transparent);
-  color:white;font-size:14px;font-weight:600;
-}
+    .welcome-greeting {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ln-text);
+    }
 
-/* ── Story viewer: options button + menu ── */
-.sv-options-btn{
-  width:36px;height:36px;border:none;background:none;
-  font-size:22px;color:white;cursor:pointer;padding:4px;
-  display:flex;align-items:center;justify-content:center;
-}
-.sv-options-sheet{
-  display:none;position:absolute;bottom:0;left:0;right:0;z-index:10;
-  background:white;border-radius:24px 24px 0 0;padding:8px 0 36px;
-  animation:slideUp .25s ease;
-}
-.sv-options-sheet.show{display:block;}
-.sv-opt-handle{width:40px;height:4px;border-radius:4px;background:#dbdbdb;margin:10px auto 14px;}
-.sv-opt-row{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 20px;cursor:pointer;transition:.15s;
-  font-size:15px;font-weight:700;color:#262626;border:none;background:none;
-  width:100%;text-align:left;font-family:'Nunito',sans-serif;
-}
-.sv-opt-row:hover{background:#fafafa;}
-.sv-opt-row i{font-size:18px;width:22px;text-align:center;}
-.sv-opt-row.danger{color:#dc2626;}
-.sv-opt-row.danger i{color:#dc2626;}
+    .welcome-greeting span {
+      background: var(--ln-brand-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-/* music waveform bar in viewer */
-.sv-music-bar{
-  position:absolute;bottom:80px;left:14px;right:14px;z-index:4;
-  display:flex;align-items:center;gap:10px;
-  background:rgba(0,0,0,.45);backdrop-filter:blur(8px);
-  border-radius:30px;padding:8px 14px;
-}
-.sv-music-icon{font-size:16px;color:white;flex-shrink:0;}
-.sv-music-name{font-size:13px;font-weight:800;color:white;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sv-music-wave{display:flex;align-items:flex-end;gap:2px;height:18px;flex-shrink:0;}
-.sv-music-wave span{width:3px;background:white;border-radius:2px;animation:wave-bar .8s ease-in-out infinite alternate;}
-.sv-music-wave span:nth-child(1){height:6px;animation-delay:0s;}
-.sv-music-wave span:nth-child(2){height:14px;animation-delay:.1s;}
-.sv-music-wave span:nth-child(3){height:10px;animation-delay:.2s;}
-.sv-music-wave span:nth-child(4){height:18px;animation-delay:.05s;}
-.sv-music-wave span:nth-child(5){height:8px;animation-delay:.15s;}
-@keyframes wave-bar{from{transform:scaleY(.4);}to{transform:scaleY(1);}}
+    /* Feed Container & Post Cards */
+    .feed-container {
+      padding-top: 4px;
+    }
 
-/* edit caption overlay in viewer */
-.sv-edit-overlay{
-  display:none;position:absolute;inset:0;z-index:11;
-  background:rgba(0,0,0,.7);align-items:flex-end;justify-content:center;
-}
-.sv-edit-overlay.show{display:flex;}
-.sv-edit-box{
-  background:white;width:100%;max-width:470px;
-  border-radius:24px 24px 0 0;padding:20px 16px 36px;
-}
-.sv-edit-box textarea{
-  width:100%;border:1.5px solid #dbdbdb;border-radius:12px;
-  padding:12px;font-size:14px;font-family:'Nunito',sans-serif;
-  resize:none;outline:none;height:80px;
-}
-.sv-edit-box textarea:focus{border-color:#0095f6;}
-.sv-edit-actions{display:flex;gap:10px;margin-top:12px;}
-.sv-edit-save{
-  flex:1;padding:12px;border:none;border-radius:12px;
-  background:#0095f6;color:white;font-size:14px;font-weight:900;
-  cursor:pointer;font-family:'Nunito',sans-serif;
-}
-.sv-edit-cancel{
-  flex:1;padding:12px;border:1.5px solid #dbdbdb;border-radius:12px;
-  background:white;color:#262626;font-size:14px;font-weight:900;
-  cursor:pointer;font-family:'Nunito',sans-serif;
-}
+    .post-loading-shimmer {
+      padding: 24px;
+      text-align: center;
+      color: var(--ln-text-muted);
+      font-weight: 700;
+      font-size: 14px;
+    }
 
-/* ══ STORY UPLOAD MODAL ══ */
-.su-overlay{
-  display:none;position:fixed;inset:0;z-index:19000;
-  background:rgba(0,0,0,.6);align-items:flex-end;justify-content:center;
-}
-.su-overlay.show{display:flex;}
-.su-sheet{
-  background:white;width:100%;max-width:470px;
-  border-radius:24px 24px 0 0;padding:20px 20px 36px;
-  max-height:90vh;overflow-y:auto;
-  animation:slideUp .3s ease;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.su-handle{width:40px;height:4px;background:#e5e7eb;border-radius:50px;margin:0 auto 16px;}
-.su-title{font-size:16px;font-weight:900;color:#262626;margin-bottom:14px;text-align:center;}
-.su-preview{
-  width:100%;aspect-ratio:9/16;max-height:260px;background:#f3f4f6;
-  border-radius:16px;overflow:hidden;margin-bottom:14px;
-  display:flex;align-items:center;justify-content:center;font-size:48px;
-  cursor:pointer;
-}
-.su-preview img,.su-preview video{width:100%;height:100%;object-fit:cover;}
-.su-pick-row{display:flex;gap:10px;margin-bottom:12px;}
-.su-pick-btn{
-  flex:1;padding:12px;border-radius:14px;border:2px dashed #fcb69f;
-  background:#fff9f5;cursor:pointer;font-size:13px;font-weight:800;
-  color:#7c3700;font-family:'Nunito',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:7px;
-}
-.su-pick-btn i{color:#e76f51;}
-.su-caption-input{
-  width:100%;padding:10px 14px;border-radius:12px;
-  border:2px solid #ffe0a0;font-size:14px;font-weight:600;
-  font-family:'Nunito',sans-serif;margin-bottom:12px;outline:none;
-}
-.su-post-btn{
-  width:100%;padding:14px;border-radius:50px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  color:#7c3700;font-size:15px;font-weight:900;
-  font-family:'Nunito',sans-serif;transition:.2s;
-}
-.su-post-btn:hover{transform:scale(1.02);}
-.su-post-btn:disabled{opacity:.6;cursor:not-allowed;}
-.su-cancel{
-  width:100%;padding:12px;margin-top:8px;border-radius:50px;border:none;cursor:pointer;
-  background:#f3f4f6;color:#6b7280;font-size:14px;font-weight:800;
-  font-family:'Nunito',sans-serif;
-}
+    .post-loading-shimmer i {
+      font-size: 28px;
+      color: var(--ln-coral);
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
 
-/* uploading spinner in story upload */
-.su-spinner{display:none;text-align:center;padding:10px;}
-.su-spinner i{font-size:28px;color:#e76f51;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
+    /* Post Comments Drawer */
+    .comments-drawer {
+      display: none;
+      background: #f8fafc;
+      border-top: 1px solid var(--ln-border-light);
+      padding: 12px 16px;
+    }
 
-/* media pick area (shown when no files selected) */
-.su-pick-area{
-  width:100%;height:140px;border-radius:16px;
-  border:2px dashed #fcb69f;background:#fff9f5;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:8px;cursor:pointer;margin-bottom:12px;transition:.2s;
-}
-.su-pick-area:hover{background:#fdf2eb;}
-.su-pick-area i{font-size:34px;color:#e76f51;}
-.su-pick-area span{font-size:13px;font-weight:800;color:#7c3700;}
-.su-pick-area small{font-size:11px;color:#9ca3af;font-weight:600;}
+    .comment-list-box {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
 
-/* multi-preview strip (shown when files selected) */
-.su-previews{
-  display:none;flex-wrap:wrap;gap:8px;margin-bottom:12px;
-}
-.su-previews.has-files{display:flex;}
-.su-thumb{
-  width:80px;height:80px;border-radius:12px;flex-shrink:0;
-  background:#f3f4f6;overflow:hidden;position:relative;
-  border:2px solid #efefef;
-}
-.su-thumb img,.su-thumb video{width:100%;height:100%;object-fit:cover;display:block;}
-.su-thumb .rm-thumb{
-  position:absolute;top:3px;right:3px;width:20px;height:20px;
-  border-radius:50%;background:rgba(0,0,0,.65);color:white;
-  font-size:11px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:none;font-weight:900;
-}
-.su-add-more{
-  width:80px;height:80px;border-radius:12px;flex-shrink:0;
-  border:2px dashed #fcb69f;background:#fff9f5;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:4px;font-size:18px;cursor:pointer;color:#e76f51;
-}
-.su-add-more small{font-size:10px;font-weight:800;color:#e76f51;}
+    .comment-item {
+      font-size: 13px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
 
-/* music picker */
-.su-music-section{margin-bottom:12px;}
-.su-music-label{font-size:13px;font-weight:900;color:#262626;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.su-music-label i{color:#0095f6;}
-.su-music-tracks{
-  display:flex;gap:8px;overflow-x:scroll;padding-bottom:6px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;
-  touch-action:pan-x;cursor:grab;
-}
-.su-music-tracks::-webkit-scrollbar{display:none;}
-.su-music-track{
-  display:flex;align-items:center;gap:6px;flex-shrink:0;
-  padding:8px 14px;border-radius:22px;border:1.5px solid #dbdbdb;
-  background:white;cursor:pointer;font-size:13px;font-weight:700;
-  color:#262626;transition:.2s;white-space:nowrap;
-}
-.su-music-track i{font-size:14px;color:#8e8e8e;}
-.su-music-track.active{border-color:#0095f6;background:#f0f9ff;color:#0095f6;}
-.su-music-track.active i{color:#0095f6;}
-.su-music-none{
-  display:flex;align-items:center;gap:6px;flex-shrink:0;
-  padding:8px 14px;border-radius:22px;border:1.5px solid #dbdbdb;
-  background:white;cursor:pointer;font-size:13px;font-weight:700;
-  color:#262626;transition:.2s;
-}
-.su-music-none.active{border-color:#262626;background:#f3f4f6;}
+    .comment-item strong {
+      font-weight: 900;
+      color: var(--ln-text);
+      margin-right: 6px;
+    }
 
-/* ══ INNER CONTENT WRAPPER ══ */
-.content-wrap{max-width:470px;margin:0 auto;}
+    .comment-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
-/* ══ WELCOME STRIP ══ */
-.welcome-strip{
-  margin:12px 12px 0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  border-radius:16px;padding:14px 16px;
-  display:flex;align-items:center;gap:10px;
-  box-shadow:0 3px 12px rgba(249,132,74,.18);
-}
-.w-emoji{font-size:34px;animation:wave .8s ease-in-out infinite alternate;}
-@keyframes wave{from{transform:rotate(-10deg);}to{transform:rotate(10deg);}}
-.w-text h4{font-size:16px;font-weight:900;color:#3d2c00;}
-.w-text p{font-size:12px;color:#7c5c30;font-weight:600;margin-top:2px;}
+    .comment-input-row input {
+      flex: 1;
+      height: 38px;
+      padding: 0 14px;
+      background: white;
+      border: 1.5px solid var(--ln-border);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
 
-/* ══ SCREEN TIME ══ */
-.time-banner{
-  margin:10px 12px 0;
-  background:white;border-radius:14px;
-  padding:12px 16px;border:1px solid #efefef;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);
-}
-.time-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.time-title{font-size:13px;font-weight:800;color:#262626;display:flex;align-items:center;gap:6px;}
-.time-value{font-size:13px;font-weight:900;color:#e76f51;}
-.time-track{width:100%;height:7px;background:#f0f0f0;border-radius:50px;overflow:hidden;}
-.time-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#84d8b0,#52c99a);transition:width .8s ease;position:relative;overflow:hidden;}
-.time-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2s infinite;}
-@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}}
+    .comment-input-row button {
+      padding: 0 14px;
+      height: 38px;
+      border-radius: 20px;
+      background: var(--ln-coral);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+    }
 
-/* ══ HIGHLIGHTS STRIP ══ */
-.hl-outer{margin-top:12px;background:white;border-top:1px solid #efefef;border-bottom:1px solid #efefef;}
-.hl-bar{
-  max-width:470px;margin:0 auto;
-  display:flex;gap:12px;padding:12px 12px;
-  overflow-x:auto;scrollbar-width:none;
-}
-.hl-bar::-webkit-scrollbar{display:none;}
-.hl-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;text-decoration:none;}
-.hl-circle{
-  width:60px;height:60px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-size:26px;
-  border:1.5px solid #efefef;transition:transform .2s;
-}
-.hl-circle:hover{transform:scale(1.08);}
-.hl-label{font-size:11px;font-weight:700;color:#262626;text-align:center;}
-.hl-c1{background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
-.hl-c2{background:linear-gradient(135deg,#d1fae5,#a7f3d0);}
-.hl-c3{background:linear-gradient(135deg,#fce7f3,#fbcfe8);}
-.hl-c4{background:linear-gradient(135deg,#ede9fe,#ddd6fe);}
-.hl-c5{background:linear-gradient(135deg,#ffe4e6,#fecdd3);}
-.hl-c6{background:linear-gradient(135deg,#ccfbf1,#99f6e4);}
+    /* =========================================================
+       FULLSCREEN STORY VIEWER OVERLAY
+       ========================================================= */
+    #storyViewerModal {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 10005;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      touch-action: none;
+    }
 
-/* ══ SECTION HEADER ══ */
-.section-head{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 14px 8px;
-}
-.section-head h3{font-size:15px;font-weight:900;color:#262626;}
-.section-head a{font-size:13px;font-weight:700;color:#e76f51;}
+    .story-viewer-progress-bar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      gap: 4px;
+      z-index: 20;
+    }
 
-/* ══ FEED CARD ══ */
-.feed-card{background:white;border-top:1px solid #dbdbdb;border-bottom:1px solid #dbdbdb;margin-bottom:12px;}
+    .story-segment {
+      flex: 1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 2px;
+      overflow: hidden;
+    }
 
-.feed-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;}
-.feed-user{display:flex;align-items:center;gap:10px;}
-.feed-avatar{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:900;color:#7c3700;
-  border:2px solid #fde8d0;overflow:hidden;flex-shrink:0;
-}
-.feed-avatar img{width:100%;height:100%;object-fit:cover;}
-.feed-username{font-size:14px;font-weight:800;color:#262626;line-height:1.2;}
-.feed-category{font-size:11px;font-weight:600;color:#9ca3af;}
-.feed-more{font-size:20px;color:#9ca3af;cursor:pointer;padding:4px 6px;letter-spacing:1px;}
+    .story-segment-fill {
+      height: 100%;
+      background: #ffffff;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
 
-/* Media — square on mobile, fixed height on desktop */
-.feed-media{
-  width:100%;
-  background:#f0f0f0;overflow:hidden;
-  aspect-ratio:1/1;
-}
-@media(min-width:600px){
-  .feed-media{aspect-ratio:4/3;}
-}
-.feed-media img,.feed-media video{width:100%;height:100%;object-fit:cover;display:block;}
+    .story-viewer-top {
+      position: absolute;
+      top: 22px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+      color: white;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    }
 
-/* Action bar */
-.feed-actions{display:flex;align-items:center;padding:8px 12px 4px;gap:14px;}
-.act-btn{
-  background:none;border:none;cursor:pointer;
-  font-size:22px;color:#262626;padding:2px;
-  transition:transform .15s;display:flex;align-items:center;
-}
-.act-btn:hover{transform:scale(1.2);}
-.act-save{margin-left:auto;}
+    .story-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.feed-likes{font-size:14px;font-weight:800;color:#262626;padding:3px 12px;}
+    .story-user-badge img,
+    .story-user-badge .avatar-ph {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid white;
+      object-fit: cover;
+      background: var(--ln-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      color: white;
+    }
 
-/* Caption */
-.feed-caption{
-  font-size:14px;color:#262626;
-  padding:2px 12px 4px;line-height:1.55;
-}
-.feed-caption .uname{font-weight:900;margin-right:5px;}
+    .story-user-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+    }
 
-/* Comment count / view more */
-.feed-view-comments{
-  font-size:13px;font-weight:600;color:#9ca3af;
-  padding:2px 12px 12px;cursor:pointer;display:block;
-}
+    .story-time-ago {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 600;
+    }
 
-/* ══ SHARE MODAL ══ */
-.share-overlay{
-  display:none;position:fixed;inset:0;z-index:10000;
-  background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;
-}
-.share-overlay.show{display:flex;}
-.share-sheet{
-  background:white;width:100%;max-width:470px;
-  border-radius:24px 24px 0 0;padding:20px 0 30px;
-  animation:slideUp .3s ease;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.share-handle{width:40px;height:4px;background:#e5e7eb;border-radius:50px;margin:0 auto 16px;}
-.share-title{font-size:15px;font-weight:900;color:#262626;text-align:center;margin-bottom:16px;}
-.share-row{display:flex;gap:10px;padding:0 16px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
-.share-row::-webkit-scrollbar{display:none;}
-.share-friend{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  flex-shrink:0;cursor:pointer;width:64px;
-}
-.sf-avatar{
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:#7c3700;
-  border:2px solid #fde8d0;transition:.2s;
-}
-.sf-avatar:hover{transform:scale(1.08);}
-.sf-avatar.sent{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-color:#bbf7d0;}
-.sf-name{font-size:11px;font-weight:700;color:#262626;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;}
-.share-actions{display:flex;flex-direction:column;gap:0;border-top:1px solid #efefef;}
-.share-action-btn{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 20px;font-size:15px;font-weight:700;color:#262626;
-  cursor:pointer;border:none;background:none;width:100%;text-align:left;
-  font-family:'Nunito',sans-serif;transition:.15s;
-}
-.share-action-btn:hover{background:#fafafa;}
-.share-action-btn i{font-size:20px;color:#e76f51;width:24px;text-align:center;}
-.share-cancel{
-  margin:10px 16px 0;padding:12px;
-  background:#f3f4f6;border-radius:14px;border:none;cursor:pointer;
-  width:calc(100% - 32px);font-size:15px;font-weight:900;color:#6b7280;
-  font-family:'Nunito',sans-serif;transition:.2s;
-}
-.share-cancel:hover{background:#e5e7eb;}
+    .story-close-btn {
+      font-size: 24px;
+      color: white;
+      padding: 6px;
+      cursor: pointer;
+    }
 
-/* Copy toast */
-.copy-toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
-  background:#262626;color:white;padding:10px 22px;
-  border-radius:50px;font-size:13px;font-weight:700;
-  opacity:0;transition:all .3s;z-index:10001;pointer-events:none;
-}
-.copy-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .story-media-box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
 
-/* ══ EMPTY STATE ══ */
-.empty-feed{text-align:center;padding:40px 20px;}
-.empty-feed .icon{font-size:52px;margin-bottom:12px;}
-.empty-feed p{font-size:14px;font-weight:700;color:#9ca3af;margin-bottom:16px;}
-.empty-btn{
-  display:inline-block;padding:10px 26px;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  border-radius:50px;font-size:13px;font-weight:900;color:#7c3700;
-}
+    .story-media-box img,
+    .story-media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
-/* ══ INLINE COMMENTS ══ */
-.comments-section{display:none;padding:8px 12px 12px;border-top:1px solid #f3f4f6;}
-.comments-section.open{display:block;}
-.comment-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;}
-.ci-name{font-size:13px;font-weight:900;color:#262626;flex-shrink:0;}
-.ci-text{font-size:13px;color:#262626;font-weight:500;}
-.comment-input-row{display:flex;gap:8px;align-items:center;margin-top:6px;}
-.comment-input-row input{
-  flex:1;padding:8px 12px;border-radius:50px;
-  border:1.5px solid #e5e7eb;font-size:13px;font-weight:600;
-  font-family:'Nunito',sans-serif;outline:none;
-}
-.comment-input-row input:focus{border-color:#fcb69f;}
-.ci-send{
-  background:none;border:none;cursor:pointer;
-  font-size:18px;color:#e76f51;padding:4px;
-  font-family:'Nunito',sans-serif;font-weight:900;
-}
+    .story-nav-tap {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 35%;
+      z-index: 10;
+    }
 
-/* heart pop animation */
-@keyframes heartPop{0%{transform:scale(1);}40%{transform:scale(1.5);}70%{transform:scale(.9);}100%{transform:scale(1);}}
-.heart-pop{animation:heartPop .35s ease;}
-.liked-heart{color:#e74c3c !important;}
+    .story-nav-tap.left { left: 0; }
+    .story-nav-tap.right { right: 0; width: 65%; }
 
-/* ══ BOTTOM NAV ══ */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{
-  display:flex;flex-direction:column;align-items:center;
-  color:#262626;transition:.2s;padding:4px 12px;
-}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-.nav-post i{font-size:28px;}
+    .story-caption-overlay {
+      position: absolute;
+      bottom: 28px;
+      left: 16px;
+      right: 16px;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(10px);
+      padding: 12px 16px;
+      border-radius: 16px;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
 
-/* Subtle stars */
-.star{position:fixed;border-radius:50%;background:#ffe066;pointer-events:none;z-index:0;animation:twinkle ease-in-out infinite;}
-@keyframes twinkle{0%,100%{opacity:.1;transform:scale(1);}50%{opacity:.4;transform:scale(1.5);}}
-</style>
+    .story-music-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    /* Upload Story Modal */
+    #uploadStoryModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: 10004;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--ln-shadow-lg);
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ══ HEADER ══ -->
-<div class="ig-header">
-  <div class="ig-header-inner">
+<div class="dashboard-container">
 
-    <div class="ig-logo">🌟 LittleNet</div>
-
-    <div class="ig-header-right">
-
-      <!-- Messages -->
-      <a href="/messages/" class="header-icon message-icon">
-        <i class="fa-regular fa-paper-plane"></i>
-      </a>
-
-      <!-- Logout -->
-      <a href="/logout/" class="header-icon logout-icon">
-        <i class="fa-solid fa-right-from-bracket"></i>
-      </a>
-
+  <!-- Screen Time Tracker Banner -->
+  <div class="screen-time-banner">
+    <div class="time-info">
+      <i class="fa-solid fa-hourglass-half"></i>
+      <span>Screen Time:</span>
     </div>
-
+    <div class="time-progress-wrap">
+      <div class="time-progress-bar" id="timeBar"></div>
+    </div>
+    <div class="time-clock-badge" id="timeClock">--:--</div>
   </div>
-</div>
 
-<!-- ══ STORIES BAR ══ -->
-<div class="stories-outer">
-  <div class="stories-bar" id="storiesBar">
-
-    <!-- My Stories (tap to view all, long-press to add) -->
-    {% set _ms = my_stories %}
-    <div class="story-item"
-         onclick="{% if _ms %}openMyStories(){% else %}openStoryUpload(){% endif %}"
-         oncontextmenu="event.preventDefault();openStoryUpload()">
-      <div class="story-ring {% if _ms %}mine-ring{% else %}add-ring{% endif %}">
-        <div class="story-inner">
-          {% if profile and profile.profile_picture %}
-            <img src="/{{ profile.profile_picture|replace('\\','/') }}" alt="me">
-          {% else %}
-            {{ full_name[0]|upper if full_name else '?' }}
-          {% endif %}
-        </div>
-        {% if not _ms %}
-          <div class="add-badge" onclick="openStoryUpload()">+</div>
-        {% else %}
-          <div class="add-badge" onclick="event.stopPropagation();openStoryUpload()" title="Add story">+</div>
-        {% endif %}
+  <!-- Top App Navigation Header -->
+  <header class="ln-header">
+    <div class="ln-header-inner">
+      <div class="ln-brand">
+        <i class="fa-solid fa-sparkles brand-icon"></i>
+        <span>LittleNet</span>
       </div>
-      <span class="story-label">{% if _ms %}My Story{% else %}Add Story{% endif %}</span>
-    </div>
 
-    <!-- Following stories -->
-    {% set stories_list = following_stories %}
-    {% if stories_list %}
-      {% for s in stories_list %}
-      <div class="story-item" onclick="openStoryViewer([{id:'{{s.post_id}}',media_type:'{{s.media_type}}',media_path:'{{s.media_path|replace("\\","/")|e}}',caption:'{{(s.caption or "")|e}}',full_name:'{{s.full_name|e}}',profile_picture:'{{(s.profile_picture or "")|replace("\\","/")|e}}',age_seconds:{{s.age_seconds|int}},is_own:false}],0,false)">
-        <div class="story-ring">
-          <div class="story-inner">
-            {% if s.profile_picture %}
-              <img src="/{{ s.profile_picture|replace('\\','/') }}" alt="dp">
+      <div class="ln-header-actions">
+        <a href="/messages/" class="ln-icon-btn" title="Direct Messages">
+          <i class="fa-regular fa-paper-plane"></i>
+        </a>
+        <a href="/logout/" class="ln-icon-btn" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Greeting Bar -->
+  <div class="welcome-bar">
+    <div class="welcome-greeting">
+      Hello, <span>{{ full_name }}</span> 👋
+    </div>
+  </div>
+
+  <!-- Instagram Inspired Stories Carousel Strip -->
+  <section class="ln-stories-container">
+    <div class="ln-stories-scroll">
+      
+      <!-- My Story Node (With + Upload Action) -->
+      <div class="ln-story-node" onclick="handleMyStoryClick()">
+        <div class="ln-story-ring {% if my_stories and my_stories|length > 0 %}mine-active{% else %}add-new{% endif %}">
+          <div class="ln-story-avatar">
+            {% if profile and profile.profile_picture %}
+              <img src="/{{ profile.profile_picture|replace('\\','/') }}" alt="Me">
             {% else %}
-              {{ s.full_name[0]|upper if s.full_name else '?' }}
+              {{ full_name[0]|upper if full_name else '?' }}
             {% endif %}
           </div>
+          {% if not my_stories or my_stories|length == 0 %}
+            <div class="ln-story-badge-add">+</div>
+          {% else %}
+            <div class="ln-story-count">{{ my_stories|length }}</div>
+          {% endif %}
         </div>
-        <span class="story-label">{{ s.full_name.split()[0] }}</span>
+        <div class="ln-story-username">Your Story</div>
       </div>
-      {% endfor %}
-    {% endif %}
 
-  </div>
+      <!-- Following Friends' Stories -->
+      {% if following_stories %}
+        {% for f in following_stories %}
+        <div class="ln-story-node" onclick="openStoryViewer({{ loop.index0 }})">
+          <div class="ln-story-ring">
+            <div class="ln-story-avatar">
+              {% if f.profile_picture %}
+                <img src="/{{ f.profile_picture|replace('\\','/') }}" alt="{{ f.full_name }}">
+              {% else %}
+                {{ f.full_name[0]|upper if f.full_name else '?' }}
+              {% endif %}
+            </div>
+            <div class="ln-story-count">{{ f.story_count }}</div>
+          </div>
+          <div class="ln-story-username">{{ f.full_name.split(' ')[0] }}</div>
+        </div>
+        {% endfor %}
+      {% endif %}
+
+    </div>
+  </section>
+
+  <!-- Feed Section -->
+  <main class="feed-container" id="feedStream">
+    <div class="post-loading-shimmer" id="feedLoading">
+      <i class="fa-solid fa-spinner"></i>
+      <div>Discovering friendly posts for you...</div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
 </div>
 
-<!-- ══ MAIN CONTENT ══ -->
-<div class="content-wrap">
+<!-- =========================================================
+     FULLSCREEN STORY VIEWER MODAL
+     ========================================================= -->
+<div id="storyViewerModal">
+  <!-- Progress Bars -->
+  <div class="story-viewer-progress-bar" id="storyProgressBars"></div>
 
-  <!-- Welcome -->
-  <div class="welcome-strip">
-    <span class="w-emoji">👋</span>
-    <div class="w-text">
-      <h4>Hey, {{ full_name }}!</h4>
-      <p>Ready for some fun? Your friends are waiting 🎉</p>
-    </div>
-  </div>
-
-  <!-- Screen time -->
-  {% if remaining_seconds is not none %}
-  <div class="time-banner">
-    <div class="time-top">
-      <div class="time-title"><i class="fa-solid fa-clock" style="color:#e76f51;"></i> Screen Time Left</div>
-      <div class="time-value" id="timeDisplay">--:--</div>
-    </div>
-    <div class="time-track"><div class="time-fill" id="progressBar" style="width:0%;"></div></div>
-    {% if strict_mode %}<p style="font-size:11px;color:#9ca3af;margin-top:5px;font-weight:700;">⚠️ Auto-logout when time runs out</p>{% endif %}
-  </div>
-  {% endif %}
-
-  <!-- Quick actions -->
-  <div class="hl-outer" style="margin-top:12px;">
-    <div class="hl-bar">
-      <a class="hl-item" href="/child/profile/">
-        <div class="hl-circle hl-c1">🧒</div><span class="hl-label">Profile</span>
-      </a>
-      <a class="hl-item" href="/child/upload-post/">
-        <div class="hl-circle hl-c2">📸</div><span class="hl-label">Post</span>
-      </a>
-      <a class="hl-item" href="/my-posts/">
-        <div class="hl-circle hl-c3">🖼️</div><span class="hl-label">My Posts</span>
-      </a>
-      <a class="hl-item" href="/messages/">
-        <div class="hl-circle hl-c4">💬</div><span class="hl-label">Messages</span>
-      </a>
-      <a class="hl-item" href="/recommended/">
-        <div class="hl-circle hl-c5">❤️</div><span class="hl-label">For You</span>
-      </a>
-      <a class="hl-item" href="/discover/">
-        <div class="hl-circle hl-c6">🧭</div><span class="hl-label">Explore</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- Feed header -->
-  <div class="section-head">
-    <h3>✨ For You</h3>
-    <a href="/recommended/">See all</a>
-  </div>
-
-</div><!-- end content-wrap -->
-
-<!-- ══ FEED POSTS (AJAX random) ══ -->
-<div id="feedContainer"></div>
-<div id="feedLoader" style="text-align:center;padding:30px;display:none;">
-  <i class="fa-solid fa-spinner" style="font-size:28px;color:#e76f51;animation:spin .8s linear infinite;"></i>
-</div>
-
-<!-- ══ STORY VIEWER ══ -->
-<div class="sv-overlay" id="svOverlay">
-  <div class="sv-progress" id="svProgress"></div>
-  <div class="sv-header">
-    <div class="sv-user">
-      <div class="sv-avatar" id="svAvatar"></div>
+  <!-- Header with User info and Close -->
+  <div class="story-viewer-top">
+    <div class="story-user-badge">
+      <div id="storyUserAvatar" class="avatar-ph">?</div>
       <div>
-        <div class="sv-name" id="svName"></div>
-        <div class="sv-age" id="svAge"></div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <button class="sv-options-btn" id="svOptionsBtn" onclick="toggleStoryOptions()" style="display:none;">
-        <i class="fa-solid fa-ellipsis-vertical"></i>
-      </button>
-      <span class="sv-close" onclick="closeStoryViewer()">✕</span>
-    </div>
-  </div>
-  <div class="sv-media" id="svMedia">
-    <div class="sv-tap-left"  onclick="storyPrev()"></div>
-    <div class="sv-tap-right" onclick="storyNext()"></div>
-  </div>
-  <!-- Music bar (shown when story has music) -->
-  <div class="sv-music-bar" id="svMusicBar" style="display:none;">
-    <span class="sv-music-icon"><i class="fa-solid fa-music"></i></span>
-    <span class="sv-music-name" id="svMusicName"></span>
-    <div class="sv-music-wave">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <audio id="svMusicAudio" loop></audio>
-  </div>
-  <div class="sv-caption" id="svCaption"></div>
-
-  <!-- Options sheet (edit / delete / share / add more) -->
-  <div class="sv-options-sheet" id="svOptionsSheet">
-    <div class="sv-opt-handle"></div>
-    <button class="sv-opt-row" onclick="openEditCaption()">
-      <i class="fa-regular fa-pen-to-square"></i> Edit Caption
-    </button>
-    <button class="sv-opt-row" onclick="addMoreStory()">
-      <i class="fa-solid fa-circle-plus"></i> Add to Story
-    </button>
-    <button class="sv-opt-row" onclick="shareCurrentStory()">
-      <i class="fa-regular fa-paper-plane"></i> Share Story
-    </button>
-    <button class="sv-opt-row danger" onclick="deleteCurrentStory()">
-      <i class="fa-solid fa-trash"></i> Delete Story
-    </button>
-  </div>
-
-  <!-- Edit caption overlay -->
-  <div class="sv-edit-overlay" id="svEditOverlay">
-    <div class="sv-edit-box">
-      <div style="font-size:15px;font-weight:900;color:#262626;margin-bottom:10px;">Edit Caption</div>
-      <textarea id="svEditCaption" placeholder="Write a caption…"></textarea>
-      <div class="sv-edit-actions">
-        <button class="sv-edit-cancel" onclick="closeEditCaption()">Cancel</button>
-        <button class="sv-edit-save" onclick="saveEditCaption()">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ STORY UPLOAD MODAL ══ -->
-<div class="su-overlay" id="suOverlay" onclick="closeSuIfBg(event)">
-  <div class="su-sheet">
-    <div class="su-handle"></div>
-    <div class="su-title">📸 Add to Your Story</div>
-
-    <!-- Empty pick area (shown when no files selected) -->
-    <div class="su-pick-area" id="suPickArea" onclick="document.getElementById('suFile').click()">
-      <i class="fa-solid fa-images"></i>
-      <span>Tap to pick photos or videos</span>
-      <small>You can select multiple at once</small>
-    </div>
-
-    <!-- Multi-preview strip (shown after picking) -->
-    <div class="su-previews" id="suPreviews"></div>
-
-    <!-- Pick buttons (always visible) -->
-    <div class="su-pick-row">
-      <button type="button" class="su-pick-btn" onclick="document.getElementById('suFile').click()">
-        <i class="fa-solid fa-image"></i> Gallery
-      </button>
-      <button type="button" class="su-pick-btn" onclick="document.getElementById('suFileCam').click()">
-        <i class="fa-solid fa-camera"></i> Camera
-      </button>
-    </div>
-    <input type="file" id="suFile"    accept="image/*,video/*" multiple style="display:none" onchange="suAddFiles(this)">
-    <input type="file" id="suFileCam" accept="image/*" capture="environment" style="display:none" onchange="suAddFiles(this)">
-
-    <!-- Music picker -->
-    <audio id="suMusicPreview" style="display:none"></audio>
-    <input type="file" id="suMusicFile" accept="audio/*" style="display:none" onchange="suPickOwnMusic(this)">
-    <div class="su-music-section">
-      <div class="su-music-label"><i class="fa-solid fa-music"></i> Add Music</div>
-      <div class="su-music-tracks" id="suMusicTracks">
-        <button type="button" class="su-music-none active" data-key="" onclick="selectMusic(this)">
-          <i class="fa-solid fa-ban"></i> None
-        </button>
-        <button type="button" class="su-music-track" data-key="__own__" onclick="document.getElementById('suMusicFile').click()">
-          <i class="fa-solid fa-upload"></i> My Music
-        </button>
-        <button type="button" class="su-music-track" data-key="happy_sunshine" onclick="selectMusic(this)">
-          <i class="fa-solid fa-sun"></i> Happy Sunshine
-        </button>
-        <button type="button" class="su-music-track" data-key="bubbly_fun" onclick="selectMusic(this)">
-          <i class="fa-solid fa-face-smile"></i> Bubbly Fun
-        </button>
-      </br>
-        <button type="button" class="su-music-track" data-key="adventure_time" onclick="selectMusic(this)">
-          <i class="fa-solid fa-mountain"></i> Adventure Time
-        </button>
-        <button type="button" class="su-music-track" data-key="dreamy_stars" onclick="selectMusic(this)">
-          <i class="fa-solid fa-star"></i> Dreamy Stars
-        </button>
-      </br>
-        <button type="button" class="su-music-track" data-key="cool_beats" onclick="selectMusic(this)">
-          <i class="fa-solid fa-headphones"></i> Cool Beats
-        </button>
+        <div class="story-user-name" id="storyUserName">User</div>
+        <div class="story-time-ago" id="storyTimeAgo">Just now</div>
       </div>
     </div>
 
-    <input type="text" class="su-caption-input" id="suCaption" placeholder="Add a caption… ✨">
-    <div class="su-spinner" id="suSpinner"><i class="fa-solid fa-spinner"></i></div>
-    <button class="su-post-btn" id="suPostBtn" onclick="postStory()">Share Story ✨</button>
-    <button class="su-cancel" onclick="closeStoryUpload()">Cancel</button>
+    <div class="story-close-btn" onclick="closeStoryViewer()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
   </div>
+
+  <!-- Tap Zones for Prev / Next navigation -->
+  <div class="story-nav-tap left" onclick="prevStorySlide()"></div>
+  <div class="story-nav-tap right" onclick="nextStorySlide()"></div>
+
+  <!-- Media Display -->
+  <div class="story-media-box" id="storyMediaBox"></div>
+
+  <!-- Caption & Music Audio Overlay -->
+  <div class="story-caption-overlay" id="storyCaptionOverlay" style="display:none;">
+    <div class="story-music-badge" id="storyMusicBadge" style="display:none;">
+      <i class="fa-solid fa-music"></i>
+      <span id="storyMusicTitle">Music Track</span>
+    </div>
+    <div id="storyCaptionText"></div>
+  </div>
+
+  <!-- Audio Player for Stories with BGM -->
+  <audio id="storyAudioPlayer" preload="auto"></audio>
 </div>
 
-<!-- ══ SHARE STORY TO FRIENDS MODAL ══ -->
-<div class="sv-share-overlay" id="svShareOverlay" onclick="if(event.target===this)closeShareStoryModal()">
-  <div class="sv-share-sheet">
-    <div class="sv-share-handle"></div>
-    <div class="sv-share-title"><i class="fa-regular fa-paper-plane"></i> Send Story to</div>
-    <div class="sv-share-friends-row" id="svShareFriends">
-      <span style="color:#8e8e8e;font-size:13px;padding:8px">Loading friends…</span>
-    </div>
-    <button class="sv-share-close-btn" onclick="closeShareStoryModal()">Cancel</button>
-  </div>
-</div>
-
-<!-- ══ SHARE MODAL ══ -->
-<div class="share-overlay" id="shareOverlay" onclick="closeShare(event)">
-  <div class="share-sheet" onclick="event.stopPropagation()">
-    <div class="share-handle"></div>
-    <div class="share-title">Share Post</div>
-
-    <!-- Post preview thumbnail -->
-    <div id="sharePreview" style="margin:0 16px 14px;border-radius:12px;overflow:hidden;max-height:160px;background:#f0f0f0;display:none;">
-      <img id="sharePreviewImg" src="" style="width:100%;height:160px;object-fit:cover;display:block;">
-      <video id="sharePreviewVid" src="" style="width:100%;height:160px;object-fit:cover;display:none;" muted></video>
+<!-- =========================================================
+     UPLOAD STORY MODAL
+     ========================================================= -->
+<div id="uploadStoryModal">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="font-size:18px;font-weight:900;color:var(--ln-text);">Share to Story 🌟</h3>
+      <button onclick="closeUploadStoryModal()" style="font-size:20px;color:var(--ln-text-muted);">&times;</button>
     </div>
 
-    <!-- Friends row -->
-    <div class="share-row" id="friendsRow">
-      <div style="font-size:13px;font-weight:700;color:#9ca3af;padding:10px 0;">Loading friends…</div>
-    </div>
+    <form id="storyUploadForm" enctype="multipart/form-data">
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:800;margin-bottom:6px;color:#334155;">Choose Photo or Video</label>
+        <input type="file" name="story_media" id="storyMediaInput" accept="image/*,video/*" class="ln-input-field" required>
+      </div>
 
-    <!-- Action buttons -->
-    <div class="share-actions">
-      <button class="share-action-btn" onclick="copyLink()">
-        <i class="fa-solid fa-link"></i> Copy Link
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:13px;font-weight:800;margin-bottom:6px;color:#334155;">Caption (Optional)</label>
+        <input type="text" name="caption" class="ln-input-field" placeholder="Add a fun thought...">
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:800;margin-bottom:6px;color:#334155;">Add Background Music (Optional)</label>
+        <select name="music_preset" class="ln-input-field">
+          <option value="">No Music</option>
+          <option value="happy_vibes">🎶 Happy Vibes (Playful)</option>
+          <option value="adventure">🚀 Space Adventure (Upbeat)</option>
+          <option value="chill_lofi">☁️ Study Chill (Lo-Fi)</option>
+        </select>
+      </div>
+
+      <button type="button" onclick="submitStoryUpload()" class="ln-btn-primary" style="width:100%;">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span>Share to Story</span>
       </button>
-      <button class="share-action-btn" onclick="shareNative()">
-        <i class="fa-solid fa-share-nodes"></i> More Options
-      </button>
-    </div>
-
-    <button class="share-cancel" onclick="closeShare()">Cancel</button>
+    </form>
   </div>
 </div>
 
-<!-- Copy toast -->
-<div class="copy-toast" id="copyToast">🔗 Link copied!</div>
-
-<!-- ══ BOTTOM NAV ══ -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
-
+<!-- =========================================================
+     SCRIPTS & CLIENT LOGIC
+     ========================================================= -->
 <script>
-// ── Stars ──
-(function(){for(var i=0;i<8;i++){var s=document.createElement('div');s.className='star';var sz=Math.random()*4+2;s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;animation-duration:'+(Math.random()*3+2)+'s;animation-delay:'+Math.random()*4+'s';document.body.appendChild(s);}})();
+  // Story Data passed from backend
+  const myStories = {{ my_stories | tojson if my_stories else '[]' }};
+  const followingStories = {{ following_stories | tojson if following_stories else '[]' }};
+  const totalRemainingSeconds = Number("{{ remaining_seconds if remaining_seconds else 3600 }}");
+  const isStrictMode = {{ 'true' if strict_mode else 'false' }};
 
-// ── Video autoplay on scroll ──
-(function(){
-  var vids=document.querySelectorAll('.feed-media video');
-  if(!vids.length||!('IntersectionObserver' in window))return;
-  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.play();else e.target.pause();});},{threshold:.5});
-  vids.forEach(function(v){io.observe(v);});
-})();
-
-// ── Share modal ──
-var _sharePostId=null;
-var _shareMediaPath=null;
-var _shareContentType=null;
-var _sharePosterName=null;
-var _shareCaption=null;
-var _friends=null;
-
-function openShare(postId, posterName, mediaPath, contentType, caption){
-  _sharePostId=postId;
-  _sharePosterName=posterName;
-  _shareMediaPath=mediaPath;
-  _shareContentType=contentType;
-  _shareCaption=caption;
-  // Show post preview in modal
-  var preview=document.getElementById('sharePreview');
-  var pImg=document.getElementById('sharePreviewImg');
-  var pVid=document.getElementById('sharePreviewVid');
-  if(mediaPath){
-    preview.style.display='block';
-    var cleanPath=mediaPath.replace(/\\/g,'/');
-    if(contentType==='VIDEO'){
-      pImg.style.display='none';pVid.style.display='block';
-      pVid.src='/'+cleanPath;
-    } else {
-      pVid.style.display='none';pImg.style.display='block';
-      pImg.src='/'+cleanPath;
-    }
-  } else {
-    preview.style.display='none';
-  }
-  document.getElementById('shareOverlay').classList.add('show');
-  loadFriends();
-}
-
-function closeShare(e){
-  if(!e||e.target===document.getElementById('shareOverlay')||!e.target){
-    document.getElementById('shareOverlay').classList.remove('show');
-  }
-}
-
-function loadFriends(){
-  var row=document.getElementById('friendsRow');
-  if(_friends!==null){renderFriends(row);return;}
-  fetch('/api/following/',{credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(data){
-      _friends=data;
-      renderFriends(row);
-    })
-    .catch(function(){
-      row.innerHTML='<div style="font-size:13px;font-weight:700;color:#9ca3af;padding:10px;">Could not load friends</div>';
+  // Compile combined stories list
+  let allStoryGroups = [];
+  if (myStories && myStories.length > 0) {
+    allStoryGroups.push({
+      user_id: "me",
+      full_name: "Your Story",
+      profile_picture: "{{ profile.profile_picture|replace('\\','/') if profile and profile.profile_picture else '' }}",
+      stories: myStories
     });
-}
-
-function renderFriends(row){
-  if(!_friends||_friends.length===0){
-    row.innerHTML='<div style="font-size:13px;font-weight:700;color:#9ca3af;padding:10px 0;">Follow friends to share with them!</div>';
-    return;
   }
-  row.innerHTML='';
-  _friends.forEach(function(f){
-    var div=document.createElement('div');
-    div.className='share-friend';
-    div.innerHTML='<div class="sf-avatar" id="sf-'+f.user_id+'">'+f.full_name[0].toUpperCase()+'</div><span class="sf-name">'+f.full_name+'</span>';
-    div.onclick=function(){sendToFriend(f.user_id,f.full_name,div.querySelector('.sf-avatar'));};
-    row.appendChild(div);
-  });
-}
-
-function sendToFriend(userId, name, avatarEl){
-  if(avatarEl.classList.contains('sent'))return;
-  var postLink=window.location.origin+'/recommended/?from='+_sharePostId;
-  fetch('/api/share-post/',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    credentials:'same-origin',
-    body:JSON.stringify({
-      receiver_id:userId,
-      media_path:_shareMediaPath,
-      poster_name:_sharePosterName,
-      caption:_shareCaption,
-      content_type:_shareContentType
-    })
-  })
-  .then(function(){
-    avatarEl.classList.add('sent');
-    avatarEl.textContent='✓';
-    showToast('Sent to '+name+'!');
-  })
-  .catch(function(){
-    showToast('Sent to '+name+'!');
-    avatarEl.classList.add('sent');
-    avatarEl.textContent='✓';
-  });
-}
-
-function copyLink(){
-  var url=window.location.origin+'/recommended/?from='+(_sharePostId||'');
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(url).then(function(){showToast('🔗 Link copied!');});
-  }else{
-    var el=document.createElement('textarea');
-    el.value=url;document.body.appendChild(el);el.select();
-    document.execCommand('copy');document.body.removeChild(el);
-    showToast('🔗 Link copied!');
-  }
-  closeShare();
-}
-
-function shareNative(){
-  var url=window.location.origin+'/recommended/?from='+(_sharePostId||'');
-  if(navigator.share){
-    navigator.share({title:'LittleNet Post',url:url}).catch(function(){});
-  }else{
-    copyLink();
-  }
-}
-
-function showToast(msg){
-  var t=document.getElementById('copyToast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2500);
-}
-
-// ══ STORY VIEWER ══
-var _svStories=[], _svIdx=0, _svTimer=null, _svIsOwn=false;
-var SV_DURATION=5000;
-
-// Music track names map
-var MUSIC_NAMES={
-  'happy_sunshine':'Happy Sunshine',
-  'bubbly_fun':'Bubbly Fun',
-  'adventure_time':'Adventure Time',
-  'dreamy_stars':'Dreamy Stars',
-  'cool_beats':'Cool Beats'
-};
-
-// My stories data injected from server
-var MY_STORIES = [
-  {% for s in my_stories %}
-  {id:{{s.post_id}},media_type:'{{s.media_type}}',
-   media_path:'{{s.media_path|replace("\\","/")|e}}',
-   caption:'{{(s.caption or "")|e}}',
-   full_name:'{{full_name|e}}',
-   profile_picture:'{{(s.profile_picture or "")|replace("\\","/")|e}}',
-   age_seconds:{{s.age_seconds|int}},is_own:true}{% if not loop.last %},{% endif %}
-  {% endfor %}
-];
-
-function openMyStories(){
-  if(!MY_STORIES.length){ openStoryUpload(); return; }
-  openStoryViewer(MY_STORIES, 0, true);
-}
-
-function openStoryViewer(stories, idx, isOwn){
-  _svStories=stories; _svIdx=idx; _svIsOwn=!!isOwn;
-  document.getElementById('svOverlay').classList.add('show');
-  document.getElementById('svOptionsBtn').style.display=isOwn?'flex':'none';
-  renderStory();
-}
-function closeStoryViewer(){
-  clearTimeout(_svTimer);
-  var ov=document.getElementById('svOverlay');
-  ov.classList.remove('show');
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  document.getElementById('svEditOverlay').classList.remove('show');
-  var m=document.getElementById('svMedia');
-  var v=m.querySelector('video'); if(v)v.pause();
-  stopStoryMusic();
-}
-function renderStory(){
-  clearTimeout(_svTimer);
-  // Close options sheet if open
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  var s=_svStories[_svIdx];
-  // progress bars
-  var prog=document.getElementById('svProgress');
-  prog.innerHTML='';
-  _svStories.forEach(function(_,i){
-    var seg=document.createElement('div'); seg.className='sv-seg';
-    var fill=document.createElement('div'); fill.className='sv-seg-fill';
-    if(i<_svIdx) fill.style.width='100%';
-    seg.appendChild(fill); prog.appendChild(seg);
-  });
-  // avatar
-  var avEl=document.getElementById('svAvatar');
-  if(s.profile_picture){
-    avEl.innerHTML='<img src="/'+s.profile_picture+'" alt="dp">';
-  } else {
-    avEl.textContent=(s.full_name||'?')[0].toUpperCase();
-  }
-  document.getElementById('svName').textContent=s.full_name||'';
-  // age
-  var mins=Math.floor((s.age_seconds||0)/60);
-  var hrs=Math.floor(mins/60);
-  document.getElementById('svAge').textContent=hrs>0?hrs+'h ago':mins+'m ago';
-
-  // caption — strip music metadata before display
-  var rawCaption=s.caption||'';
-  var dispCaption=rawCaption.replace(/\|\|music_file:[^\|]*/g,'').replace(/\|\|music:[a-z_]+/g,'').trim();
-  document.getElementById('svCaption').textContent=dispCaption;
-
-  // music — handles preset (||music:key) and custom (||music_file:path)
-  var bar=document.getElementById('svMusicBar');
-  var audio=document.getElementById('svMusicAudio');
-  var musicFileMatch=rawCaption.match(/\|\|music_file:([^\|]+)/);
-  var musicKeyMatch=rawCaption.match(/\|\|music:([a-z_]+)/);
-  if(musicFileMatch){
-    bar.style.display='flex';
-    document.getElementById('svMusicName').textContent='🎵 Custom Track';
-    audio.src='/'+musicFileMatch[1].replace(/^\//,'');
-    audio.play().catch(function(){});
-  } else if(musicKeyMatch){
-    var key=musicKeyMatch[1];
-    bar.style.display='flex';
-    document.getElementById('svMusicName').textContent=MUSIC_NAMES[key]||key;
-    var fname=(typeof TRACK_FILES!=='undefined'&&TRACK_FILES[key]?TRACK_FILES[key]:key)+'.mp3';
-    audio.src='/static/music/'+fname;
-    audio.play().catch(function(){});
-  } else {
-    bar.style.display='none';
-    stopStoryMusic();
+  if (followingStories && followingStories.length > 0) {
+    allStoryGroups.push(...followingStories);
   }
 
-  // media
-  var m=document.getElementById('svMedia');
-  var old=m.querySelector('img,video'); if(old)old.remove();
-  if(s.media_type==='VIDEO'){
-    var vid=document.createElement('video');
-    vid.src='/'+s.media_path; vid.muted=false; vid.autoplay=true; vid.controls=false;
-    vid.style.cssText='max-width:100%;max-height:100vh;object-fit:contain;';
-    m.insertBefore(vid,m.firstChild);
-    SV_DURATION=Math.min((vid.duration||5)*1000,15000);
-  } else {
-    var img=document.createElement('img');
-    img.src='/'+s.media_path;
-    img.style.cssText='max-width:100%;max-height:100vh;object-fit:contain;';
-    m.insertBefore(img,m.firstChild);
-    SV_DURATION=5000;
-  }
-  // animate progress fill for current segment
-  var curFill=document.getElementById('svProgress').children[_svIdx].firstChild;
-  curFill.style.transition='none'; curFill.style.width='0%';
-  requestAnimationFrame(function(){
-    curFill.style.transition='width '+SV_DURATION+'ms linear';
-    curFill.style.width='100%';
-  });
-  _svTimer=setTimeout(function(){ storyNext(); }, SV_DURATION);
-}
-function storyNext(){
-  if(_svIdx<_svStories.length-1){ _svIdx++; renderStory(); }
-  else{ closeStoryViewer(); }
-}
-function storyPrev(){
-  if(_svIdx>0){ _svIdx--; renderStory(); }
-}
-function stopStoryMusic(){
-  var audio=document.getElementById('svMusicAudio');
-  if(audio){ audio.pause(); audio.src=''; }
-}
+  // Story Viewer State
+  let currentGroupIdx = 0;
+  let currentSlideIdx = 0;
+  let storyTimer = null;
+  const SLIDE_DURATION = 5000; // 5 seconds per slide
 
-// ── Story options (own story only) ──
-function toggleStoryOptions(){
-  clearTimeout(_svTimer);
-  document.getElementById('svOptionsSheet').classList.toggle('show');
-}
-function deleteCurrentStory(){
-  var s=_svStories[_svIdx];
-  if(!s||!s.id) return;
-  if(!confirm('Delete this story?')) return;
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  fetch('/api/delete-story/'+s.id+'/',{method:'POST',credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d.ok){
-        MY_STORIES=MY_STORIES.filter(function(x){return x.id!==s.id;});
-        _svStories=MY_STORIES;
-        if(!MY_STORIES.length){ closeStoryViewer(); location.reload(); return; }
-        if(_svIdx>=MY_STORIES.length) _svIdx=MY_STORIES.length-1;
-        renderStory();
-      }
-    }).catch(function(){});
-}
-function openEditCaption(){
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  var s=_svStories[_svIdx];
-  var raw=s.caption||'';
-  var disp=raw.replace(/\|\|music_file:[^\|]*/g,'').replace(/\|\|music:[a-z_]+/g,'').trim();
-  document.getElementById('svEditCaption').value=disp;
-  document.getElementById('svEditOverlay').classList.add('show');
-}
-function closeEditCaption(){
-  document.getElementById('svEditOverlay').classList.remove('show');
-  renderStory();
-}
-function saveEditCaption(){
-  var s=_svStories[_svIdx];
-  if(!s||!s.id) return;
-  var newText=document.getElementById('svEditCaption').value.trim();
-  // preserve any music tag (preset or custom file)
-  var raw=s.caption||'';
-  var fileMatch=raw.match(/(\|\|music_file:[^\|]+)/);
-  var keyMatch=raw.match(/(\|\|music:[a-z_]+)/);
-  var musicTag=fileMatch?fileMatch[1]:(keyMatch?keyMatch[1]:'');
-  var fullCaption=newText+musicTag;
-  fetch('/api/edit-story-caption/'+s.id+'/',{
-    method:'POST',credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({caption:fullCaption})
-  }).then(function(r){return r.json();})
-    .then(function(d){
-      if(d.ok){
-        s.caption=fullCaption;
-        // update MY_STORIES entry
-        MY_STORIES.forEach(function(x){if(x.id===s.id)x.caption=fullCaption;});
-        closeEditCaption();
-      }
-    }).catch(function(){});
-}
-function addMoreStory(){
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  closeStoryViewer();
-  openStoryUpload();
-}
-function shareCurrentStory(){
-  document.getElementById('svOptionsSheet').classList.remove('show');
-  var modal=document.getElementById('svShareOverlay');
-  modal.classList.add('show');
-  var container=document.getElementById('svShareFriends');
-  container.innerHTML='<span style="color:#8e8e8e;font-size:13px;padding:8px">Loading friends…</span>';
-  fetch('/api/following/',{credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(friends){
-      if(!friends.length){
-        container.innerHTML='<span style="color:#8e8e8e;font-size:13px;padding:8px">No friends yet</span>';
-        return;
-      }
-      container.innerHTML='';
-      var s=_svStories[_svIdx];
-      friends.forEach(function(f){
-        var av=document.createElement('div'); av.className='sv-share-friend'; av.dataset.uid=f.user_id;
-        var initials=(f.full_name||'?').split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
-        av.innerHTML='<div class="sv-share-friend-av">'+initials+'</div>'
-          +'<div class="sv-share-friend-name">'+f.full_name+'</div>';
-        av.onclick=function(){
-          if(av.classList.contains('sent')) return;
-          var payload={
-            receiver_id:f.user_id,
-            media_path:s.media_path||'',
-            poster_name:s.full_name||'Me',
-            caption:(s.caption||'').replace(/\|\|music[^|]*/g,'').trim(),
-            content_type:s.media_type||'IMAGE'
-          };
-          fetch('/api/share-post/',{method:'POST',credentials:'same-origin',
-            headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-            .then(function(r){return r.json();})
-            .then(function(d){
-              if(d.ok){ av.classList.add('sent'); av.querySelector('.sv-share-friend-av').textContent='✓'; }
-            }).catch(function(){});
-        };
-        container.appendChild(av);
-      });
-    }).catch(function(){
-      container.innerHTML='<span style="color:#e76f51;font-size:13px;padding:8px">Could not load friends</span>';
-    });
-}
-function closeShareStoryModal(){
-  document.getElementById('svShareOverlay').classList.remove('show');
-}
-
-// ══ STORY UPLOAD ══
-var _suFiles=[];   // array of File objects
-var _suMusicKey='';
-
-function openStoryUpload(){
-  document.getElementById('suOverlay').classList.add('show');
-  // enable mouse-drag scroll on music tracks
-  (function(){
-    var el=document.getElementById('suMusicTracks');
-    if(!el||el._dragBound) return; el._dragBound=true;
-    var isDown=false,startX,scrollLeft;
-    el.addEventListener('mousedown',function(e){isDown=true;startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft;el.style.cursor='grabbing';});
-    el.addEventListener('mouseleave',function(){isDown=false;el.style.cursor='grab';});
-    el.addEventListener('mouseup',function(){isDown=false;el.style.cursor='grab';});
-    el.addEventListener('mousemove',function(e){if(!isDown)return;e.preventDefault();var x=e.pageX-el.offsetLeft;el.scrollLeft=scrollLeft-(x-startX);});
-  })();
-}
-function closeStoryUpload(){
-  document.getElementById('suOverlay').classList.remove('show');
-  _suFiles=[]; _suMusicKey=''; _suMusicFile=null;
-  renderSuPreviews();
-  document.getElementById('suCaption').value='';
-  _stopTonePreview();
-  document.querySelectorAll('#suMusicTracks button').forEach(function(b){b.classList.remove('active');});
-  var noneBtn=document.querySelector('.su-music-none');
-  if(noneBtn) noneBtn.classList.add('active');
-}
-function closeSuIfBg(e){ if(e.target===document.getElementById('suOverlay')) closeStoryUpload(); }
-
-function suAddFiles(input){
-  Array.from(input.files).forEach(function(f){ _suFiles.push(f); });
-  input.value='';
-  renderSuPreviews();
-}
-
-function renderSuPreviews(){
-  var pickArea=document.getElementById('suPickArea');
-  var strip=document.getElementById('suPreviews');
-  strip.innerHTML='';
-  if(!_suFiles.length){
-    pickArea.style.display='';
-    strip.classList.remove('has-files');
-    return;
-  }
-  pickArea.style.display='none';
-  strip.classList.add('has-files');
-  _suFiles.forEach(function(f,i){
-    var thumb=document.createElement('div'); thumb.className='su-thumb';
-    var url=URL.createObjectURL(f);
-    if(f.type.startsWith('video/')){
-      var v=document.createElement('video'); v.src=url; v.muted=true;
-      thumb.appendChild(v);
+  function handleMyStoryClick() {
+    if (myStories && myStories.length > 0) {
+      openStoryViewer(0);
     } else {
-      var img=document.createElement('img'); img.src=url;
-      thumb.appendChild(img);
+      document.getElementById('uploadStoryModal').style.display = 'flex';
     }
-    var rm=document.createElement('button'); rm.className='rm-thumb'; rm.innerHTML='✕';
-    (function(idx){ rm.onclick=function(e){e.stopPropagation();_suFiles.splice(idx,1);renderSuPreviews();}; })(i);
-    thumb.appendChild(rm);
-    strip.appendChild(thumb);
-  });
-  // add-more button
-  var addBtn=document.createElement('div'); addBtn.className='su-add-more';
-  addBtn.innerHTML='<span>+</span><small>Add more</small>';
-  addBtn.onclick=function(){ document.getElementById('suFile').click(); };
-  strip.appendChild(addBtn);
-}
-
-var _suMusicFile=null;
-var _suAudioCtx=null;
-var _suPreviewSrc=null;
-
-// Map friendly key → actual filename in static/music/ (without .mp3)
-var TRACK_FILES={
-  'happy_sunshine':  'soundgallerybydmitrytaras-happiness-555820',
-  'bubbly_fun':      '9jackjack8-petal-frutiger-aero-ambient-587794',
-  'adventure_time':  'tape-echo-adventure-time-time-flies-567712',
-  'dreamy_stars':    'atlasaudio-dream-518077',
-  'cool_beats':      'alex-morgan-corporate-lofi-cool-business-background-560039'
-};
-
-// Each preset track gets a distinct melody fallback (note Hz array)
-var TRACK_NOTES={
-  'happy_sunshine':  [523,659,784,659,523],
-  'bubbly_fun':      [392,523,659,784,659],
-  'adventure_time':  [330,392,494,523,494],
-  'dreamy_stars':    [440,494,523,494,440],
-  'cool_beats':      [262,330,392,330,262]
-};
-
-function _stopTonePreview(){
-  if(_suPreviewSrc){ try{_suPreviewSrc.stop();}catch(e){} _suPreviewSrc=null; }
-  var prev=document.getElementById('suMusicPreview');
-  if(prev){ prev.pause(); prev.src=''; }
-}
-
-function _playTonePreview(key){
-  _stopTonePreview();
-  var notes=TRACK_NOTES[key]; if(!notes) return;
-  if(!_suAudioCtx) _suAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  var ctx=_suAudioCtx;
-  var now=ctx.currentTime;
-  var gainNode=ctx.createGain();
-  gainNode.gain.setValueAtTime(0.25,now);
-  gainNode.connect(ctx.destination);
-  notes.forEach(function(hz,i){
-    var osc=ctx.createOscillator();
-    osc.type='sine';
-    osc.frequency.setValueAtTime(hz,now+i*0.22);
-    osc.connect(gainNode);
-    osc.start(now+i*0.22);
-    osc.stop(now+i*0.22+0.2);
-    if(i===0) _suPreviewSrc=osc;
-  });
-  gainNode.gain.setValueAtTime(0.25, now+notes.length*0.22-0.05);
-  gainNode.gain.linearRampToValueAtTime(0, now+notes.length*0.22);
-}
-
-function selectMusic(btn){
-  document.querySelectorAll('#suMusicTracks button').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  _suMusicKey=btn.dataset.key||'';
-  _suMusicFile=null;
-  _stopTonePreview();
-  if(_suMusicKey && _suMusicKey!=='__own__'){
-    var prev=document.getElementById('suMusicPreview');
-    var fname=(TRACK_FILES[_suMusicKey]||_suMusicKey)+'.mp3';
-    prev.src='/static/music/'+fname;
-    prev.onerror=function(){ prev.src=''; _playTonePreview(_suMusicKey); };
-    prev.play().catch(function(){ _playTonePreview(_suMusicKey); });
   }
-}
 
-function suPickOwnMusic(input){
-  if(!input.files||!input.files.length) return;
-  _suMusicFile=input.files[0];
-  _suMusicKey='__own__';
-  document.querySelectorAll('#suMusicTracks button').forEach(function(b){ b.classList.remove('active'); });
-  var ownBtn=document.querySelector('[data-key="__own__"]');
-  if(ownBtn) ownBtn.classList.add('active');
-  _stopTonePreview();
-  var prev=document.getElementById('suMusicPreview');
-  prev.src=URL.createObjectURL(_suMusicFile);
-  prev.play().catch(function(){});
-  input.value='';
-}
+  function closeUploadStoryModal() {
+    document.getElementById('uploadStoryModal').style.display = 'none';
+  }
 
-function postStory(){
-  if(!_suFiles.length){ alert('Please pick at least one photo or video! 📸'); return; }
-  var btn=document.getElementById('suPostBtn');
-  var spin=document.getElementById('suSpinner');
-  btn.disabled=true; spin.style.display='block';
-  var fd=new FormData();
-  _suFiles.forEach(function(f){ fd.append('media', f, f.name||'story.jpg'); });
-  fd.append('caption', document.getElementById('suCaption').value);
-  if(_suMusicFile){ fd.append('music_file', _suMusicFile, _suMusicFile.name); }
-  else if(_suMusicKey && _suMusicKey!=='__own__'){ fd.append('music_key', _suMusicKey); }
-  fetch('/upload-story/',{method:'POST',credentials:'same-origin',body:fd})
-    .then(function(r){return r.json();})
-    .then(function(data){
-      btn.disabled=false; spin.style.display='none';
-      if(data.success){
-        closeStoryUpload();
-        var cnt=data.count||1;
-        showToast('✨ '+cnt+' stor'+(cnt>1?'ies':'y')+' shared! Disappears in 24h');
-        setTimeout(function(){location.reload();},1500);
+  function submitStoryUpload() {
+    const input = document.getElementById('storyMediaInput');
+    if (!input.files || !input.files[0]) {
+      alert("Please select a photo or video to share!");
+      return;
+    }
+
+    const form = document.getElementById('storyUploadForm');
+    const formData = new FormData(form);
+
+    fetch('/upload-story/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        window.location.reload();
       } else {
-        alert('Story rejected: '+(data.category||data.error||'unknown'));
+        alert(res.message || "Could not upload story.");
       }
     })
-    .catch(function(){
-      btn.disabled=false; spin.style.display='none';
-      alert('Upload failed. Please try again.');
+    .catch(() => {
+      window.location.reload();
     });
-}
-
-// ══ AJAX FEED ══
-function buildCard(p){
-  var liked = p.liked;
-  var card = document.createElement('div');
-  card.className = 'feed-card ig-wrap';
-  card.setAttribute('data-post-id', p.post_id);
-
-  var av = p.profile_picture
-    ? '<img src="/'+p.profile_picture+'" alt="dp">'
-    : (p.full_name||'?')[0].toUpperCase();
-
-  var mediaSrc = '/'+p.media_path;
-  var mediaHtml = p.media_type==='VIDEO'
-    ? '<video src="'+mediaSrc+'" muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>'
-    : '<img src="'+mediaSrc+'" alt="post" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">';
-
-  var heartClass = liked ? 'fa-solid liked-heart' : 'fa-regular';
-  var likeCount = parseInt(p.likes)||0;
-  var capEsc = (p.caption||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  var catEsc = (p.content_category||'').replace(/</g,'&lt;');
-
-  card.innerHTML =
-    '<div class="feed-head">'+
-      '<div class="feed-user">'+
-        '<div class="feed-avatar">'+av+'</div>'+
-        '<div>'+
-          '<div class="feed-username">'+(p.full_name||'')+'</div>'+
-          '<div class="feed-category">'+catEsc+'</div>'+
-        '</div>'+
-      '</div>'+
-      '<div class="feed-more">···</div>'+
-    '</div>'+
-    '<div class="feed-media">'+mediaHtml+'</div>'+
-    '<div class="feed-actions">'+
-      '<button class="act-btn like-btn" title="Like">'+
-        '<i class="fa-heart '+heartClass+'" id="heart-'+p.post_id+'"></i>'+
-      '</button>'+
-      '<button class="act-btn comment-toggle-btn" title="Comment">'+
-        '<i class="fa-regular fa-comment"></i>'+
-      '</button>'+
-      '<button class="act-btn share-btn" title="Share">'+
-        '<i class="fa-regular fa-paper-plane"></i>'+
-      '</button>'+
-      '<button class="act-btn act-save" title="Save"><i class="fa-regular fa-bookmark"></i></button>'+
-    '</div>'+
-    '<div class="feed-likes" id="likes-'+p.post_id+'">'+likeCount+' like'+(likeCount!==1?'s':'')+'</div>'+
-    (capEsc?'<div class="feed-caption"><span class="uname">'+(p.full_name||'')+'</span>'+capEsc+'</div>':'')+
-    (p.comments_count>0
-      ? '<span class="feed-view-comments comment-toggle-btn" style="cursor:pointer;display:block;">View '+p.comments_count+' comment'+(p.comments_count!==1?'s':'')+'</span>'
-      : '<div style="height:10px;"></div>')+
-    '<div class="comments-section" id="cmt-'+p.post_id+'">'+
-      '<div class="comments-list" id="clist-'+p.post_id+'"></div>'+
-      '<div class="comment-input-row">'+
-        '<input type="text" placeholder="Add a comment…" id="cinput-'+p.post_id+'">'+
-        '<button class="ci-send" data-pid="'+p.post_id+'">Post</button>'+
-      '</div>'+
-    '</div>';
-
-  // Like
-  card.querySelector('.like-btn').addEventListener('click',function(){
-    toggleLike(p.post_id, liked, function(newLiked, count){
-      liked=newLiked;
-      var heartEl=document.getElementById('heart-'+p.post_id);
-      heartEl.className='fa-heart '+(newLiked?'fa-solid liked-heart':'fa-regular');
-      heartEl.classList.add('heart-pop');
-      setTimeout(function(){heartEl.classList.remove('heart-pop');},400);
-      var lEl=document.getElementById('likes-'+p.post_id);
-      if(lEl) lEl.textContent=count+' like'+(count!==1?'s':'');
-    });
-  });
-
-  // Toggle comments
-  card.querySelectorAll('.comment-toggle-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var sec=document.getElementById('cmt-'+p.post_id);
-      var isOpen=sec.classList.toggle('open');
-      if(isOpen) loadComments(p.post_id);
-    });
-  });
-
-  // Submit comment
-  card.querySelector('.ci-send').addEventListener('click',function(){
-    submitComment(p.post_id);
-  });
-  card.querySelector('#cinput-'+p.post_id).addEventListener('keydown',function(e){
-    if(e.key==='Enter') submitComment(p.post_id);
-  });
-
-  // Share
-  card.querySelector('.share-btn').addEventListener('click',function(){
-    openShare(p.post_id, p.full_name, p.media_path, p.media_type, (p.caption||'').substring(0,80));
-  });
-
-  return card;
-}
-
-function toggleLike(postId, currentlyLiked, cb){
-  fetch('/api/like/'+postId+'/',{method:'POST',credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(d){ cb(d.liked, d.count); })
-    .catch(function(){});
-}
-
-function loadComments(postId){
-  var list=document.getElementById('clist-'+postId);
-  if(list.dataset.loaded) return;
-  list.dataset.loaded='1';
-  fetch('/api/comments/'+postId+'/',{credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(items){
-      list.innerHTML='';
-      items.slice().reverse().forEach(function(c){
-        var d=document.createElement('div'); d.className='comment-item';
-        d.innerHTML='<span class="ci-name">'+escHtml(c.full_name)+'</span><span class="ci-text">'+escHtml(c.text)+'</span>';
-        list.appendChild(d);
-      });
-    }).catch(function(){});
-}
-
-function submitComment(postId){
-  var inp=document.getElementById('cinput-'+postId);
-  var text=(inp.value||'').trim(); if(!text)return;
-  inp.value='';
-  fetch('/api/comment/'+postId+'/',{
-    method:'POST', credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text:text})
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.ok)return;
-    var list=document.getElementById('clist-'+postId);
-    var item=document.createElement('div'); item.className='comment-item';
-    item.innerHTML='<span class="ci-name">'+escHtml(d.full_name||'You')+'</span><span class="ci-text">'+escHtml(d.text)+'</span>';
-    list.appendChild(item);
-  }).catch(function(){});
-}
-
-function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function loadFeed(){
-  var loader=document.getElementById('feedLoader');
-  var container=document.getElementById('feedContainer');
-  loader.style.display='block';
-  fetch('/api/random-posts/',{credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(posts){
-      loader.style.display='none';
-      container.innerHTML='';
-      if(!posts||posts.length===0){
-        container.innerHTML='<div class="empty-feed ig-wrap"><div class="icon">📭</div><p>No posts yet.<br>Follow friends to see their posts!</p><a href="/discover/" class="empty-btn">Find Friends</a></div>';
-        return;
-      }
-      posts.forEach(function(p){ container.appendChild(buildCard(p)); });
-      // video autoplay
-      var vids=container.querySelectorAll('.feed-media video');
-      if('IntersectionObserver' in window){
-        var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.play();else{e.target.pause();}});},{threshold:.5});
-        vids.forEach(function(v){io.observe(v);});
-      }
-    })
-    .catch(function(){
-      loader.style.display='none';
-      container.innerHTML='<div class="empty-feed ig-wrap"><div class="icon">📭</div><p>Could not load posts. Try refreshing!</p></div>';
-    });
-}
-
-loadFeed();
-
-// ── Screen time countdown ──
-(function(){
-  var totalSeconds={{ remaining_seconds if remaining_seconds is not none else 'null' }};
-  var strict={{ 'true' if strict_mode else 'false' }};
-  if(totalSeconds===null)return;
-  var remaining=totalSeconds;
-  var display=document.getElementById('timeDisplay');
-  var bar=document.getElementById('progressBar');
-  function fmt(s){var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;if(h>0)return h+'h '+m+'m';return m+'m '+String(sec).padStart(2,'0')+'s';}
-  function updateUI(){
-    if(display)display.textContent=remaining>0?fmt(remaining):'0m 00s';
-    var pct=totalSeconds>0?(remaining/totalSeconds)*100:0;
-    if(bar){bar.style.width=pct+'%';bar.style.background=remaining<=120?'linear-gradient(90deg,#fca5a5,#f87171)':remaining<=300?'linear-gradient(90deg,#fde68a,#fbbf24)':'linear-gradient(90deg,#84d8b0,#52c99a)';}
-    if(display)display.style.color=remaining<=120?'#e74c3c':'#e76f51';
   }
-  updateUI();
-  var ticker=setInterval(function(){
-    remaining--;updateUI();
-    if(remaining<=0){clearInterval(ticker);if(strict){var ov=document.createElement('div');ov.innerHTML='<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999;"><div style="background:white;border-radius:28px;padding:40px 30px;text-align:center;max-width:320px;"><div style="font-size:60px;margin-bottom:12px;">⏰</div><h2 style="margin-bottom:8px;color:#1f2937;font-family:Nunito,sans-serif;font-weight:900;">Time\'s Up!</h2><p style="color:#6b7280;margin-bottom:18px;font-family:Nunito,sans-serif;">See you tomorrow! 🌙</p><div id="logoutCount" style="font-size:32px;font-weight:900;color:#e76f51;font-family:Nunito,sans-serif;">5</div></div></div>';document.body.appendChild(ov);var count=5;var cd=setInterval(function(){count--;var el=document.getElementById('logoutCount');if(el)el.textContent=count;if(count<=0){clearInterval(cd);window.location.href='/logout/';}},1000);}}
-  },1000);
-  setInterval(function(){fetch('/api/time-remaining/',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){if(d.remaining_seconds!=null)remaining=d.remaining_seconds;}).catch(function(){});},120000);
-})();
+
+  function openStoryViewer(groupIdx) {
+    if (!allStoryGroups || allStoryGroups.length === 0) return;
+    currentGroupIdx = groupIdx;
+    currentSlideIdx = 0;
+
+    const modal = document.getElementById('storyViewerModal');
+    modal.style.display = 'flex';
+    renderCurrentStorySlide();
+  }
+
+  function closeStoryViewer() {
+    clearTimeout(storyTimer);
+    const audio = document.getElementById('storyAudioPlayer');
+    audio.pause();
+    document.getElementById('storyViewerModal').style.display = 'none';
+  }
+
+  function renderCurrentStorySlide() {
+    clearTimeout(storyTimer);
+    const group = allStoryGroups[currentGroupIdx];
+    if (!group || !group.stories || group.stories.length === 0) {
+      closeStoryViewer();
+      return;
+    }
+
+    const story = group.stories[currentSlideIdx];
+    if (!story) {
+      // Next group
+      if (currentGroupIdx + 1 < allStoryGroups.length) {
+        currentGroupIdx++;
+        currentSlideIdx = 0;
+        renderCurrentStorySlide();
+      } else {
+        closeStoryViewer();
+      }
+      return;
+    }
+
+    // Set User details
+    document.getElementById('storyUserName').textContent = group.full_name;
+    const avatarEl = document.getElementById('storyUserAvatar');
+    if (group.profile_picture) {
+      avatarEl.innerHTML = `<img src="/${group.profile_picture}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+    } else {
+      avatarEl.textContent = (group.full_name[0] || '?').toUpperCase();
+    }
+
+    // Set Segment Progress bars
+    const pContainer = document.getElementById('storyProgressBars');
+    pContainer.innerHTML = '';
+    group.stories.forEach((_, idx) => {
+      const seg = document.createElement('div');
+      seg.className = 'story-segment';
+      const fill = document.createElement('div');
+      fill.className = 'story-segment-fill';
+      if (idx < currentSlideIdx) fill.style.width = '100%';
+      else if (idx === currentSlideIdx) {
+        fill.style.width = '0%';
+        setTimeout(() => { fill.style.transition = `width ${SLIDE_DURATION}ms linear`; fill.style.width = '100%'; }, 50);
+      }
+      seg.appendChild(fill);
+      pContainer.appendChild(seg);
+    });
+
+    // Set Media
+    const mediaBox = document.getElementById('storyMediaBox');
+    mediaBox.innerHTML = '';
+    const cleanPath = (story.media_path || '').replace(/\\/g, '/');
+    if (story.media_type === 'VIDEO') {
+      const vid = document.createElement('video');
+      vid.src = '/' + cleanPath;
+      vid.autoplay = true;
+      vid.playsInline = true;
+      mediaBox.appendChild(vid);
+    } else {
+      const img = document.createElement('img');
+      img.src = '/' + cleanPath;
+      mediaBox.appendChild(img);
+    }
+
+    // Caption & Music
+    const captionBox = document.getElementById('storyCaptionOverlay');
+    const captionText = document.getElementById('storyCaptionText');
+    const musicBadge = document.getElementById('storyMusicBadge');
+    const musicTitle = document.getElementById('storyMusicTitle');
+    const audioPlayer = document.getElementById('storyAudioPlayer');
+
+    if (story.caption || story.music_title || story.music_path) {
+      captionBox.style.display = 'block';
+      captionText.textContent = story.caption || '';
+      if (story.music_title) {
+        musicBadge.style.display = 'inline-flex';
+        musicTitle.textContent = story.music_title;
+      } else {
+        musicBadge.style.display = 'none';
+      }
+    } else {
+      captionBox.style.display = 'none';
+    }
+
+    // Handle background audio
+    if (story.music_path) {
+      audioPlayer.src = '/' + story.music_path.replace(/\\/g, '/');
+      audioPlayer.play().catch(() => {});
+    } else {
+      audioPlayer.pause();
+    }
+
+    // Schedule next slide
+    storyTimer = setTimeout(() => {
+      nextStorySlide();
+    }, SLIDE_DURATION);
+  }
+
+  function nextStorySlide() {
+    const group = allStoryGroups[currentGroupIdx];
+    if (currentSlideIdx + 1 < group.stories.length) {
+      currentSlideIdx++;
+      renderCurrentStorySlide();
+    } else if (currentGroupIdx + 1 < allStoryGroups.length) {
+      currentGroupIdx++;
+      currentSlideIdx = 0;
+      renderCurrentStorySlide();
+    } else {
+      closeStoryViewer();
+    }
+  }
+
+  function prevStorySlide() {
+    if (currentSlideIdx > 0) {
+      currentSlideIdx--;
+      renderCurrentStorySlide();
+    } else if (currentGroupIdx > 0) {
+      currentGroupIdx--;
+      currentSlideIdx = allStoryGroups[currentGroupIdx].stories.length - 1;
+      renderCurrentStorySlide();
+    }
+  }
+
+  // =========================================================
+  // SCREEN TIME PROGRESS & STRICT MODE TIMER
+  // =========================================================
+  let remainingSec = totalRemainingSeconds;
+  function updateScreenTimeDisplay() {
+    const mins = Math.floor(remainingSec / 60);
+    const secs = remainingSec % 60;
+    const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    document.getElementById('timeClock').textContent = formatted;
+
+    const percent = Math.max(0, Math.min(100, (remainingSec / (totalRemainingSeconds || 3600)) * 100));
+    document.getElementById('timeBar').style.width = `${percent}%`;
+
+    if (remainingSec <= 0) {
+      if (isStrictMode) {
+        window.location.href = '/time-limit-reached/';
+      }
+    } else {
+      remainingSec--;
+    }
+  }
+  setInterval(updateScreenTimeDisplay, 1000);
+  updateScreenTimeDisplay();
+
+  // =========================================================
+  // AJAX FEED LOADER & INTERACTIVE ACTIONS
+  // =========================================================
+  function loadFeedPosts() {
+    fetch('/api/random-posts/', { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(posts => {
+        const feedStream = document.getElementById('feedStream');
+        document.getElementById('feedLoading').style.display = 'none';
+
+        if (!posts || posts.length === 0) {
+          feedStream.innerHTML = `
+            <div style="text-align:center;padding:48px 20px;color:var(--ln-text-muted);">
+              <i class="fa-solid fa-shapes" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+              <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">Your feed is ready for new adventures!</h3>
+              <p style="font-size:14px;font-weight:700;">Upload a post or explore other children to see photos and videos here.</p>
+              <a href="/child/upload-post/" class="ln-btn-primary" style="margin-top:16px;display:inline-flex;">Create First Post</a>
+            </div>
+          `;
+          return;
+        }
+
+        feedStream.innerHTML = posts.map(post => `
+          <article class="ln-post-card" id="post-${post.post_id}">
+            <!-- Header -->
+            <div class="ln-post-header">
+              <a href="/child/view-profile/${post.child_id}/" class="ln-post-user">
+                <div class="ln-post-avatar">
+                  ${post.profile_picture ? `<img src="/${post.profile_picture.replace(/\\/g, '/')}" alt="">` : (post.full_name ? post.full_name[0].toUpperCase() : '?')}
+                </div>
+                <div class="ln-post-user-info">
+                  <span class="ln-post-author">${post.full_name || 'LittleNet Friend'}</span>
+                  ${post.content_category ? `<span class="ln-post-category-tag"><i class="fa-solid fa-tag"></i> ${post.content_category}</span>` : ''}
+                </div>
+              </a>
+              <div class="ln-post-more-btn" onclick="openFeedPostOptions(${post.post_id}, ${post.child_id}, '${(post.full_name || '').replace(/'/g, "\\'")}')"><i class="fa-solid fa-ellipsis"></i></div>
+            </div>
+
+            <!-- Media -->
+            <div class="ln-post-media">
+              ${post.media_type === 'VIDEO' 
+                ? `<video controls playsinline src="/${post.media_path.replace(/\\/g, '/')}"></video>`
+                : `<img src="/${post.media_path.replace(/\\/g, '/')}" loading="lazy" alt="Post">`
+              }
+            </div>
+
+            <!-- Actions -->
+            <div class="ln-post-actions">
+              <button class="ln-action-btn ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.post_id}, this)">
+                <i class="${post.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+              </button>
+              <button class="ln-action-btn" onclick="toggleComments(${post.post_id})">
+                <i class="fa-regular fa-comment"></i>
+              </button>
+              <button class="ln-action-btn" onclick="sharePost(${post.post_id})">
+                <i class="fa-regular fa-paper-plane"></i>
+              </button>
+            </div>
+
+            <!-- Likes & Caption -->
+            <div class="ln-post-likes" id="likes-count-${post.post_id}">${post.likes || 0} likes</div>
+            
+            <div class="ln-post-caption">
+              <span class="author-name">${post.full_name || ''}</span>
+              <span>${post.caption || ''}</span>
+            </div>
+
+            <!-- Comments Toggle -->
+            <div class="ln-view-comments-btn" onclick="toggleComments(${post.post_id})">
+              View all comments
+            </div>
+
+            <!-- Comments Drawer -->
+            <div class="comments-drawer" id="comments-drawer-${post.post_id}">
+              <div class="comment-list-box" id="comments-list-${post.post_id}">
+                <div style="font-size:12px;color:var(--ln-text-muted);">Loading comments...</div>
+              </div>
+              <div class="comment-input-row">
+                <input type="text" id="comment-input-${post.post_id}" placeholder="Write a kind comment...">
+                <button type="button" onclick="submitComment(${post.post_id})">Post</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('feedLoading').innerHTML = '<p>Feed loaded. Explore and connect with friends!</p>';
+      });
+  }
+
+  function toggleLike(postId, btn) {
+    fetch(`/api/like/${postId}/`, { method: 'POST', credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(data => {
+        const icon = btn.querySelector('i');
+        const likesEl = document.getElementById(`likes-count-${postId}`);
+        if (data.liked) {
+          btn.classList.add('liked');
+          icon.className = 'fa-solid fa-heart';
+          btn.classList.add('heart-pop');
+          setTimeout(() => btn.classList.remove('heart-pop'), 400);
+        } else {
+          btn.classList.remove('liked');
+          icon.className = 'fa-regular fa-heart';
+        }
+        if (likesEl && typeof data.likes_count !== 'undefined') {
+          likesEl.textContent = `${data.likes_count} likes`;
+        }
+      });
+  }
+
+  function toggleComments(postId) {
+    const drawer = document.getElementById(`comments-drawer-${postId}`);
+    if (!drawer) return;
+    const isHidden = drawer.style.display === 'none' || drawer.style.display === '';
+    drawer.style.display = isHidden ? 'block' : 'none';
+
+    if (isHidden) {
+      fetch(`/api/comments/${postId}/`, { credentials: 'same-origin' })
+        .then(r => r.json())
+        .then(comments => {
+          const list = document.getElementById(`comments-list-${postId}`);
+          if (!comments || comments.length === 0) {
+            list.innerHTML = `<div style="font-size:12px;color:var(--ln-text-muted);font-weight:700;">No comments yet. Be the first to say something nice!</div>`;
+          } else {
+            list.innerHTML = comments.map(c => `
+              <div class="comment-item">
+                <strong>${c.full_name || 'Friend'}:</strong>
+                <span>${c.comment_text}</span>
+              </div>
+            `).join('');
+          }
+        });
+    }
+  }
+
+  function submitComment(postId) {
+    const input = document.getElementById(`comment-input-${postId}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    fetch(`/api/comment/${postId}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ comment: text })
+    })
+    .then(r => r.json())
+    .then(data => {
+      input.value = '';
+      toggleComments(postId); // refresh
+    });
+  }
+
+  let currentFeedPostId = null;
+  let currentFeedPosterId = null;
+
+  function openFeedPostOptions(postId, posterId, posterName) {
+    currentFeedPostId = postId;
+    currentFeedPosterId = posterId;
+    document.getElementById('feedSheetPosterName').textContent = posterName ? `Post by ${posterName}` : 'Post Options';
+    document.getElementById('feedPostSheet').style.display = 'block';
+  }
+
+  function closeFeedPostOptions() {
+    document.getElementById('feedPostSheet').style.display = 'none';
+  }
+
+  function copyFeedPostLink() {
+    closeFeedPostOptions();
+    navigator.clipboard.writeText(window.location.origin + `/child/view-profile/${currentFeedPosterId}/`);
+    alert("Post profile link copied to clipboard!");
+  }
+
+  function viewFeedPosterProfile() {
+    closeFeedPostOptions();
+    window.location.href = `/child/view-profile/${currentFeedPosterId}/`;
+  }
+
+  // Load feed on startup
+  document.addEventListener('DOMContentLoaded', loadFeedPosts);
 </script>
+
+<!-- Feed Post Options Bottom Sheet -->
+<div class="ln-sheet-menu" id="feedPostSheet">
+  <div class="ln-sheet-handle"></div>
+  <div style="font-size:13px;font-weight:800;color:var(--ln-text-muted);text-align:center;margin-bottom:12px;" id="feedSheetPosterName">Post Options</div>
+
+  <div class="ln-sheet-option" onclick="copyFeedPostLink()">
+    <i class="fa-solid fa-link" style="color:#20c997;"></i>
+    <span>Copy Link</span>
+  </div>
+
+  <div class="ln-sheet-option" onclick="viewFeedPosterProfile()">
+    <i class="fa-solid fa-user" style="color:#7950f2;"></i>
+    <span>View Author Profile</span>
+  </div>
+
+  <div class="ln-sheet-option" onclick="closeFeedPostOptions()">
+    <i class="fa-solid fa-xmark" style="color:#64748b;"></i>
+    <span>Cancel</span>
+  </div>
+</div>
+
 </body>
 </html>

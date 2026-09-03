@@ -1,572 +1,603 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chat with {{ receiver_name }} | LittleNet</title>
 
-/* ── Header ── */
-.chat-header{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 14px;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-  flex-shrink:0;max-width:100%;
-}
-.ig-back{
-  font-size:21px;color:#262626;cursor:pointer;flex-shrink:0;
-  width:32px;display:flex;align-items:center;
-}
-.ig-back:hover{color:#e76f51;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-.peer-avatar{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:900;color:#7c3700;overflow:hidden;
-  cursor:pointer;
-}
-.peer-avatar img{width:100%;height:100%;object-fit:cover;}
+  <style>
+    body {
+      padding-bottom: 0 !important;
+      background: #f8f9fd;
+    }
 
-.peer-info{flex:1;min-width:0;cursor:pointer;}
-.peer-name{font-size:15px;font-weight:900;color:#262626;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.peer-sub{font-size:12px;color:#8e8e8e;font-weight:600;}
+    .chat-screen-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      box-shadow: var(--ln-shadow-md);
+      position: relative;
+    }
 
-.header-actions{display:flex;gap:18px;align-items:center;flex-shrink:0;}
-.header-actions button{background:none;border:none;font-size:21px;color:#262626;cursor:pointer;}
-.header-actions button:hover{color:#e76f51;}
+    /* Chat Header */
+    .chat-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* ── Messages area ── */
-.messages-area{
-  flex:1;overflow-y:auto;padding:12px 14px;
-  display:flex;flex-direction:column;gap:4px;
-  background:#fff;
-}
-.messages-area::-webkit-scrollbar{width:3px;}
-.messages-area::-webkit-scrollbar-thumb{background:#efefef;border-radius:3px;}
+    .chat-header-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* Date divider */
-.date-sep{
-  text-align:center;font-size:12px;font-weight:700;color:#8e8e8e;
-  margin:10px 0 6px;
-}
+    .header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+    }
 
-/* Empty state */
-.empty-chat{
-  flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;gap:12px;padding:40px;
-}
-.empty-chat .e-avatar{
-  width:80px;height:80px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:32px;font-weight:900;color:#7c3700;margin-bottom:4px;
-}
-.empty-chat h4{font-size:17px;font-weight:900;color:#262626;}
-.empty-chat p{font-size:13px;color:#8e8e8e;font-weight:600;}
+    .header-name {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--ln-text);
+      line-height: 1.2;
+    }
 
-/* ── Bubbles ── */
-.msg-row{display:flex;align-items:flex-end;gap:6px;margin-bottom:2px;}
-.msg-row.sent{justify-content:flex-end;}
-.msg-row.received{justify-content:flex-start;}
+    .header-status {
+      font-size: 11px;
+      font-weight: 700;
+      color: #20c997;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-/* Small avatar on received messages */
-.msg-av{
-  width:26px;height:26px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.msg-av img{width:100%;height:100%;object-fit:cover;}
-.msg-av.hidden{visibility:hidden;}
+    /* Messages Stream */
+    .messages-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f8f9fd;
+    }
 
-.bubble{
-  max-width:72%;padding:10px 14px;
-  word-break:break-word;font-size:14px;line-height:1.5;font-weight:600;
-  position:relative;
-}
+    .message-bubble-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
 
-/* Sent — Instagram blue-purple gradient */
-.bubble.sent{
-  background:#0095f6;color:white;
-  border-radius:22px 22px 4px 22px;
-}
-.bubble.sent .time{color:rgba(255,255,255,.6);}
+    .message-bubble-row.sent {
+      justify-content: flex-end;
+    }
 
-/* Received — light grey */
-.bubble.received{
-  background:#efefef;color:#262626;
-  border-radius:22px 22px 22px 4px;
-}
-.bubble.received .time{color:#8e8e8e;}
+    .message-bubble-row.received {
+      justify-content: flex-start;
+    }
 
-.bubble .time{
-  display:block;font-size:10px;margin-top:4px;font-weight:700;text-align:right;
-}
-.bubble.received .time{text-align:left;}
+    .bubble {
+      max-width: 78%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.45;
+      position: relative;
+      word-break: break-word;
+    }
 
-/* Media inside bubble */
-.bubble img{max-width:100%;border-radius:14px;display:block;margin-bottom:4px;cursor:pointer;}
-.bubble video,.bubble audio{max-width:100%;border-radius:14px;display:block;margin-bottom:4px;}
-.file-link{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 12px;border-radius:12px;
-  background:rgba(255,255,255,.2);color:white;
-  font-size:13px;font-weight:800;
-}
-.bubble.received .file-link{background:rgba(0,0,0,.06);color:#262626;}
+    .bubble.sent {
+      background: var(--ln-brand-gradient);
+      color: white;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 14px rgba(255, 107, 107, 0.2);
+    }
 
-/* ── Input bar ── */
-.input-bar{
-  background:#fff;border-top:1px solid #dbdbdb;
-  padding:8px 12px;flex-shrink:0;
-}
+    .bubble.received {
+      background: white;
+      color: var(--ln-text);
+      border-bottom-left-radius: 4px;
+      border: 1px solid var(--ln-border-light);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
 
-/* Attachment tray */
-.attach-menu{
-  display:none;flex-wrap:wrap;gap:12px;
-  padding:10px 4px 14px;
-}
-.attach-menu.open{display:flex;}
-.attach-opt{
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  cursor:pointer;font-size:11px;font-weight:800;color:#262626;
-}
-.attach-opt .icon-circle{
-  width:50px;height:50px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:white;transition:.2s;
-}
-.attach-opt:hover .icon-circle{transform:scale(1.1);}
-.opt-image  .icon-circle{background:#0095f6;}
-.opt-camera .icon-circle{background:#ef4444;}
-.opt-video  .icon-circle{background:#f59e0b;}
-.opt-audio  .icon-circle{background:#8b5cf6;}
-.opt-file   .icon-circle{background:#10b981;}
+    .bubble-media-img {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 4px;
+      max-height: 240px;
+      cursor: pointer;
+    }
 
-/* Recording bar */
-.recording-bar{
-  display:none;align-items:center;gap:10px;
-  padding:8px 12px;background:#fff0f0;border-radius:12px;margin-bottom:8px;
-  font-size:13px;color:#b91c1c;font-weight:800;
-}
-.recording-bar.show{display:flex;}
-.rec-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:pulse 1s infinite;}
-.rec-timer{flex:1;}
-.rec-cancel{background:none;border:none;color:#b91c1c;cursor:pointer;font-size:18px;}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+    .bubble-media-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* Upload indicator */
-.upload-indicator{display:none;font-size:12px;font-weight:700;color:#0095f6;padding:4px 12px;text-align:center;}
-.upload-indicator.show{display:block;}
+    .bubble-time {
+      font-size: 10px;
+      opacity: 0.75;
+      margin-top: 4px;
+      text-align: right;
+    }
 
-/* Text row */
-.text-row{display:flex;align-items:center;gap:8px;}
+    /* Voice Note Bubble */
+    .voice-bubble {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+    }
 
-.attach-toggle{
-  width:36px;height:36px;border:none;background:none;
-  font-size:22px;color:#262626;cursor:pointer;flex-shrink:0;transition:.2s;
-}
-.attach-toggle:hover,.attach-toggle.active{color:#0095f6;transform:rotate(45deg);}
+    .voice-play-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: white;
+      color: var(--ln-coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
 
-.text-input{
-  flex:1;border:1.5px solid #dbdbdb;border-radius:22px;
-  padding:9px 16px;font-size:14px;font-weight:600;outline:none;
-  background:#fafafa;transition:.2s;resize:none;
-  max-height:100px;line-height:1.4;
-  font-family:'Nunito',sans-serif;color:#262626;
-}
-.text-input:focus{border-color:#0095f6;background:#fff;}
-.text-input::placeholder{color:#8e8e8e;}
+    .bubble.received .voice-play-btn {
+      background: var(--ln-coral);
+      color: white;
+    }
 
-.voice-btn{
-  width:36px;height:36px;border:none;background:none;
-  color:#262626;font-size:20px;cursor:pointer;flex-shrink:0;transition:.2s;
-}
-.voice-btn:hover{color:#0095f6;}
-.voice-btn.recording{color:#ef4444;animation:pulse 1s infinite;}
+    /* Chat Input Bar */
+    .chat-bottom-bar {
+      background: white;
+      padding: 10px 14px 14px;
+      border-top: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
 
-.send-btn{
-  width:36px;height:36px;border:none;background:none;
-  color:#0095f6;font-size:22px;cursor:pointer;flex-shrink:0;transition:.2s;
-}
-.send-btn:hover{transform:scale(1.15);}
+    .chat-action-icon {
+      font-size: 20px;
+      color: #64748b;
+      cursor: pointer;
+      padding: 6px;
+      transition: all 0.2s;
+    }
 
-input[type=file].hidden-input{display:none;}
+    .chat-action-icon:hover {
+      color: var(--ln-coral);
+      transform: scale(1.15);
+    }
 
-/* ── Lightbox ── */
-#lightbox{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);
-  z-index:9999;align-items:center;justify-content:center;cursor:zoom-out;
-}
-#lightbox.open{display:flex;}
-#lightboxImg{max-width:95%;max-height:90vh;border-radius:14px;}
+    .chat-input-field {
+      flex: 1;
+      height: 42px;
+      padding: 0 16px;
+      background: #f1f5f9;
+      border: 1.5px solid transparent;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ln-text);
+      transition: all 0.2s;
+    }
 
-/* ── Camera modal ── */
-.cam-modal{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);
-  z-index:9000;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-}
-.cam-modal.open{display:flex;}
-#camPreview{width:min(420px,95vw);border-radius:20px;background:#000;aspect-ratio:4/3;object-fit:cover;}
-.cam-controls{display:flex;gap:20px;align-items:center;}
-.cam-snap{
-  width:68px;height:68px;border-radius:50%;border:4px solid white;
-  background:rgba(255,255,255,.18);font-size:28px;color:white;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:.2s;
-}
-.cam-snap:hover{background:rgba(255,255,255,.35);}
-.cam-close-btn{
-  width:44px;height:44px;border-radius:50%;border:none;
-  background:rgba(255,255,255,.18);color:white;font-size:18px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;
-}
-.cam-close-btn:hover{background:rgba(255,255,255,.35);}
-#camCanvas{display:none;}
+    .chat-input-field:focus {
+      background: white;
+      border-color: var(--ln-coral);
+    }
 
-@media(max-width:600px){.bubble{max-width:82%;}}
-</style>
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-brand-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: var(--ln-shadow-glow);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .chat-send-btn:hover {
+      transform: scale(1.08);
+    }
+
+    /* Attachment Menu Popup */
+    .attach-popup-sheet {
+      display: none;
+      position: absolute;
+      bottom: 64px;
+      left: 14px;
+      background: white;
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--ln-shadow-lg);
+      border: 1px solid var(--ln-border-light);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      z-index: 200;
+      animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .attach-opt-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .attach-icon-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+    }
+
+    .attach-opt-btn span {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ln-text);
+    }
+
+    /* Voice Recording Bar */
+    .voice-record-bar {
+      display: none;
+      flex: 1;
+      height: 42px;
+      background: #fee2e2;
+      border-radius: 9999px;
+      padding: 0 16px;
+      align-items: center;
+      justify-content: space-between;
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .rec-pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #dc2626;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      100% { transform: scale(1.2); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="chat-header">
-  <a class="ig-back" href="/messages/"><i class="fa-solid fa-arrow-left"></i></a>
+<div class="chat-screen-wrap">
 
-  <div class="peer-avatar" id="peerAvatarEl" onclick="goProfile()">?</div>
+  <!-- Header -->
+  <header class="chat-header">
+    <a href="/messages/" style="color:var(--ln-text);font-size:18px;padding:4px;">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
 
-  <div class="peer-info" onclick="goProfile()">
-    <div class="peer-name" id="peerName">{{ receiver_name }}</div>
-    <div class="peer-sub">LittleNet</div>
-  </div>
+    <a href="/child/view-profile/{{ receiver_child_id }}/" class="chat-header-user">
+      <div class="header-avatar">
+        {{ receiver_name[0]|upper if receiver_name else '?' }}
+      </div>
+      <div>
+        <div class="header-name">{{ receiver_name }}</div>
+        <div class="header-status"><i class="fa-solid fa-circle" style="font-size:6px;"></i> Active now</div>
+      </div>
+    </a>
 
-  <div class="header-actions">
-    <button onclick="goProfile()" title="Profile"><i class="fa-solid fa-circle-info"></i></button>
-  </div>
-</div>
+    <div>
+      <a href="/child/view-profile/{{ receiver_child_id }}/" style="color:var(--ln-text);font-size:18px;padding:4px;">
+        <i class="fa-solid fa-circle-info"></i>
+      </a>
+    </div>
+  </header>
 
-<!-- Messages -->
-<div class="messages-area" id="messagesArea">
+  <!-- Messages Scroll Area -->
+  <main class="messages-stream" id="msgStream">
+    {% if messages %}
+      {% for msg in messages %}
+      <div class="message-bubble-row {% if msg.sender_id == current_child_id %}sent{% else %}received{% endif %}">
+        
+        <div class="bubble {% if msg.sender_id == current_child_id %}sent{% else %}received{% endif %}">
+          
+          {# Image Message #}
+          {% if msg.message_type == 'IMAGE' %}
+            <div class="bubble-media-img" onclick="openImageLightbox('/{{ msg.media_path|replace('\\','/') }}')">
+              <img src="/{{ msg.media_path|replace('\\','/') }}" loading="lazy" alt="Photo">
+            </div>
+            {% if msg.message_text %}<p>{{ msg.message_text }}</p>{% endif %}
 
-  {% if messages %}
-    {% for message in messages %}
-      {% if message.sender_child_id == current_child_id %}
-        <div class="msg-row sent">
-          <div class="bubble sent">
-            {% if message.message_type == "TEXT" %}{{ message.message_text }}
-            {% elif message.message_type == "IMAGE" %}
-              <img src="/{{ message.media_path | replace('\\', '/') }}" alt="image" onclick="openImg(this.src)">
-            {% elif message.message_type == "VIDEO" %}
-              <video controls><source src="/{{ message.media_path | replace('\\', '/') }}"></video>
-            {% elif message.message_type == "VOICE" %}
-              <audio controls><source src="/{{ message.media_path | replace('\\', '/') }}"></audio>
-            {% elif message.message_type == "FILE" %}
-              <a class="file-link" href="/{{ message.media_path | replace('\\', '/') }}" target="_blank">
-                <i class="fa-regular fa-file"></i> Download file
-              </a>
-            {% endif %}
-            <span class="time">{{ message.sent_at.strftime('%H:%M') if message.sent_at else '' }}</span>
-          </div>
+          {# Video Message #}
+          {% elif msg.message_type == 'VIDEO' %}
+            <div style="border-radius:14px;overflow:hidden;margin-bottom:4px;">
+              <video controls playsinline src="/{{ msg.media_path|replace('\\','/') }}" style="width:100%;max-height:220px;"></video>
+            </div>
+            {% if msg.message_text %}<p>{{ msg.message_text }}</p>{% endif %}
+
+          {# Voice Message #}
+          {% elif msg.message_type == 'VOICE' or msg.message_type == 'AUDIO' %}
+            <div class="voice-bubble">
+              <div class="voice-play-btn" onclick="playVoiceAudio('/{{ msg.media_path|replace('\\','/') }}', this)">
+                <i class="fa-solid fa-play"></i>
+              </div>
+              <div>
+                <div style="font-size:12px;font-weight:800;">Voice Note</div>
+                <div style="font-size:10px;opacity:0.8;">Tap to play</div>
+              </div>
+            </div>
+
+          {# Plain Text #}
+          {% else %}
+            <p>{{ msg.message_text }}</p>
+          {% endif %}
+
+          <div class="bubble-time">{{ msg.sent_at if msg.sent_at is defined else '' }}</div>
         </div>
-      {% else %}
-        <div class="msg-row received">
-          <div class="msg-av" id="peerMsgAv">?</div>
-          <div class="bubble received">
-            {% if message.message_type == "TEXT" %}{{ message.message_text }}
-            {% elif message.message_type == "IMAGE" %}
-              <img src="/{{ message.media_path | replace('\\', '/') }}" alt="image" onclick="openImg(this.src)">
-            {% elif message.message_type == "VIDEO" %}
-              <video controls><source src="/{{ message.media_path | replace('\\', '/') }}"></video>
-            {% elif message.message_type == "VOICE" %}
-              <audio controls><source src="/{{ message.media_path | replace('\\', '/') }}"></audio>
-            {% elif message.message_type == "FILE" %}
-              <a class="file-link" href="/{{ message.media_path | replace('\\', '/') }}" target="_blank">
-                <i class="fa-regular fa-file"></i> Download file
-              </a>
-            {% endif %}
-            <span class="time">{{ message.sent_at.strftime('%H:%M') if message.sent_at else '' }}</span>
-          </div>
-        </div>
-      {% endif %}
-    {% endfor %}
-  {% else %}
-    <div class="empty-chat">
-      <div class="e-avatar" id="emptyAvatar">?</div>
-      <h4 id="emptyName">{{ receiver_name }}</h4>
-      <p>Say hello and start the conversation! 👋</p>
-    </div>
-  {% endif %}
 
-</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--ln-text-muted);">
+        <i class="fa-regular fa-paper-plane" style="font-size:42px;color:#cbd5e1;margin-bottom:10px;"></i>
+        <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:4px;">Say hello to {{ receiver_name }}!</h3>
+        <p style="font-size:13px;font-weight:700;">All messages are protected by LittleNet AI Child Safety.</p>
+      </div>
+    {% endif %}
+  </main>
 
-<!-- Input bar -->
-<div class="input-bar">
-
-  <div class="recording-bar" id="recBar">
-    <div class="rec-dot"></div>
-    <span class="rec-timer" id="recTimer">0:00</span>
-    <span>Recording…</span>
-    <button class="rec-cancel" onclick="cancelRecording()"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-
-  <div class="upload-indicator" id="uploadIndicator">Sending… ✨</div>
-
-  <!-- Attachment tray -->
-  <div class="attach-menu" id="attachMenu">
-    <div class="attach-opt opt-image" onclick="document.getElementById('fileImage').click()">
-      <div class="icon-circle"><i class="fa-regular fa-image"></i></div><span>Photo</span>
+  <!-- Attachment Options Menu -->
+  <div class="attach-popup-sheet" id="attachPopup">
+    <div class="attach-opt-btn" onclick="triggerFileInput('image/*')">
+      <div class="attach-icon-circle" style="background:var(--ln-coral);"><i class="fa-regular fa-image"></i></div>
+      <span>Photos</span>
     </div>
-    <div class="attach-opt opt-camera" onclick="openCamera()">
-      <div class="icon-circle"><i class="fa-solid fa-camera"></i></div><span>Camera</span>
+    <div class="attach-opt-btn" onclick="triggerFileInput('video/*')">
+      <div class="attach-icon-circle" style="background:var(--ln-purple);"><i class="fa-solid fa-video"></i></div>
+      <span>Video</span>
     </div>
-    <div class="attach-opt opt-video" onclick="document.getElementById('fileVideo').click()">
-      <div class="icon-circle"><i class="fa-solid fa-video"></i></div><span>Video</span>
-    </div>
-    <div class="attach-opt opt-audio" onclick="document.getElementById('fileAudio').click()">
-      <div class="icon-circle"><i class="fa-solid fa-music"></i></div><span>Audio</span>
-    </div>
-    <div class="attach-opt opt-file" onclick="document.getElementById('fileDoc').click()">
-      <div class="icon-circle"><i class="fa-regular fa-file"></i></div><span>File</span>
+    <div class="attach-opt-btn" onclick="triggerFileInput('.pdf,.doc,.docx')">
+      <div class="attach-icon-circle" style="background:#339af0;"><i class="fa-solid fa-file"></i></div>
+      <span>Document</span>
     </div>
   </div>
 
-  <!-- Hidden file inputs -->
-  <input type="file" id="fileImage"        class="hidden-input" accept="image/*"              onchange="sendFile(this)">
-  <input type="file" id="fileCameraMobile" class="hidden-input" accept="image/*" capture="environment" onchange="sendFile(this)">
-  <input type="file" id="fileVideo"        class="hidden-input" accept="video/*"              onchange="sendFile(this)">
-  <input type="file" id="fileAudio"        class="hidden-input" accept="audio/*"              onchange="sendFile(this)">
-  <input type="file" id="fileDoc"          class="hidden-input" accept=".pdf,.doc,.docx,.txt" onchange="sendFile(this)">
+  <input type="file" id="mediaUploadInput" style="display:none;" onchange="uploadMediaAttachment(this)">
 
-  <!-- Text row -->
-  <div class="text-row">
-    <button class="attach-toggle" id="attachToggle" onclick="toggleAttach()">
-      <i class="fa-solid fa-circle-plus"></i>
-    </button>
+  <!-- Chat Bottom Input Bar -->
+  <footer class="chat-bottom-bar">
+    <div class="chat-action-icon" onclick="toggleAttachmentMenu()">
+      <i class="fa-solid fa-paperclip"></i>
+    </div>
 
-    <textarea class="text-input" id="textInput" placeholder="Message…" rows="1"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <!-- Voice Note Bar (shown while recording) -->
+    <div class="voice-record-bar" id="voiceRecordBar">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="rec-pulse-dot"></div>
+        <span id="recTimer">0:00</span>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <button type="button" onclick="cancelVoiceRecording()" style="color:#64748b;font-weight:800;font-size:12px;">Cancel</button>
+        <button type="button" onclick="stopAndSendVoiceNote()" style="color:#dc2626;font-weight:900;font-size:13px;">Send</button>
+      </div>
+    </div>
 
-    <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">
+    <!-- Normal Text Input -->
+    <input
+      type="text"
+      id="messageTextInput"
+      class="chat-input-field"
+      placeholder="Type a friendly message..."
+      onkeypress="handleKeyPress(event)"
+    >
+
+    <div class="chat-action-icon" id="micBtn" onclick="startVoiceRecording()">
       <i class="fa-solid fa-microphone"></i>
-    </button>
+    </div>
 
-    <button class="send-btn" onclick="sendText()">
+    <button type="button" class="chat-send-btn" onclick="sendTextMessage()">
       <i class="fa-solid fa-paper-plane"></i>
     </button>
-  </div>
-</div>
+  </footer>
 
-<!-- Lightbox -->
-<div id="lightbox" onclick="this.classList.remove('open')">
-  <img id="lightboxImg">
-</div>
-
-<!-- Camera modal -->
-<div class="cam-modal" id="camModal">
-  <video id="camPreview" autoplay playsinline muted></video>
-  <canvas id="camCanvas"></canvas>
-  <div class="cam-controls">
-    <button class="cam-close-btn" onclick="closeCamera()"><i class="fa-solid fa-xmark"></i></button>
-    <button class="cam-snap" onclick="snapPhoto()"><i class="fa-solid fa-camera"></i></button>
-    <button class="cam-close-btn" onclick="flipCamera()"><i class="fa-solid fa-rotate"></i></button>
-  </div>
 </div>
 
 <script>
-const RECEIVER_ID = {{ receiver_child_id }};
-const RECEIVER_PROFILE_ID = {{ receiver_child_id }};
-const mediaArea = document.getElementById('messagesArea');
+  const receiverId = {{ receiver_child_id }};
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let recInterval = null;
+  let recSecs = 0;
 
-// Set peer avatar initial
-var peerNameStr = document.getElementById('peerName').textContent.trim();
-var peerInit = peerNameStr[0] ? peerNameStr[0].toUpperCase() : '?';
-document.getElementById('peerAvatarEl').textContent = peerInit;
-var msgAvEls = document.querySelectorAll('#peerMsgAv');
-msgAvEls.forEach(function(el){ el.textContent = peerInit; });
-var emptyAv = document.getElementById('emptyAvatar');
-if(emptyAv) emptyAv.textContent = peerInit;
+  // Auto-scroll to bottom of chat
+  function scrollToBottom() {
+    const stream = document.getElementById('msgStream');
+    stream.scrollTop = stream.scrollHeight;
+  }
+  window.onload = scrollToBottom;
 
-mediaArea.scrollTop = mediaArea.scrollHeight;
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      sendTextMessage();
+    }
+  }
 
-function goProfile(){ window.location.href = '/child/view-profile/'+RECEIVER_PROFILE_ID+'/'; }
+  function sendTextMessage() {
+    const input = document.getElementById('messageTextInput');
+    const text = input.value.trim();
+    if (!text) return;
 
-function autoResize(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,100)+'px';
-}
-
-function handleKey(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendText();}
-}
-
-function sendText(){
-  var input=document.getElementById('textInput');
-  var text=input.value.trim(); if(!text)return;
-  var form=document.createElement('form');
-  form.method='POST';form.action='/send-message/'+RECEIVER_ID+'/';
-  var field=document.createElement('input');
-  field.type='hidden';field.name='message_text';field.value=text;
-  form.appendChild(field);
-  appendBubble('TEXT',null,text);
-  input.value='';input.style.height='auto';
-  document.body.appendChild(form);form.submit();
-}
-
-function toggleAttach(){
-  var menu=document.getElementById('attachMenu');
-  var btn=document.getElementById('attachToggle');
-  var open=menu.classList.toggle('open');
-  btn.classList.toggle('active',open);
-}
-
-function sendFile(input){
-  var file=input.files[0]; if(!file)return;
-  document.getElementById('attachMenu').classList.remove('open');
-  document.getElementById('attachToggle').classList.remove('active');
-  var fd=new FormData(); fd.append('media',file);
-  setUploading(true);
-  fetch('/send-media/'+RECEIVER_ID+'/',{method:'POST',credentials:'same-origin',body:fd})
-    .then(function(r){return r.json();})
-    .then(function(data){
-      setUploading(false);
-      if(data.ok) appendBubble(data.message_type,'/'+data.media_path,null);
-      else alertshowUploadError(data.error);
+    fetch(`/send-message/${receiverId}/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ message: text })
     })
-    .catch(function(){setUploading(false);alert('Upload failed. Try again.');});
-  input.value='';
-}
-
-function setUploading(on){
-  document.getElementById('uploadIndicator').className=on?'upload-indicator show':'upload-indicator';
-}
-
-// ── Voice ──
-var mediaRecorder=null,audioChunks=[],recInterval=null,recSeconds=0;
-function toggleVoice(){
-  if(mediaRecorder&&mediaRecorder.state==='recording') stopRecording(); else startRecording();
-}
-function startRecording(){
-  if(!navigator.mediaDevices){alert('Voice not supported.');return;}
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    audioChunks=[];
-    mediaRecorder=new MediaRecorder(stream);
-    mediaRecorder.ondataavailable=function(e){if(e.data.size>0)audioChunks.push(e.data);};
-    mediaRecorder.onstop=function(){stream.getTracks().forEach(function(t){t.stop();});uploadVoice();};
-    mediaRecorder.start();
-    document.getElementById('recBar').classList.add('show');
-    document.getElementById('voiceBtn').classList.add('recording');
-    document.getElementById('voiceBtn').querySelector('i').className='fa-solid fa-stop';
-    recSeconds=0;
-    recInterval=setInterval(function(){
-      recSeconds++;
-      var m=Math.floor(recSeconds/60),s=String(recSeconds%60).padStart(2,'0');
-      document.getElementById('recTimer').textContent=m+':'+s;
-    },1000);
-  }).catch(function(){alert('Could not access microphone.');});
-}
-function stopRecording(){
-  if(mediaRecorder)mediaRecorder.stop();
-  clearInterval(recInterval);
-  document.getElementById('recBar').classList.remove('show');
-  document.getElementById('voiceBtn').classList.remove('recording');
-  document.getElementById('voiceBtn').querySelector('i').className='fa-solid fa-microphone';
-}
-function cancelRecording(){
-  if(mediaRecorder&&mediaRecorder.state==='recording'){
-    mediaRecorder.ondataavailable=null;mediaRecorder.onstop=null;mediaRecorder.stop();
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert(data.message || "Could not send message.");
+      }
+    })
+    .catch(() => window.location.reload());
   }
-  audioChunks=[];clearInterval(recInterval);
-  document.getElementById('recBar').classList.remove('show');
-  document.getElementById('voiceBtn').classList.remove('recording');
-  document.getElementById('voiceBtn').querySelector('i').className='fa-solid fa-microphone';
-}
-function uploadVoice(){
-  if(!audioChunks.length)return;
-  var blob=new Blob(audioChunks,{type:'audio/webm'});
-  var fd=new FormData();fd.append('media',blob,'voice_'+Date.now()+'.webm');
-  setUploading(true);
-  fetch('/send-media/'+RECEIVER_ID+'/',{method:'POST',credentials:'same-origin',body:fd})
-    .then(function(r){return r.json();})
-    .then(function(data){setUploading(false);if(data.ok)appendBubble('VOICE','/'+data.media_path,null);})
-    .catch(function(){setUploading(false);});
-}
 
-function appendBubble(type,mediaSrc,text){
-  var now=new Date();
-  var timeStr=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  var inner='';
-  if(type==='TEXT') inner=escHtml(text);
-  else if(type==='IMAGE') inner='<img src="'+mediaSrc+'" onclick="openImg(this.src)">';
-  else if(type==='VIDEO') inner='<video controls><source src="'+mediaSrc+'"></video>';
-  else if(type==='VOICE') inner='<audio controls><source src="'+mediaSrc+'"></audio>';
-  else if(type==='FILE')  inner='<a class="file-link" href="'+mediaSrc+'" target="_blank"><i class="fa-regular fa-file"></i> Download file</a>';
-  var row=document.createElement('div');
-  row.className='msg-row sent';
-  row.innerHTML='<div class="bubble sent">'+inner+'<span class="time">'+timeStr+'</span></div>';
-  var empty=mediaArea.querySelector('.empty-chat');
-  if(empty)empty.remove();
-  mediaArea.appendChild(row);
-  mediaArea.scrollTop=mediaArea.scrollHeight;
-}
-
-function escHtml(str){
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function openImg(src){
-  document.getElementById('lightboxImg').src=src;
-  document.getElementById('lightbox').classList.add('open');
-}
-
-// ── Camera ──
-var camStream=null,facingMode='environment';
-function openCamera(){
-  document.getElementById('attachMenu').classList.remove('open');
-  document.getElementById('attachToggle').classList.remove('active');
-  if(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){
-    document.getElementById('fileCameraMobile').click();return;
+  function toggleAttachmentMenu() {
+    const popup = document.getElementById('attachPopup');
+    popup.style.display = (popup.style.display === 'grid') ? 'none' : 'grid';
   }
-  if(!navigator.mediaDevices){alert('Camera not supported.');return;}
-  startCamStream();
-}
-function startCamStream(){
-  if(camStream)camStream.getTracks().forEach(function(t){t.stop();});
-  navigator.mediaDevices.getUserMedia({video:{facingMode:facingMode},audio:false})
-    .then(function(stream){
-      camStream=stream;
-      document.getElementById('camPreview').srcObject=stream;
-      document.getElementById('camModal').classList.add('open');
-    }).catch(function(e){alert('Could not access camera: '+e.message);});
-}
-function flipCamera(){facingMode=facingMode==='environment'?'user':'environment';startCamStream();}
-function closeCamera(){
-  if(camStream){camStream.getTracks().forEach(function(t){t.stop();});camStream=null;}
-  document.getElementById('camModal').classList.remove('open');
-}
-function snapPhoto(){
-  var video=document.getElementById('camPreview');
-  var canvas=document.getElementById('camCanvas');
-  canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-  canvas.getContext('2d').drawImage(video,0,0);
-  closeCamera();
-  canvas.toBlob(function(blob){
-    if(!blob)return;
-    var file=new File([blob],'camera_'+Date.now()+'.jpg',{type:'image/jpeg'});
-    var fd=new FormData();fd.append('media',file);
-    setUploading(true);
-    fetch('/send-media/'+RECEIVER_ID+'/',{method:'POST',credentials:'same-origin',body:fd})
-      .then(function(r){return r.json();})
-      .then(function(data){setUploading(false);if(data.ok)appendBubble('IMAGE','/'+data.media_path,null);})
-      .catch(function(){setUploading(false);});
-  },'image/jpeg',0.88);
-}
+
+  function triggerFileInput(acceptType) {
+    const input = document.getElementById('mediaUploadInput');
+    input.accept = acceptType;
+    input.click();
+    toggleAttachmentMenu();
+  }
+
+  function uploadMediaAttachment(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('media', file);
+
+    fetch(`/send-media/${receiverId}/`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert(data.message || "Attachment flagged by AI content filter.");
+      }
+    })
+    .catch(() => window.location.reload());
+  }
+
+  // Voice Notes
+  function startVoiceRecording() {
+    if (!navigator.mediaDevices) {
+      alert("Voice recording is not supported in this browser.");
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.start();
+
+        document.getElementById('messageTextInput').style.display = 'none';
+        document.getElementById('micBtn').style.display = 'none';
+        document.getElementById('voiceRecordBar').style.display = 'flex';
+
+        recSecs = 0;
+        recInterval = setInterval(() => {
+          recSecs++;
+          const m = Math.floor(recSecs / 60);
+          const s = recSecs % 60;
+          document.getElementById('recTimer').textContent = `${m}:${String(s).padStart(2, '0')}`;
+        }, 1000);
+      })
+      .catch(() => alert("Microphone permission required for voice notes."));
+  }
+
+  function cancelVoiceRecording() {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    }
+    clearInterval(recInterval);
+    document.getElementById('voiceRecordBar').style.display = 'none';
+    document.getElementById('messageTextInput').style.display = 'block';
+    document.getElementById('micBtn').style.display = 'block';
+  }
+
+  function stopAndSendVoiceNote() {
+    if (!mediaRecorder) return;
+
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const voiceFile = new File([audioBlob], "voice_note.webm", { type: "audio/webm" });
+
+      const formData = new FormData();
+      formData.append('media', voiceFile);
+
+      fetch(`/send-media/${receiverId}/`, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: formData
+      })
+      .then(() => window.location.reload())
+      .catch(() => window.location.reload());
+    };
+
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+    clearInterval(recInterval);
+  }
+
+  function playVoiceAudio(src, btn) {
+    const audio = new Audio(src);
+    audio.play();
+    btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    audio.onended = () => {
+      btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+    };
+  }
+
+  function openImageLightbox(src) {
+    window.open(src, '_blank');
+  }
 </script>
+
 </body>
 </html>

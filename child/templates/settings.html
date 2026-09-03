@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Settings | LittleNet</title>
+
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
+
+  <style>
+    .settings-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ln-border-light);
+    }
+
+    .settings-body {
+      padding: 16px 14px 90px;
+    }
+
+    .privacy-explain-card {
+      background: #f8fafc;
+      border: 1.5px solid var(--ln-border-light);
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--ln-text-muted);
+      line-height: 1.5;
+    }
+
+    .privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .privacy-badge.public {
+      background: #e6fcf5;
+      color: #0ca678;
+    }
+
+    .privacy-badge.private {
+      background: #f3f0ff;
+      color: #7950f2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="ln-app-wrap">
+  
+  <!-- Header -->
+  <header class="settings-header">
+    <a href="/child/profile/" style="font-size:18px;color:var(--ln-text);padding:4px;">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <h2 style="font-size:17px;font-weight:900;color:var(--ln-text);">Settings & Privacy</h2>
+    <div style="width:26px;"></div>
+  </header>
+
+  <!-- Settings Body -->
+  <main class="settings-body">
+
+    <!-- Section: Account -->
+    <div class="settings-section">
+      <div class="settings-section-title">Account</div>
+      <div class="settings-group">
+        <a href="/child/edit-profile/" class="settings-row">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#fff5f5;color:var(--ln-coral);"><i class="fa-regular fa-user"></i></div>
+            <span>Edit Profile</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+
+        <a href="/story/archive/" class="settings-row">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#f3f0ff;color:var(--ln-purple);"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <span>Story Archive</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Privacy -->
+    <div class="settings-section">
+      <div class="settings-section-title">Account Privacy</div>
+      <div class="settings-group" style="padding:16px;">
+        
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="settings-icon" style="background:#e6fcf5;color:var(--ln-mint);"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <div style="font-size:15px;font-weight:800;color:var(--ln-text);">Private Account</div>
+              <div id="privacyStatusBadge" class="privacy-badge {% if profile and profile.is_private %}private{% else %}public{% endif %}">
+                <i class="fa-solid {% if profile and profile.is_private %}fa-lock{% else %}fa-globe{% endif %}"></i>
+                <span id="privacyStatusText">{% if profile and profile.is_private %}Private Mode Active{% else %}Public Mode Active{% endif %}</span>
+              </div>
+            </div>
+          </div>
+
+          <label class="settings-toggle-switch">
+            <input type="checkbox" id="privacyToggle" {% if profile and profile.is_private %}checked{% endif %} onchange="toggleAccountPrivacy(this.checked)">
+            <span class="settings-slider"></span>
+          </label>
+        </div>
+
+        <div class="privacy-explain-card">
+          <p id="privacyExplainText">
+            {% if profile and profile.is_private %}
+              🔒 <strong>Private Account:</strong> Only people you approve as followers can see your posts and highlights. Connection requests will require approval.
+            {% else %}
+              🌍 <strong>Public Account:</strong> Any student on LittleNet can view your talents and safe posts, while all content remains fully AI-moderated.
+            {% endif %}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section: Connections & Content -->
+    <div class="settings-section">
+      <div class="settings-section-title">Connections & Interactions</div>
+      <div class="settings-group">
+        <a href="/followers/" class="settings-row">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#e7f5ff;color:#339af0;"><i class="fa-solid fa-users"></i></div>
+            <span>Followers List</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+
+        <a href="/following/" class="settings-row">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#fff9db;color:#f59f00;"><i class="fa-solid fa-user-plus"></i></div>
+            <span>Following List</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+
+        <a href="/messages/" class="settings-row">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#fff0f6;color:#d6336c;"><i class="fa-regular fa-paper-plane"></i></div>
+            <span>Direct Messages</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Section: Safety & AI Moderation -->
+    <div class="settings-section">
+      <div class="settings-section-title">Safety & Supervision</div>
+      <div class="settings-group">
+        <div class="settings-row" style="cursor:default;">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#f3f0ff;color:var(--ln-purple);"><i class="fa-solid fa-shield-cat"></i></div>
+            <div>
+              <div>AI Child Protection</div>
+              <div style="font-size:11.5px;color:var(--ln-text-muted);font-weight:600;">Active 24/7 (YOLO, NudeNet, CLIP)</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" style="color:#20c997;"></i>
+        </div>
+
+        <div class="settings-row" style="cursor:default;">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#fff5f5;color:var(--ln-coral);"><i class="fa-solid fa-user-shield"></i></div>
+            <div>
+              <div>Parental Supervision</div>
+              <div style="font-size:11.5px;color:var(--ln-text-muted);font-weight:600;">Managed by Parent Portal</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-circle-check" style="color:#20c997;"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Log Out -->
+    <div class="settings-section">
+      <div class="settings-group">
+        <a href="/logout/" class="settings-row" style="color:#ef4444;">
+          <div class="settings-left">
+            <div class="settings-icon" style="background:#fef2f2;color:#ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+            <span style="font-weight:800;">Log Out</span>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#cbd5e1;font-size:12px;"></i>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-create-btn" title="Create">
+        <i class="fa-solid fa-plus"></i>
+      </a>
+
+      <a href="/recommended/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item active">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
+
+</div>
+
+<script>
+function toggleAccountPrivacy(isPrivate) {
+  fetch('/api/update-privacy/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({ is_private: isPrivate })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const badge = document.getElementById('privacyStatusBadge');
+    const text = document.getElementById('privacyStatusText');
+    const explain = document.getElementById('privacyExplainText');
+
+    if (isPrivate) {
+      badge.className = 'privacy-badge private';
+      badge.innerHTML = '<i class="fa-solid fa-lock"></i> <span>Private Mode Active</span>';
+      explain.innerHTML = '🔒 <strong>Private Account:</strong> Only people you approve as followers can see your posts and highlights. Connection requests will require approval.';
+    } else {
+      badge.className = 'privacy-badge public';
+      badge.innerHTML = '<i class="fa-solid fa-globe"></i> <span>Public Mode Active</span>';
+      explain.innerHTML = '🌍 <strong>Public Account:</strong> Any student on LittleNet can view your talents and safe posts, while all content remains fully AI-moderated.';
+    }
+  })
+  .catch(() => window.location.reload());
+}
+</script>
+
+</body>
+</html>
+

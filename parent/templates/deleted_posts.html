@@ -1,408 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Deleted Posts | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#f5f7fb;
-color:#222;
-
-}
-
-.header{
-
-position:sticky;
-top:0;
-
-background:white;
-
-padding:18px 20px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-border-bottom:1px solid #ddd;
-
-z-index:100;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
-}
-
-.container{
-
-max-width:900px;
-
-margin:25px auto;
-
-padding:0 15px;
-
-}
-
-.page-title{
-
-font-size:30px;
-font-weight:700;
-margin-bottom:10px;
-
-}
-
-.subtitle{
-
-color:#666;
-margin-bottom:30px;
-
-}
-
-.post{
-
-background:white;
-
-border-radius:20px;
-
-overflow:hidden;
-
-margin-bottom:25px;
-
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-
-}
-
-.post-header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-padding:18px;
-
-}
-
-.user{
-
-display:flex;
-align-items:center;
-gap:15px;
-
-}
-
-.avatar{
-
-width:55px;
-height:55px;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-font-size:22px;
-
-}
-
-.name{
-
-font-size:18px;
-font-weight:600;
-
-}
-
-.deleted{
-
-background:#fee2e2;
-color:#dc2626;
-
-padding:8px 15px;
-
-border-radius:20px;
-
-font-size:13px;
-font-weight:600;
-
-}
-
-.content{
-
-padding:20px;
-
-}
-
-.label{
-
-font-weight:600;
-color:#2563EB;
-
-}
-
-.caption{
-
-margin-top:15px;
-margin-bottom:15px;
-line-height:1.7;
-
-}
-
-.info{
-
-color:#666;
-margin-bottom:18px;
-
-}
-
-img,
-video{
-
-width:100%;
-
-display:block;
-
-max-height:500px;
-
-object-fit:cover;
-
-}
-
-.empty{
-
-background:white;
-
-padding:60px;
-
-border-radius:20px;
-
-text-align:center;
-
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-
-}
-
-.empty i{
-
-font-size:70px;
-
-color:#d1d5db;
-
-margin-bottom:20px;
-
-}
-
-.empty h2{
-
-margin-bottom:10px;
-
-}
-
-.empty p{
-
-color:#777;
-
-}
-
-@media(max-width:768px){
-
-.logo{
-
-font-size:24px;
-
-}
-
-.page-title{
-
-font-size:24px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Moderation Audit Logs | Parent Portal</title>
+
+  <meta name="theme-color" content="#D6336C">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .page-head {
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .log-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+    }
+
+    .log-media-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0f172a;
+      position: relative;
+    }
+
+    .log-media-box img,
+    .log-media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .blocked-badge-overlay {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #ef4444;
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .log-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .log-top-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .child-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .time-stamp {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .flag-reason-box {
+      background: #fff5f5;
+      border-left: 4px solid #ef4444;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #b91c1c;
+    }
+
+    .caption-snippet {
+      font-size: 13px;
+      color: #475569;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .empty-state {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #e2e8f0;
+      padding: 60px 20px;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .empty-state i {
+      font-size: 52px;
+      color: #20c997;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .log-card {
+        grid-template-columns: 1fr;
+      }
+      .log-media-box {
+        max-height: 220px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/parent/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">AI Moderation Audit</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
+  
+  <div class="page-head">
+    <h1 class="page-title">
+      <i class="fa-solid fa-shield-virus" style="color:#d6336c;"></i>
+      <span>AI Moderation Logs</span>
+    </h1>
+    <p class="page-sub">Audit trail of all uploads automatically blocked by LittleNet's multi-model AI safety pipeline (YOLOv8, NudeNet, and CLIP).</p>
+  </div>
 
-<div class="page-title">
+  {% if posts %}
+    {% for p in posts %}
+    <div class="log-card">
+      <div class="log-media-box">
+        <div class="blocked-badge-overlay">BLOCKED</div>
+        {% if p.media_type == 'VIDEO' %}
+          <video controls src="/{{ p.media_path }}"></video>
+        {% else %}
+          <img src="/{{ p.media_path }}" alt="Flagged Media">
+        {% endif %}
+      </div>
 
-Deleted Posts
+      <div class="log-details">
+        <div>
+          <div class="log-top-line">
+            <span class="child-name">{{ p.full_name }}</span>
+            <span class="time-stamp">{{ p.deleted_at if p.deleted_at is defined else '' }}</span>
+          </div>
 
-</div>
+          <div class="flag-reason-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Blocked Category: {{ p.content_category or 'Flagged Content' }}</span>
+            {% if p.reason %}
+              <div style="font-weight:600;font-size:12px;margin-top:2px;">{{ p.reason }}</div>
+            {% endif %}
+          </div>
 
-<div class="subtitle">
+          {% if p.caption %}
+          <div class="caption-snippet">
+            <strong>Caption:</strong> {{ p.caption }}
+          </div>
+          {% endif %}
+        </div>
 
-Posts removed by AI moderation or parental controls.
-
-</div>
-
-{% if posts %}
-
-{% for post in posts %}
-
-<div class="post">
-
-<div class="post-header">
-
-<div class="user">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div class="name">
-
-{{ post.full_name }}
-
-</div>
-
-</div>
-
-<div class="deleted">
-
-Deleted
-
-</div>
-
-</div>
-
-{% if post.media_type=="IMAGE" %}
-
-<img src="/{{ post.media_path }}">
-
-{% endif %}
-
-{% if post.media_type=="VIDEO" %}
-
-<video controls>
-
-<source
-src="/{{ post.media_path }}"
-type="video/mp4">
-
-</video>
-
-{% endif %}
-
-<div class="content">
-
-<p>
-
-<span class="label">
-
-Category:
-
-</span>
-
-{{ post.content_category }}
-
-</p>
-
-<div class="caption">
-
-{{ post.caption }}
-
-</div>
-
-<div class="info">
-
-<i class="fa-regular fa-calendar"></i>
-
-Deleted on
-
-{{ post.deleted_at }}
-
-</div>
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-solid fa-trash-can"></i>
-
-<h2>
-
-No Deleted Posts
-
-</h2>
-
-<p>
-
-There are currently no deleted posts to review.
-
-</p>
-
-</div>
-
-{% endif %}
+        <div style="font-size:12px;font-weight:700;color:#0ca678;margin-top:10px;">
+          <i class="fa-solid fa-shield-check"></i> Automatically blocked before public display
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-shield-heart"></i>
+      <h3 style="font-size:20px;font-weight:900;color:#0f172a;margin-bottom:6px;">Clean Safety Record!</h3>
+      <p style="font-size:14px;font-weight:600;">No posts have been flagged or removed by the AI content moderation filters.</p>
+    </div>
+  {% endif %}
 
 </div>
 
 </body>
-
 </html>

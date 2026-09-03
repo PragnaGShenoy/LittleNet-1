@@ -202,13 +202,18 @@ def update_child_profile(
         WHERE child_id = %s
     """,
     (
-        form_data["full_name"],
-        form_data["school_name"],
-        form_data["location"],
-        form_data["current_class"],
-        form_data["bio"],
+        form_data.get("full_name", ""),
+        form_data.get("school_name", ""),
+        form_data.get("location", ""),
+        form_data.get("current_class", ""),
+        form_data.get("bio", ""),
         child_id
     ))
+
+    if form_data.get("full_name"):
+        cur.execute("""
+            UPDATE users SET full_name = %s WHERE user_id = %s
+        """, (form_data["full_name"], child_id))
 
     conn.commit()
 
@@ -503,16 +508,112 @@ def get_my_posts_for_profile(child_id):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
-        SELECT p.post_id, p.media_type, p.media_path, p.caption,
+        SELECT p.post_id, p.media_type, p.media_path, p.caption, p.content_category, p.created_at,
+               COALESCE(p.is_archived, FALSE) AS is_archived,
                (SELECT COUNT(*) FROM likes l WHERE l.post_id=p.post_id) AS likes,
                (SELECT COUNT(*) FROM comments c WHERE c.post_id=p.post_id) AS comments_count
         FROM posts p
-        WHERE p.child_id=%s AND (p.is_story IS NULL OR p.is_story=FALSE)
+        WHERE p.child_id=%s 
+          AND (p.is_story IS NULL OR p.is_story=FALSE)
+          AND (p.is_archived IS NULL OR p.is_archived=FALSE)
         ORDER BY p.created_at DESC
     """, (child_id,))
     posts = cur.fetchall()
     cur.close(); conn.close()
     return posts
+
+
+def get_archived_posts(child_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.post_id, p.media_type, p.media_path, p.caption, p.content_category, p.created_at,
+               TRUE AS is_archived,
+               (SELECT COUNT(*) FROM likes l WHERE l.post_id=p.post_id) AS likes,
+               (SELECT COUNT(*) FROM comments c WHERE c.post_id=p.post_id) AS comments_count
+        FROM posts p
+        WHERE p.child_id=%s 
+          AND (p.is_story IS NULL OR p.is_story=FALSE)
+          AND p.is_archived=TRUE
+        ORDER BY p.created_at DESC
+    """, (child_id,))
+    posts = cur.fetchall()
+    cur.close(); conn.close()
+    return posts
+
+
+def get_story_archive(child_id):
+    """All stories posted by this child historically (active + expired), ordered by created_at DESC."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.*,
+               cp.profile_picture,
+               TO_CHAR(p.created_at, 'Mon DD, YYYY') AS formatted_date,
+               (p.created_at > NOW() - INTERVAL '24 hours') AS is_active
+        FROM posts p
+        LEFT JOIN child_profiles cp ON p.child_id = cp.child_id
+        WHERE p.is_story = TRUE
+          AND p.child_id = %s
+        ORDER BY p.created_at DESC
+    """, (child_id,))
+    stories = cur.fetchall()
+    cur.close()
+    conn.close()
+    return stories
+
+
+def get_story_highlights(child_id):
+    """Returns highlighted stories or story collections for a child's profile."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT p.post_id, p.media_path, p.media_type, p.caption,
+               COALESCE(p.highlight_title, p.content_category, 'Moments') AS highlight_title,
+               p.created_at
+        FROM posts p
+        WHERE p.child_id = %s
+          AND (p.is_highlight = TRUE OR p.is_story = TRUE)
+        ORDER BY p.is_highlight DESC, p.created_at DESC
+        LIMIT 6
+    """, (child_id,))
+    highlights = cur.fetchall()
+    cur.close()
+    conn.close()
+    return highlights
+
+
+def toggle_story_highlight(post_id, child_id, title=None):
+    """Pin/unpin a story to profile highlights."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE posts
+        SET is_highlight = NOT COALESCE(is_highlight, FALSE),
+            highlight_title = COALESCE(%s, highlight_title, 'Highlight')
+        WHERE post_id = %s AND child_id = %s
+        RETURNING is_highlight
+    """, (title, post_id, child_id))
+    row = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    return row["is_highlight"] if row else False
+
+
+def update_account_privacy(child_id, is_private):
+    """Toggle public / private account."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE child_profiles
+        SET is_private = %s, updated_at = CURRENT_TIMESTAMP
+        WHERE child_id = %s
+    """, (is_private, child_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return True
 
 
 def get_following_stories(child_id):

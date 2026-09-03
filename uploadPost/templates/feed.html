@@ -1,520 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>LittleNet Feed</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#f5f7fb;
-
-padding-bottom:90px;
-
-}
-
-.header{
-
-position:sticky;
-
-top:0;
-
-background:white;
-
-padding:18px 20px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-border-bottom:1px solid #ddd;
-
-z-index:999;
-
-}
-
-.logo{
-
-font-size:30px;
-
-font-weight:700;
-
-color:#2563EB;
-
-}
-
-.header-icons{
-
-display:flex;
-
-gap:20px;
-
-font-size:22px;
-
-color:#444;
-
-}
-
-.container{
-
-max-width:700px;
-
-margin:25px auto;
-
-padding:0 15px;
-
-}
-
-.post{
-
-background:white;
-
-border-radius:20px;
-
-overflow:hidden;
-
-margin-bottom:25px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-animation:fade .5s;
-
-}
-
-@keyframes fade{
-
-from{
-
-opacity:0;
-
-transform:translateY(20px);
-
-}
-
-to{
-
-opacity:1;
-
-transform:translateY(0);
-
-}
-
-}
-
-.post-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:18px;
-
-}
-
-.user{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-}
-
-.avatar{
-
-width:55px;
-
-height:55px;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-color:white;
-
-font-size:22px;
-
-}
-
-.username{
-
-font-weight:600;
-
-font-size:17px;
-
-}
-
-.category{
-
-color:#777;
-
-font-size:14px;
-
-margin-top:3px;
-
-}
-
-.follow{
-
-padding:8px 18px;
-
-border-radius:20px;
-
-background:#2563EB;
-
-color:white;
-
-text-decoration:none;
-
-font-size:14px;
-
-font-weight:600;
-
-}
-
-.following{
-
-padding:8px 18px;
-
-border-radius:20px;
-
-background:#EAF2FF;
-
-color:#2563EB;
-
-text-decoration:none;
-
-border:1px solid #2563EB;
-
-font-size:14px;
-
-font-weight:600;
-
-}
-
-.post img,
-.post video{
-
-width:100%;
-
-display:block;
-
-max-height:500px;
-
-object-fit:cover;
-
-}
-
-.content{
-
-padding:18px;
-
-}
-
-.actions{
-
-display:flex;
-
-gap:20px;
-
-font-size:22px;
-
-margin-bottom:12px;
-
-}
-
-.actions a{
-
-text-decoration:none;
-
-color:#444;
-
-}
-
-.likes{
-
-font-weight:600;
-
-margin-bottom:10px;
-
-}
-
-.caption{
-
-line-height:1.7;
-
-margin-bottom:10px;
-
-}
-
-.bottom-nav{
-
-position:fixed;
-
-bottom:0;
-
-left:0;
-
-width:100%;
-
-background:white;
-
-display:flex;
-
-justify-content:space-around;
-
-padding:16px 0;
-
-border-top:1px solid #ddd;
-
-}
-
-.bottom-nav a{
-
-font-size:24px;
-
-color:#555;
-
-text-decoration:none;
-
-transition:.3s;
-
-}
-
-.bottom-nav a:hover{
-
-color:#2563EB;
-
-}
-
-@media(max-width:768px){
-
-.container{
-
-padding:10px;
-
-}
-
-.logo{
-
-font-size:24px;
-
-}
-
-.post-header{
-
-padding:15px;
-
-}
-
-.avatar{
-
-width:45px;
-
-height:45px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Feed | LittleNet</title>
+
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
+
+  <style>
+    .feed-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .post-card {
+      background: white;
+      border-bottom: 1px solid var(--ln-border-light);
+      margin-bottom: 12px;
+    }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .follow-btn {
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .follow-btn.to-follow {
+      background: var(--ln-coral);
+      color: white;
+    }
+
+    .follow-btn.following {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .media-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: black;
+    }
+
+    .media-box img,
+    .media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 16px 4px;
+      font-size: 22px;
+    }
+
+    .likes-text {
+      font-size: 14px;
+      font-weight: 900;
+      padding: 2px 16px 4px;
+    }
+
+    .caption-box {
+      font-size: 14px;
+      padding: 2px 16px 12px;
+      line-height: 1.5;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<div class="header-icons">
-
-<i class="fa-regular fa-heart"></i>
-
-<i class="fa-regular fa-bell"></i>
-
-<i class="fa-regular fa-paper-plane"></i>
-
-</div>
-
-</div>
-
-<div class="container">
-
-{% for post in posts %}
-
-<div class="post">
-
-<div class="post-header">
-
-<div class="user">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div>
-
-<div class="username">
-
-{{ post.full_name }}
-
-</div>
-
-<div class="category">
-
-{{ post.content_category }}
-
-</div>
-
-</div>
-
-</div>
-
-{% if post.is_following == True %}
-
-<a href="/follow/{{ post.child_id }}/"
-class="following">
-
-Following
-
-</a>
-
-{% else %}
-
-<a href="/follow/{{ post.child_id }}/"
-class="follow">
-
-Follow
-
-</a>
-
-{% endif %}
-
-</div>
-
-{% if post.media_type == "IMAGE" %}
-
-<img src="/{{ post.media_path }}">
-
-{% endif %}
-
-{% if post.media_type == "VIDEO" %}
-
-<video controls>
-
-<source src="/{{ post.media_path }}">
-
-</video>
-
-{% endif %}
-
-<div class="content">
-
-<div class="actions">
-
-<a href="/like/{{ post.post_id }}/">
-
-❤️
-
-</a>
-
-💬
-
-📤
-
-</div>
-
-<div class="likes">
-
-❤️ {{ post.likes }} Likes
-
-</div>
-
-<div class="caption">
-
-<strong>{{ post.full_name }}</strong>
-
-{{ post.caption }}
-
-</div>
-
-</div>
-
-</div>
-
-{% endfor %}
-
-</div>
-
-<div class="bottom-nav">
-
-<a href="/child/dashboard/">
-
-<i class="fa-solid fa-house"></i>
-
-</a>
-
-<a href="/discover/">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-</a>
-
-<a href="/child/upload-post/">
-
-<i class="fa-solid fa-square-plus"></i>
-
-</a>
-
-<a href="/my-posts/">
-
-<i class="fa-solid fa-heart"></i>
-
-</a>
-
-<a href="/child/profile/">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
+<div class="feed-wrap">
+
+  <div class="top-header">
+    <div class="ln-brand">
+      <i class="fa-solid fa-sparkles brand-icon"></i>
+      <span>LittleNet</span>
+    </div>
+    <div>
+      <a href="/messages/" style="font-size:20px;color:var(--ln-text);padding:6px;">
+        <i class="fa-regular fa-paper-plane"></i>
+      </a>
+    </div>
+  </div>
+
+  <main>
+    {% if posts %}
+      {% for post in posts %}
+      <article class="post-card">
+        <div class="post-head">
+          <div class="user-info">
+            <div class="avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:800;">{{ post.full_name }}</div>
+              {% if post.content_category %}
+                <div style="font-size:11px;color:var(--ln-purple);font-weight:700;">{{ post.content_category }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if post.is_following %}
+            <a href="/follow/{{ post.child_id }}/" class="follow-btn following">Following</a>
+          {% else %}
+            <a href="/follow/{{ post.child_id }}/" class="follow-btn to-follow">Follow</a>
+          {% endif %}
+        </div>
+
+        <div class="media-box">
+          {% if post.media_type == 'IMAGE' %}
+            <img src="/{{ post.media_path }}" loading="lazy" alt="Post">
+          {% elif post.media_type == 'VIDEO' %}
+            <video controls playsinline src="/{{ post.media_path }}"></video>
+          {% endif %}
+        </div>
+
+        <div class="actions-bar">
+          <a href="/like/{{ post.post_id }}/" style="color:inherit;"><i class="fa-regular fa-heart"></i></a>
+          <i class="fa-regular fa-comment"></i>
+          <i class="fa-regular fa-paper-plane"></i>
+        </div>
+
+        <div class="likes-text">❤️ {{ post.likes }} likes</div>
+
+        <div class="caption-box">
+          <strong>{{ post.full_name }}</strong>
+          <span>{{ post.caption }}</span>
+        </div>
+      </article>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--ln-text-muted);">
+        <i class="fa-solid fa-shapes" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+        <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">No posts in feed yet</h3>
+        <p style="font-size:14px;font-weight:700;">Explore other children and create new posts to populate your feed.</p>
+      </div>
+    {% endif %}
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
+
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </div>
+  </nav>
 
 </div>
 
 </body>
-
 </html>

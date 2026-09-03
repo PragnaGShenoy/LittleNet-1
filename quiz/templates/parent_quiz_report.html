@@ -1,399 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Performance Report | Parent Portal</title>
 
-<meta charset="UTF-8">
+  <meta name="theme-color" content="#20C997">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-<title>Quiz Report | LittleNet</title>
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
 
-<style>
+    .container {
+      max-width: 880px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
 
-body{
-background:#f5f7fb;
-color:#222;
-}
+    .page-sub {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
 
-.header{
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-}
+    /* Summary Metrics Row */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
 
-.logo{
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-}
+    .metric-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
 
-.back{
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-}
+    .metric-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
 
-.container{
-max-width:900px;
-margin:25px auto;
-padding:0 15px;
-}
+    .metric-num {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+    }
 
-.title{
-font-size:30px;
-font-weight:700;
-margin-bottom:25px;
-}
+    .metric-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
 
-.summary{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-margin-bottom:35px;
-}
+    /* Question Attempts */
+    .attempt-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
 
-.card{
-background:white;
-padding:25px;
-border-radius:18px;
-text-align:center;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
+    .attempt-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
 
-.card i{
-font-size:35px;
-margin-bottom:15px;
-color:#2563EB;
-}
+    .attempt-q {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.4;
+    }
 
-.card h2{
-font-size:30px;
-margin-bottom:5px;
-}
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
 
-.card p{
-color:#666;
-font-weight:600;
-}
+    .status-badge.correct {
+      background: #e6fcf5;
+      color: #0ca678;
+    }
 
-.report{
-background:white;
-border-radius:18px;
-padding:25px;
-margin-bottom:25px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-}
+    .status-badge.wrong {
+      background: #fff5f5;
+      color: #e03131;
+    }
 
-.question{
-font-size:19px;
-font-weight:700;
-margin-bottom:20px;
-}
+    .attempt-ans-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-.row{
-margin-bottom:12px;
-line-height:1.7;
-}
+    .ans-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
 
-.label{
-font-weight:700;
-color:#2563EB;
-}
+    .ans-box strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
 
-.correct{
-
-display:inline-block;
-padding:6px 12px;
-background:#DCFCE7;
-color:#166534;
-border-radius:25px;
-font-weight:600;
-
-}
-
-.wrong{
-
-display:inline-block;
-padding:6px 12px;
-background:#FEE2E2;
-color:#B91C1C;
-border-radius:25px;
-font-weight:600;
-
-}
-
-.date{
-margin-top:20px;
-color:#666;
-font-size:14px;
-}
-
-.empty{
-
-background:white;
-padding:60px;
-text-align:center;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-
-}
-
-.empty i{
-
-font-size:70px;
-color:#d1d5db;
-margin-bottom:20px;
-
-}
-
-@media(max-width:768px){
-
-.logo{
-font-size:24px;
-}
-
-.title{
-font-size:24px;
-}
-
-}
-
-</style>
-
+    .timestamp-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/parent/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Learning Reports</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
 
-<div class="title">
-
-Quiz Report
-
-</div>
-
-<div class="summary">
-
-<div class="card">
-
-<i class="fa-solid fa-list-check"></i>
-
-<h2>
-
-{{ summary.total }}
-
-</h2>
-
-<p>
-
-Total Quizzes
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-circle-check"></i>
-
-<h2>
-
-{{ summary.correct }}
-
-</h2>
-
-<p>
-
-Correct
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-circle-xmark"></i>
-
-<h2>
-
-{{ summary.wrong }}
-
-</h2>
-
-<p>
-
-Wrong
-
-</p>
-
-</div>
-
-<div class="card">
-
-<i class="fa-solid fa-chart-line"></i>
-
-<h2>
-
-{% if summary.total > 0 %}
-
-{{ (summary.correct * 100 // summary.total) }}%
-
-{% else %}
-
-0%
-
-{% endif %}
-
-</h2>
-
-<p>
-
-Accuracy
-
-</p>
-
-</div>
-
-</div>
-
-{% if attempts %}
-
-{% for item in attempts %}
-
-<div class="report">
-
-<div class="question">
-
-❓ {{ item.question }}
-
-</div>
-
-<div class="row">
-
-<span class="label">
-
-Child Answer:
-
-</span>
-
-{{ item.selected_answer }}
-
-</div>
-
-<div class="row">
-
-<span class="label">
-
-Correct Answer:
-
-</span>
-
-{{ item.correct_answer }}
-
-</div>
-
-<div class="row">
-
-<span class="label">
-
-Result:
-
-</span>
-
-{% if item.is_correct %}
-
-<span class="correct">
-
-✓ Correct
-
-</span>
-
-{% else %}
-
-<span class="wrong">
-
-✗ Wrong
-
-</span>
-
-{% endif %}
-
-</div>
-
-<div class="date">
-
-<i class="fa-regular fa-calendar"></i>
-
-{{ item.attempted_at }}
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-solid fa-file-circle-question"></i>
-
-<h2>
-
-No Quiz Attempts
-
-</h2>
-
-<p>
-
-The child hasn't attempted any quizzes yet.
-
-</p>
-
-</div>
-
-{% endif %}
+  <h1 class="page-title">Quiz Performance Report</h1>
+  <p class="page-sub">Review your child's STEM, Logic, and Creative learning quiz attempts.</p>
+
+  <!-- Metrics -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon" style="color:#7950f2;"><i class="fa-solid fa-list-check"></i></div>
+      <div class="metric-num">{{ summary.total }}</div>
+      <div class="metric-label">Total Quizzes</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon" style="color:#20c997;"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="metric-num">{{ summary.correct }}</div>
+      <div class="metric-label">Correct Answers</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon" style="color:#ff6b6b;"><i class="fa-solid fa-circle-xmark"></i></div>
+      <div class="metric-num">{{ summary.wrong }}</div>
+      <div class="metric-label">Wrong Attempts</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-icon" style="color:#fcc419;"><i class="fa-solid fa-chart-pie"></i></div>
+      <div class="metric-num">
+        {% if summary.total > 0 %}
+          {{ (summary.correct * 100 // summary.total) }}%
+        {% else %}
+          0%
+        {% endif %}
+      </div>
+      <div class="metric-label">Accuracy Rate</div>
+    </div>
+  </div>
+
+  <!-- Attempts List -->
+  {% if attempts %}
+    {% for item in attempts %}
+    <div class="attempt-card">
+      <div class="attempt-header">
+        <div class="attempt-q">❓ {{ item.question }}</div>
+        {% if item.is_correct %}
+          <span class="status-badge correct"><i class="fa-solid fa-check"></i> Correct</span>
+        {% else %}
+          <span class="status-badge wrong"><i class="fa-solid fa-xmark"></i> Wrong</span>
+        {% endif %}
+      </div>
+
+      <div class="attempt-ans-row">
+        <div class="ans-box">
+          <strong>Child Answer</strong>
+          <span style="font-weight:700;color:#0f172a;">{{ item.selected_answer }}</span>
+        </div>
+
+        <div class="ans-box">
+          <strong>Correct Answer</strong>
+          <span style="font-weight:700;color:#0ca678;">{{ item.correct_answer }}</span>
+        </div>
+      </div>
+
+      <div class="timestamp-text">
+        <i class="fa-regular fa-clock"></i> Attempted at: {{ item.attempted_at }}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="background:white;border-radius:24px;border:1px solid #e2e8f0;padding:60px 20px;text-align:center;color:#64748b;">
+      <i class="fa-solid fa-award" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+      <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:4px;">No quiz attempts logged yet</h3>
+      <p style="font-size:14px;font-weight:600;">Quiz results will appear here as your child answers educational questions.</p>
+    </div>
+  {% endif %}
 
 </div>
 
 </body>
-
 </html>

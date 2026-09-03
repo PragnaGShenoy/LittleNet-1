@@ -1,352 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Child Profile | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#f5f7fb;
-color:#222;
-padding-bottom:40px;
-
-}
-
-.header{
-
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
-}
-
-.container{
-
-max-width:800px;
-margin:30px auto;
-padding:0 15px;
-
-}
-
-.profile-card{
-
-background:white;
-border-radius:22px;
-padding:35px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-.profile-top{
-
-display:flex;
-align-items:center;
-gap:25px;
-margin-bottom:30px;
-flex-wrap:wrap;
-
-}
-
-.avatar{
-
-width:120px;
-height:120px;
-border-radius:50%;
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-font-size:48px;
-
-}
-
-.name{
-
-font-size:32px;
-font-weight:700;
-
-}
-
-.subtitle{
-
-color:#666;
-margin-top:8px;
-
-}
-
-.info-grid{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:18px;
-margin-top:20px;
-
-}
-
-.info-box{
-
-background:#f8f9fc;
-padding:18px;
-border-radius:14px;
-
-}
-
-.info-box h3{
-
-font-size:15px;
-color:#2563EB;
-margin-bottom:8px;
-
-}
-
-.info-box p{
-
-font-size:16px;
-font-weight:500;
-
-}
-
-.bio{
-
-margin-top:25px;
-background:#f8f9fc;
-padding:20px;
-border-radius:15px;
-
-}
-
-.bio h3{
-
-color:#2563EB;
-margin-bottom:12px;
-
-}
-
-.bio p{
-
-line-height:1.8;
-color:#444;
-
-}
-
-@media(max-width:768px){
-
-.profile-top{
-
-justify-content:center;
-text-align:center;
-
-}
-
-.logo{
-
-font-size:24px;
-
-}
-
-.name{
-
-font-size:26px;
-
-}
-
-.avatar{
-
-width:100px;
-height:100px;
-font-size:42px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ profile.full_name }}'s Profile | Parent Portal</title>
+
+  <meta name="theme-color" content="#7950F2">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .profile-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .avatar-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 900;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(121, 80, 242, 0.25);
+    }
+
+    .avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .child-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .child-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e6fcf5;
+      color: #0ca678;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .info-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+    }
+
+    .info-lbl {
+      font-size: 12px;
+      font-weight: 800;
+      color: #7950f2;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .bio-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .bio-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #7950f2;
+      margin-bottom: 8px;
+    }
+
+    .bio-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.6;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/parent/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Child Profile Overview</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
+  <div class="profile-card">
+    
+    <div class="profile-top">
+      <div class="avatar-box">
+        {% if profile.profile_picture %}
+          <img src="/{{ profile.profile_picture|replace('\\','/') }}" alt="">
+        {% else %}
+          {{ profile.full_name[0]|upper if profile.full_name else '?' }}
+        {% endif %}
+      </div>
+      <div>
+        <h1 class="child-title">{{ profile.full_name }}</h1>
+        <div class="child-status-pill">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Parent Verified Child Account</span>
+        </div>
+      </div>
+    </div>
 
-<div class="profile-card">
+    <div class="info-grid">
+      <div class="info-box">
+        <div class="info-lbl"><i class="fa-solid fa-cake-candles"></i> Age</div>
+        <div class="info-val">{{ profile.age }} years old</div>
+      </div>
 
-<div class="profile-top">
+      <div class="info-box">
+        <div class="info-lbl"><i class="fa-solid fa-school"></i> School Name</div>
+        <div class="info-val">{{ profile.school_name }}</div>
+      </div>
 
-<div class="avatar">
+      <div class="info-box">
+        <div class="info-lbl"><i class="fa-solid fa-location-dot"></i> Location</div>
+        <div class="info-val">{{ profile.location }}</div>
+      </div>
 
-<i class="fa-solid fa-user"></i>
+      <div class="info-box">
+        <div class="info-lbl"><i class="fa-solid fa-graduation-cap"></i> Grade / Class</div>
+        <div class="info-val">{{ profile.current_class }}</div>
+      </div>
+    </div>
 
-</div>
+    {% if profile.bio %}
+    <div class="bio-box">
+      <div class="bio-title"><i class="fa-solid fa-quote-left"></i> About & Bio</div>
+      <p class="bio-text">{{ profile.bio }}</p>
+    </div>
+    {% endif %}
 
-<div>
-
-<div class="name">
-
-{{ profile.full_name }}
-
-</div>
-
-<div class="subtitle">
-
-Child Profile Information
-
-</div>
-
-</div>
-
-</div>
-
-<div class="info-grid">
-
-<div class="info-box">
-
-<h3>
-
-Age
-
-</h3>
-
-<p>
-
-{{ profile.age }}
-
-</p>
-
-</div>
-
-<div class="info-box">
-
-<h3>
-
-School
-
-</h3>
-
-<p>
-
-{{ profile.school_name }}
-
-</p>
-
-</div>
-
-<div class="info-box">
-
-<h3>
-
-Location
-
-</h3>
-
-<p>
-
-{{ profile.location }}
-
-</p>
-
-</div>
-
-<div class="info-box">
-
-<h3>
-
-Class
-
-</h3>
-
-<p>
-
-{{ profile.current_class }}
-
-</p>
-
-</div>
-
-</div>
-
-<div class="bio">
-
-<h3>
-
-About
-
-</h3>
-
-<p>
-
-{{ profile.bio }}
-
-</p>
-
-</div>
-
-</div>
-
+  </div>
 </div>
 
 </body>
-
 </html>

@@ -16,6 +16,7 @@ def get_random_posts(child_id, limit=6):
         LEFT JOIN child_profiles cp ON p.child_id = cp.child_id
         WHERE p.is_safe = TRUE
           AND (p.is_story IS NULL OR p.is_story = FALSE)
+          AND (p.is_archived IS NULL OR p.is_archived = FALSE)
           AND p.child_id != %s
         ORDER BY RANDOM()
         LIMIT %s
@@ -293,3 +294,43 @@ def get_post_comments(post_id):
     conn.close()
 
     return comments
+
+
+def edit_post(post_id, child_id, caption, category=None):
+    """Edit caption and category of own post."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    if category:
+        cur.execute("""
+            UPDATE posts
+            SET caption = %s, content_category = %s
+            WHERE post_id = %s AND child_id = %s
+        """, (caption, category, post_id, child_id))
+    else:
+        cur.execute("""
+            UPDATE posts
+            SET caption = %s
+            WHERE post_id = %s AND child_id = %s
+        """, (caption, post_id, child_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return True
+
+
+def toggle_archive_post(post_id, child_id):
+    """Toggle is_archived on own post."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        UPDATE posts
+        SET is_archived = NOT COALESCE(is_archived, FALSE)
+        WHERE post_id = %s AND child_id = %s
+        RETURNING is_archived
+    """, (post_id, child_id))
+    row = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    return row["is_archived"] if row else False
+

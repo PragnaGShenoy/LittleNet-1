@@ -43,9 +43,21 @@ CREATE TABLE parent_child_map (
 
     parent_email VARCHAR(100) NOT NULL,
 
-    approval_token UUID,
+    verification_token VARCHAR(128),
+
+    approval_token VARCHAR(128),
+
+    approval_token_expires_at TIMESTAMP WITH TIME ZONE,
+
+    approval_status VARCHAR(30) DEFAULT 'PENDING_PARENT_VERIFICATION',
 
     approved BOOLEAN DEFAULT FALSE,
+
+    is_token_used BOOLEAN DEFAULT FALSE,
+
+    rejection_reason TEXT,
+
+    verified_parent_id INTEGER,
 
     approved_at TIMESTAMP,
 
@@ -60,6 +72,25 @@ CREATE TABLE parent_child_map (
         FOREIGN KEY (parent_id)
         REFERENCES users(user_id)
         ON DELETE CASCADE
+);
+
+CREATE TABLE parent_verifications (
+    verification_id SERIAL PRIMARY KEY,
+    parent_user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    child_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    verification_provider VARCHAR(50) NOT NULL DEFAULT 'SANDBOX_MOCK',
+    verification_status VARCHAR(30) NOT NULL DEFAULT 'PENDING'
+        CHECK (verification_status IN ('PENDING', 'VERIFIED', 'FAILED', 'MANUAL_REVIEW')),
+    liveness_status VARCHAR(30) DEFAULT 'PENDING'
+        CHECK (liveness_status IN ('PENDING', 'PASSED', 'FAILED')),
+    face_match_status VARCHAR(30) DEFAULT 'PENDING'
+        CHECK (face_match_status IN ('PENDING', 'MATCHED', 'MISMATCHED', 'FAILED')),
+    document_type VARCHAR(50) DEFAULT 'AADHAAR_MOCK',
+    masked_id VARCHAR(20),
+    consent_given BOOLEAN DEFAULT FALSE,
+    consent_timestamp TIMESTAMP WITH TIME ZONE,
+    verified_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 #table 3
@@ -386,3 +417,7 @@ ALTER TABLE public.child_messages
 
 
 ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_story BOOLEAN DEFAULT FALSE;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_archived BOOLEAN DEFAULT FALSE;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_highlight BOOLEAN DEFAULT FALSE;
+ALTER TABLE posts ADD COLUMN IF NOT EXISTS highlight_title VARCHAR(100);
+ALTER TABLE child_profiles ADD COLUMN IF NOT EXISTS is_private BOOLEAN DEFAULT FALSE;

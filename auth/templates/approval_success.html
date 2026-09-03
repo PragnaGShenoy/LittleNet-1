@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title | default('Approval Status') }} | LittleNet</title>
+  
+  <meta name="theme-color" content="#20C997">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(230, 252, 245, 0.9) 0%, rgba(243, 240, 255, 0.8) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #1e293b;
+    }
+
+    .success-container {
+      width: 100%;
+      max-width: 480px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 42px 34px;
+      text-align: center;
+      box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(233, 236, 239, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .success-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: {% if is_error %}linear-gradient(90deg, #ef4444, #f87171){% elif is_verified %}linear-gradient(90deg, #7950f2, #9775fa, #20c997){% else %}linear-gradient(90deg, #20c997, #38d9a9, #7950f2){% endif %};
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: {% if is_error %}#fef2f2{% elif is_verified %}#f3f0ff{% else %}#e6fcf5{% endif %};
+      color: {% if is_error %}#ef4444{% elif is_verified %}#7950f2{% else %}#20c997{% endif %};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      animation: bounceCheck 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes bounceCheck {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #1e293b;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    .info-badge {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 24px;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      height: 52px;
+      background: {% if is_verified %}linear-gradient(135deg, #7950f2 0%, #9775fa 100%){% else %}linear-gradient(135deg, #20c997 0%, #0ca678 100%){% endif %};
+      color: white;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-container">
+  <div class="success-card">
+    <div class="success-icon">
+      {% if is_error %}
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      {% elif is_verified %}
+        <i class="fa-solid fa-user-shield"></i>
+      {% else %}
+        <i class="fa-solid fa-circle-check"></i>
+      {% endif %}
+    </div>
+    
+    <h1 class="title">{{ title | default('Success') }}</h1>
+    <p class="desc">{{ message | default('Your request has been processed successfully.') }}</p>
+
+    {% if extra_info %}
+    <div class="info-badge">
+      {{ extra_info }}
+    </div>
+    {% endif %}
+
+    <a href="{{ button_url | default('/login/') }}" class="btn-action">
+      <span>{{ button_text | default('Continue to LittleNet') }}</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

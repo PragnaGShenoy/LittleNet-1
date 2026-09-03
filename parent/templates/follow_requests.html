@@ -1,96 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Follow Requests — LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:#f5f7fb;color:#222;min-height:100vh;}
-.header{position:sticky;top:0;background:white;padding:16px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid #e5e7eb;z-index:10;}
-.back-btn{width:36px;height:36px;border-radius:50%;border:none;background:#f3f4f6;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
-.header h1{font-size:18px;font-weight:700;color:#111;}
-.badge{background:#ef4444;color:white;border-radius:12px;padding:2px 8px;font-size:12px;font-weight:700;margin-left:6px;}
-.container{max-width:600px;margin:24px auto;padding:0 16px;}
-.empty{text-align:center;padding:60px 20px;color:#9ca3af;}
-.empty i{font-size:48px;margin-bottom:16px;display:block;}
-.empty p{font-size:16px;font-weight:500;}
-.card{background:white;border-radius:16px;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#f9844a,#e76f51);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;color:white;flex-shrink:0;}
-.info{flex:1;}
-.info .name{font-size:15px;font-weight:700;color:#111;}
-.info .desc{font-size:13px;color:#6b7280;margin-top:2px;}
-.info .desc strong{color:#374151;}
-.actions{display:flex;gap:8px;flex-shrink:0;}
-.btn-approve{padding:8px 18px;border-radius:10px;border:none;background:#10b981;color:white;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
-.btn-approve:hover{background:#059669;}
-.btn-reject{padding:8px 18px;border-radius:10px;border:1.5px solid #e5e7eb;background:white;color:#374151;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
-.btn-reject:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626;}
-.done-row{display:flex;align-items:center;gap:8px;color:#10b981;font-size:13px;font-weight:600;}
-.done-row i{font-size:18px;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Follow Requests | Parent Portal</title>
+
+  <meta name="theme-color" content="#20C997">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    .request-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #e6fcf5;
+      color: #0ca678;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .name {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .actions-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-approve {
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: #20c997;
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-approve:hover {
+      background: #0ca678;
+    }
+
+    .btn-reject {
+      padding: 8px 16px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #ef4444;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-reject:hover {
+      background: #fee2e2;
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <button class="back-btn" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
-  <h1>Follow Requests <span class="badge" id="countBadge">{{ pending|length }}</span></h1>
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Follow Request Approvals</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
-  {% if not pending %}
-  <div class="empty">
-    <i class="fa-solid fa-user-check"></i>
-    <p>No pending follow requests</p>
-  </div>
-  {% else %}
-    {% for req in pending %}
-    <div class="card" id="req-{{ req.requester_id }}-{{ req.target_id }}">
-      <div class="avatar">{{ req.requester_name[0]|upper }}</div>
-      <div class="info">
-        <div class="name">{{ req.requester_name }}</div>
-        <div class="desc">wants to follow <strong>{{ req.target_name }}</strong></div>
-      </div>
-      <div class="actions" id="actions-{{ req.requester_id }}-{{ req.target_id }}">
-        <button class="btn-approve"
-          onclick="handleFollow('approve', {{ req.requester_id }}, {{ req.target_id }}, this)">
-          Approve
-        </button>
-        <button class="btn-reject"
-          onclick="handleFollow('reject', {{ req.requester_id }}, {{ req.target_id }}, this)">
-          Reject
-        </button>
-      </div>
+  <div class="card">
+    <h1 class="page-title">Follow Requests</h1>
+    <p class="page-sub">Approve or decline children requesting to connect and follow your child.</p>
+
+    <div id="requestsList">
+      {% if pending %}
+        {% for req in pending %}
+        <div class="request-row" id="req-{{ req.follower_id }}">
+          <div class="user-info">
+            <div class="avatar">
+              {{ req.full_name[0]|upper if req.full_name else '?' }}
+            </div>
+            <div>
+              <div class="name">{{ req.full_name }}</div>
+              <div class="meta">Wants to follow your child</div>
+            </div>
+          </div>
+
+          <div class="actions-group">
+            <button class="btn-approve" onclick="handleFollowDecision({{ req.follower_id }}, 'approve')">
+              <i class="fa-solid fa-check"></i>
+              <span>Approve</span>
+            </button>
+            <button class="btn-reject" onclick="handleFollowDecision({{ req.follower_id }}, 'reject')">
+              <i class="fa-solid fa-xmark"></i>
+              <span>Decline</span>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="text-align:center;padding:48px 20px;color:#64748b;">
+          <i class="fa-solid fa-user-check" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+          <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:4px;">No Pending Requests</h3>
+          <p style="font-size:14px;font-weight:600;">You're all caught up! New requests will show here immediately.</p>
+        </div>
+      {% endif %}
     </div>
-    {% endfor %}
-  {% endif %}
+
+  </div>
 </div>
 
 <script>
-var remaining = {{ pending|length }};
-
-function handleFollow(action, childId, targetId, btn) {
-  btn.disabled = true;
-  var url = action === 'approve' ? '/parent/approve-follow/' : '/parent/reject-follow/';
+function handleFollowDecision(followerId, action) {
+  const url = action === 'approve' ? '/parent/approve-follow/' : '/parent/reject-follow/';
   fetch(url, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'same-origin',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({child_id: childId, target_id: targetId})
-  }).then(function(r){ return r.json(); })
-    .then(function(d){
-      if (d.ok) {
-        var actionsDiv = document.getElementById('actions-' + childId + '-' + targetId);
-        actionsDiv.innerHTML = '<div class="done-row"><i class="fa-solid fa-circle-check"></i>'
-          + (action === 'approve' ? 'Approved' : 'Rejected') + '</div>';
-        remaining--;
-        document.getElementById('countBadge').textContent = remaining;
-        if (remaining === 0) document.getElementById('countBadge').style.display = 'none';
-      }
-    }).catch(function(){ btn.disabled = false; });
+    body: JSON.stringify({ follower_id: followerId })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const row = document.getElementById(`req-${followerId}`);
+    if (row) {
+      row.style.opacity = '0';
+      setTimeout(() => row.remove(), 250);
+    }
+  })
+  .catch(() => window.location.reload());
 }
 </script>
+
 </body>
 </html>

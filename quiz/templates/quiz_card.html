@@ -1,326 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Question {{ question_number }} of {{ total_questions }} | LittleNet Quiz</title>
 
-    <meta charset="UTF-8">
+  <meta name="theme-color" content="#FCC419">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: radial-gradient(circle at 10% 20%, rgba(255, 249, 219, 0.9) 0%, rgba(243, 240, 255, 0.8) 90%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #1e293b;
+    }
 
-    <title>Quiz Time | LittleNet</title>
+    .quiz-wrap {
+      width: 100%;
+      max-width: 480px;
+      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-    <style>
+    .quiz-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 36px 28px;
+      box-shadow: 0 20px 45px -10px rgba(252, 196, 25, 0.25), 0 1px 3px rgba(0, 0, 0, 0.02);
+      border: 1.5px solid #fff3bf;
+      position: relative;
+      overflow: hidden;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    .quiz-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #fcc419, #f59f00, #ff6b6b);
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            color: #222;
-        }
+    .quiz-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
 
-        .quiz-container {
-            max-width: 650px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
+    .quiz-level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #fff9db;
+      color: #b45309;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
 
-        .quiz-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+    .quiz-step-count {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--ln-text-muted);
+    }
 
-        .quiz-header h1 {
-            margin: 0;
-            font-size: 30px;
-        }
+    /* Progress bar */
+    .progress-track {
+      height: 8px;
+      background: #f1f3f5;
+      border-radius: 9999px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
 
-        .quiz-header p {
-            margin-top: 8px;
-            color: #777;
-        }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #fcc419, #ff6b6b);
+      border-radius: 9999px;
+      transition: width 0.4s ease;
+    }
 
-        .progress {
-            height: 10px;
-            background: #e8e8e8;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
+    .question-box {
+      font-size: 19px;
+      font-weight: 900;
+      color: #1e293b;
+      line-height: 1.45;
+      margin-bottom: 24px;
+    }
 
-        .progress-bar {
-            height: 100%;
-            background: #ff7a59;
-            width: {{ (question_number / total_questions) * 100 }}%;
-            transition: width 0.3s ease;
-        }
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-        .question-number {
-            font-weight: bold;
-            color: #ff7043;
-            margin-bottom: 15px;
-        }
+    .opt-card {
+      position: relative;
+    }
 
-        .question {
-            font-size: 22px;
-            font-weight: bold;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
+    .opt-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    .opt-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
+      color: #334155;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-        .option {
-            border: 2px solid #ddd;
-            border-radius: 14px;
-            padding: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 17px;
-        }
+    .opt-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: 1.5px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--ln-text);
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
 
-        .option:hover {
-            border-color: #ff7043;
-            background: #fff7f3;
-        }
+    .opt-card:hover .opt-label {
+      background: #fffdf5;
+      border-color: #fcc419;
+      transform: translateX(4px);
+    }
 
-        .option input {
-            margin-right: 10px;
-        }
+    .opt-card input[type="radio"]:checked + .opt-label {
+      background: #fff9db;
+      border-color: #f59f00;
+      color: #744210;
+      box-shadow: 0 4px 14px rgba(245, 159, 0, 0.2);
+    }
 
-        .submit-btn {
-            width: 100%;
-            margin-top: 25px;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: #1597e5;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .opt-card input[type="radio"]:checked + .opt-label .opt-letter {
+      background: #f59f00;
+      color: white;
+      border-color: #f59f00;
+    }
 
-        .submit-btn:hover {
-            background: #087fc7;
-        }
+    .btn-next {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #fcc419 0%, #f59f00 100%);
+      color: #432800;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px rgba(245, 159, 0, 0.28);
+      transition: all 0.2s;
+    }
 
-        .submit-btn:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        .age-badge {
-            display: inline-block;
-            padding: 8px 14px;
-            border-radius: 20px;
-            background: #fff0c7;
-            color: #7a4d00;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 700px) {
-
-            .quiz-container {
-                margin: 15px;
-                padding: 22px;
-            }
-
-            .question {
-                font-size: 19px;
-            }
-
-        }
-
-    </style>
-
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(245, 159, 0, 0.35);
+    }
+  </style>
 </head>
-
-
 <body>
 
+<div class="quiz-wrap">
+  <div class="quiz-card">
 
-<div class="quiz-container">
+    <div class="quiz-top-bar">
+      <div class="quiz-level-badge">
+        <i class="fa-solid fa-brain"></i>
+        <span>Age {{ age }} &bull; Level {{ age_group }}</span>
+      </div>
+      <div class="quiz-step-count">
+        Question {{ question_number }} of {{ total_questions }}
+      </div>
+    </div>
 
+    <!-- Progress Track -->
+    <div class="progress-track">
+      <div class="progress-fill" style="width: {{ (question_number / total_questions) * 100 }}%;"></div>
+    </div>
 
-    <!-- HEADER -->
+    <div class="question-box">
+      {{ quiz.question }}
+    </div>
 
-    <div class="quiz-header">
+    <form method="POST" action="/quiz/submit/">
+      <input type="hidden" name="quiz_id" value="{{ quiz.quiz_id }}">
 
-        <h1>🧠 Quiz Time!</h1>
-
-        <p>
-            Let's learn something new!
-        </p>
-
-        <div class="age-badge">
-
-            Age {{ age }} ·
-            {{ age_group }}
-
+      <div class="options-grid">
+        <div class="opt-card">
+          <input type="radio" id="optA" name="answer" value="{{ quiz.option_a }}" required>
+          <label class="opt-label" for="optA">
+            <span class="opt-letter">A</span>
+            <span>{{ quiz.option_a }}</span>
+          </label>
         </div>
 
-    </div>
-
-
-    <!-- PROGRESS -->
-
-    <div class="progress">
-
-        <div class="progress-bar"></div>
-
-    </div>
-
-
-    <!-- QUESTION NUMBER -->
-
-    <div class="question-number">
-
-        Question {{ question_number }}
-        of {{ total_questions }}
-
-    </div>
-
-
-    <!-- QUESTION -->
-
-    <div class="question">
-
-        {{ quiz["question"] }}
-
-    </div>
-
-
-    <!-- ANSWER FORM -->
-
-    <form
-        method="POST"
-        action="/quiz/submit/"
-        id="quizForm"
-    >
-
-        <input
-            type="hidden"
-            name="quiz_id"
-            value="{{ quiz['quiz_id'] }}"
-        >
-
-
-        <div class="options">
-
-
-            <label class="option">
-
-                <input
-                    type="radio"
-                    name="answer"
-                    value="{{ quiz['option_a'] }}"
-                    required
-                >
-
-                {{ quiz["option_a"] }}
-
-            </label>
-
-
-            <label class="option">
-
-                <input
-                    type="radio"
-                    name="answer"
-                    value="{{ quiz['option_b'] }}"
-                    required
-                >
-
-                {{ quiz["option_b"] }}
-
-            </label>
-
-
-            <label class="option">
-
-                <input
-                    type="radio"
-                    name="answer"
-                    value="{{ quiz['option_c'] }}"
-                    required
-                >
-
-                {{ quiz["option_c"] }}
-
-            </label>
-
-
-            <label class="option">
-
-                <input
-                    type="radio"
-                    name="answer"
-                    value="{{ quiz['option_d'] }}"
-                    required
-                >
-
-                {{ quiz["option_d"] }}
-
-            </label>
-
-
+        <div class="opt-card">
+          <input type="radio" id="optB" name="answer" value="{{ quiz.option_b }}" required>
+          <label class="opt-label" for="optB">
+            <span class="opt-letter">B</span>
+            <span>{{ quiz.option_b }}</span>
+          </label>
         </div>
 
+        <div class="opt-card">
+          <input type="radio" id="optC" name="answer" value="{{ quiz.option_c }}" required>
+          <label class="opt-label" for="optC">
+            <span class="opt-letter">C</span>
+            <span>{{ quiz.option_c }}</span>
+          </label>
+        </div>
 
-        <button
-            type="submit"
-            class="submit-btn"
-            id="submitButton"
-        >
+        <div class="opt-card">
+          <input type="radio" id="optD" name="answer" value="{{ quiz.option_d }}" required>
+          <label class="opt-label" for="optD">
+            <span class="opt-letter">D</span>
+            <span>{{ quiz.option_d }}</span>
+          </label>
+        </div>
+      </div>
 
-            ✅ Submit Answer
-
-        </button>
-
-
+      <button type="submit" class="btn-next">
+        <span>{% if question_number == total_questions %}Finish Quiz & View Results{% else %}Next Question{% endif %}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
     </form>
 
-
+  </div>
 </div>
 
-
-<script>
-
-    const form =
-        document.getElementById("quizForm");
-
-    const button =
-        document.getElementById("submitButton");
-
-
-    form.addEventListener(
-        "submit",
-        function() {
-
-            button.disabled = true;
-
-            button.innerHTML =
-                "Checking Answer...";
-
-        }
-    );
-
-</script>
-
-
 </body>
-
 </html>

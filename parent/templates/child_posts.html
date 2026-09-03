@@ -1,405 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Child Posts | LittleNet</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Inter',sans-serif;
-}
-
-body{
-
-background:#f5f7fb;
-color:#222;
-padding-bottom:40px;
-
-}
-
-.header{
-
-position:sticky;
-top:0;
-background:white;
-padding:18px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #ddd;
-z-index:100;
-
-}
-
-.logo{
-
-font-size:30px;
-font-weight:700;
-color:#2563EB;
-
-}
-
-.back{
-
-text-decoration:none;
-color:#2563EB;
-font-weight:600;
-
-}
-
-.container{
-
-max-width:850px;
-margin:25px auto;
-padding:0 15px;
-
-}
-
-.page-title{
-
-font-size:30px;
-font-weight:700;
-margin-bottom:8px;
-
-}
-
-.subtitle{
-
-color:#666;
-margin-bottom:30px;
-
-}
-
-.post{
-
-background:white;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:30px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-.post-header{
-
-display:flex;
-align-items:center;
-gap:15px;
-padding:18px;
-
-}
-
-.avatar{
-
-width:55px;
-height:55px;
-border-radius:50%;
-background:linear-gradient(135deg,#2563EB,#4F46E5);
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-font-size:22px;
-
-}
-
-.name{
-
-font-size:18px;
-font-weight:600;
-
-}
-
-.category{
-
-font-size:14px;
-color:#666;
-
-}
-
-.post img,
-.post video{
-
-width:100%;
-display:block;
-max-height:500px;
-object-fit:cover;
-
-}
-
-.content{
-
-padding:20px;
-
-}
-
-.caption{
-
-margin-bottom:20px;
-line-height:1.7;
-
-}
-
-.stats{
-
-display:flex;
-gap:30px;
-margin-bottom:20px;
-font-weight:600;
-color:#444;
-
-}
-
-.stats div{
-
-display:flex;
-align-items:center;
-gap:8px;
-
-}
-
-.comments-btn{
-
-display:inline-block;
-padding:12px 20px;
-background:#2563EB;
-color:white;
-text-decoration:none;
-border-radius:12px;
-font-weight:600;
-transition:.3s;
-
-}
-
-.comments-btn:hover{
-
-background:#1D4ED8;
-
-}
-
-.empty{
-
-background:white;
-padding:60px;
-text-align:center;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
-}
-
-.empty i{
-
-font-size:70px;
-color:#d1d5db;
-margin-bottom:20px;
-
-}
-
-.empty h2{
-
-margin-bottom:10px;
-
-}
-
-.empty p{
-
-color:#777;
-
-}
-
-@media(max-width:768px){
-
-.logo{
-
-font-size:24px;
-
-}
-
-.page-title{
-
-font-size:24px;
-
-}
-
-.stats{
-
-flex-direction:column;
-gap:10px;
-
-}
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts Uploaded by {{ child.full_name }} | Parent Portal</title>
+
+  <meta name="theme-color" content="#F59F00">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .portal-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #7950f2;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 32px auto 0;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .page-sub {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    .post-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .post-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .avatar-ph {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7950f2 0%, #9775fa 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .media-holder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+    }
+
+    .media-holder img,
+    .media-holder video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .content-box {
+      padding: 20px;
+    }
+
+    .caption-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .btn-comments {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-comments:hover {
+      background: #e2e8f0;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-
-LittleNet
-
-</div>
-
-<a href="/parent/dashboard/" class="back">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Dashboard
-
-</a>
-
-</div>
+<nav class="portal-nav">
+  <a href="/parent/dashboard/" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Dashboard</span>
+  </a>
+  <div style="font-size:14px;font-weight:800;color:#64748b;">Review Posts</div>
+  <div style="width:50px;"></div>
+</nav>
 
 <div class="container">
+  
+  <h1 class="page-title">Posts Shared by {{ child.full_name }}</h1>
+  <p class="page-sub">Review photos, videos, and discussions published by your child.</p>
 
-<div class="page-title">
+  {% if posts %}
+    {% for post in posts %}
+    <div class="post-card">
+      <div class="post-top">
+        <div class="avatar-ph">
+          {{ child.full_name[0]|upper if child.full_name else '?' }}
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#0f172a;">{{ child.full_name }}</div>
+          {% if post.content_category %}
+            <div style="font-size:12px;color:#7950f2;font-weight:700;">{{ post.content_category }}</div>
+          {% endif %}
+        </div>
+      </div>
 
-Posts Uploaded By
+      <div class="media-holder">
+        {% if post.media_type == 'IMAGE' %}
+          <img src="/{{ post.media_path }}" alt="Post">
+        {% elif post.media_type == 'VIDEO' %}
+          <video controls src="/{{ post.media_path }}"></video>
+        {% endif %}
+      </div>
 
-{{ child.full_name }}
+      <div class="content-box">
+        <div class="caption-text">{{ post.caption }}</div>
 
-</div>
+        <div class="stats-row">
+          <span><i class="fa-solid fa-heart" style="color:#ef4444;margin-right:4px;"></i> {{ post.likes_count }} Likes</span>
+          <span><i class="fa-solid fa-comment" style="color:#339af0;margin-right:4px;"></i> {{ post.comments_count }} Comments</span>
+        </div>
 
-<div class="subtitle">
-
-Review all posts shared by this child.
-
-</div>
-
-{% if posts %}
-
-{% for post in posts %}
-
-<div class="post">
-
-<div class="post-header">
-
-<div class="avatar">
-
-<i class="fa-solid fa-user"></i>
-
-</div>
-
-<div>
-
-<div class="name">
-
-{{ child.full_name }}
-
-</div>
-
-<div class="category">
-
-{{ post.content_category }}
-
-</div>
-
-</div>
-
-</div>
-
-{% if post.media_type == "IMAGE" %}
-
-<img src="/{{ post.media_path }}">
-
-{% endif %}
-
-{% if post.media_type == "VIDEO" %}
-
-<video controls>
-
-<source
-src="/{{ post.media_path }}">
-
-</video>
-
-{% endif %}
-
-<div class="content">
-
-<div class="caption">
-
-{{ post.caption }}
-
-</div>
-
-<div class="stats">
-
-<div>
-
-❤️ {{ post.likes_count }} Likes
-
-</div>
-
-<div>
-
-💬 {{ post.comments_count }} Comments
-
-</div>
-
-</div>
-
-<a
-href="/parent/post-comments/{{ post.post_id }}/"
-class="comments-btn">
-
-<i class="fa-solid fa-comments"></i>
-
-View Comments
-
-</a>
-
-</div>
-
-</div>
-
-{% endfor %}
-
-{% else %}
-
-<div class="empty">
-
-<i class="fa-regular fa-images"></i>
-
-<h2>
-
-No Posts Yet
-
-</h2>
-
-<p>
-
-This child hasn't uploaded any posts yet.
-
-</p>
-
-</div>
-
-{% endif %}
+        <a href="/parent/post-comments/{{ post.post_id }}/" class="btn-comments">
+          <i class="fa-solid fa-comments"></i>
+          <span>View Post Comments</span>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="background:white;border-radius:24px;border:1px solid #e2e8f0;padding:60px 20px;text-align:center;color:#64748b;">
+      <i class="fa-regular fa-images" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+      <h3 style="font-size:18px;font-weight:900;color:#0f172a;margin-bottom:4px;">No posts uploaded</h3>
+      <p style="font-size:14px;font-weight:600;">Posts will show up here as your child shares photos or videos.</p>
+    </div>
+  {% endif %}
 
 </div>
 
 </body>
-
 </html>

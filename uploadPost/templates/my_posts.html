@@ -1,512 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Posts | LittleNet</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Nunito',sans-serif;}
-a{text-decoration:none;color:inherit;}
-body{background:#fafafa;min-height:100vh;padding-bottom:70px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>My Posts | LittleNet</title>
 
-/* ── Header ── */
-.ig-header{
-  position:sticky;top:0;z-index:999;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-bottom:1px solid #dbdbdb;
-}
-.ig-header-inner{
-  max-width:470px;margin:0 auto;
-  display:flex;align-items:center;gap:14px;
-  padding:12px 16px;
-}
-.ig-back{font-size:21px;color:#262626;flex-shrink:0;}
-.ig-back:hover{color:#e76f51;}
-.ig-title{font-size:17px;font-weight:900;color:#262626;flex:1;}
-.ig-new{font-size:22px;color:#0095f6;}
-.ig-new:hover{color:#0081d6;}
+  <meta name="theme-color" content="#FF6B6B">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/littlenet.css">
 
-/* ── Feed card ── */
-.feed-card{
-  background:white;
-  border-bottom:1px solid #dbdbdb;
-  max-width:470px;margin:0 auto;
-}
+  <style>
+    .my-posts-wrap {
+      max-width: var(--ln-max-w);
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--ln-surface);
+      padding-bottom: 80px;
+    }
 
-/* Card header */
-.feed-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px;
-}
-.feed-user{display:flex;align-items:center;gap:10px;cursor:pointer;}
-.feed-avatar{
-  width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:900;color:#7c3700;overflow:hidden;
-}
-.feed-avatar img{width:100%;height:100%;object-fit:cover;}
-.feed-username{font-size:14px;font-weight:900;color:#262626;}
-.feed-date{font-size:12px;color:#8e8e8e;font-weight:600;margin-top:1px;}
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--ln-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* Delete / more menu */
-.feed-more{position:relative;}
-.more-btn{background:none;border:none;font-size:20px;color:#262626;cursor:pointer;letter-spacing:1px;padding:4px;}
-.more-menu{
-  display:none;position:absolute;right:0;top:32px;
-  background:white;border:1px solid #dbdbdb;border-radius:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,.1);min-width:140px;z-index:100;overflow:hidden;
-}
-.more-menu.open{display:block;}
-.more-menu a{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 16px;font-size:14px;font-weight:700;color:#dc2626;
-  transition:.15s;
-}
-.more-menu a:hover{background:#fff0f0;}
+    .header-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ln-text);
+    }
 
-/* Media */
-.feed-media{width:100%;aspect-ratio:1/1;background:#fafafa;overflow:hidden;}
-.feed-media img,.feed-media video{width:100%;height:100%;object-fit:cover;display:block;}
+    .post-card {
+      background: white;
+      border-bottom: 1px solid var(--ln-border-light);
+      margin-bottom: 12px;
+    }
 
-/* Actions */
-.feed-actions{
-  display:flex;align-items:center;padding:8px 14px 4px;gap:14px;
-}
-.act-btn{
-  background:none;border:none;cursor:pointer;
-  font-size:24px;color:#262626;padding:2px;transition:.2s;
-  display:flex;align-items:center;
-}
-.act-btn:hover{transform:scale(1.12);}
-.act-save{margin-left:auto;}
+    .post-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+    }
 
-.liked-heart{color:#e0245e;}
-@keyframes heartPop{0%{transform:scale(1);}40%{transform:scale(1.5);}100%{transform:scale(1);}}
-.heart-pop{animation:heartPop .35s ease;}
+    .user-info-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-/* Likes & caption */
-.feed-likes{font-size:14px;font-weight:800;color:#262626;padding:4px 14px 2px;}
-.feed-caption{font-size:14px;color:#262626;padding:2px 14px 6px;line-height:1.5;}
-.feed-caption .uname{font-weight:900;margin-right:5px;cursor:pointer;}
-.feed-view-comments{font-size:14px;color:#8e8e8e;font-weight:600;padding:0 14px 6px;display:block;cursor:pointer;}
+    .avatar-small {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ln-purple-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      overflow: hidden;
+    }
 
-/* Comments section */
-.comments-section{display:none;padding:0 14px 10px;}
-.comments-section.open{display:block;}
-.comments-list{margin-bottom:8px;}
-.comment-item{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
-.ci-name{font-weight:900;color:#262626;margin-right:4px;}
-.ci-text{color:#262626;font-weight:600;}
-.comment-input-row{
-  display:flex;align-items:center;gap:8px;
-  border-top:1px solid #efefef;padding-top:8px;
-}
-.comment-input-row input{
-  flex:1;border:none;outline:none;font-size:14px;font-weight:600;
-  background:transparent;font-family:'Nunito',sans-serif;color:#262626;
-}
-.comment-input-row input::placeholder{color:#8e8e8e;}
-.ci-send{
-  background:none;border:none;color:#0095f6;font-size:13px;
-  font-weight:900;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;
-}
-.ci-send:hover{color:#0081d6;}
+    .avatar-small img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-/* ── Share modal ── */
-.share-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
-  z-index:8000;align-items:flex-end;justify-content:center;
-}
-.share-overlay.show{display:flex;}
-.share-sheet{
-  background:white;width:100%;max-width:470px;
-  border-radius:24px 24px 0 0;padding:0 0 28px;
-  animation:slideUp .28s ease;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.share-handle{width:40px;height:4px;border-radius:4px;background:#dbdbdb;margin:12px auto 14px;}
-.share-title{font-size:16px;font-weight:900;color:#262626;text-align:center;padding-bottom:14px;border-bottom:1px solid #efefef;}
-.share-row{
-  display:flex;gap:18px;overflow-x:auto;padding:16px 16px 0;
-  scrollbar-width:none;
-}
-.share-row::-webkit-scrollbar{display:none;}
-.share-friend{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;}
-.sf-avatar{
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(135deg,#ffecd2,#fcb69f);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:900;color:#7c3700;transition:.2s;
-}
-.sf-avatar.sent{background:#d1fae5;color:#065f46;}
-.sf-name{font-size:12px;font-weight:700;color:#262626;max-width:64px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.share-actions{display:flex;gap:10px;padding:14px 16px 0;}
-.share-action-btn{
-  flex:1;padding:12px;border-radius:12px;border:1.5px solid #dbdbdb;
-  background:white;font-size:13px;font-weight:800;cursor:pointer;
-  color:#262626;font-family:'Nunito',sans-serif;transition:.2s;
-}
-.share-action-btn:hover{background:#efefef;}
-.share-cancel{
-  display:block;width:calc(100% - 32px);margin:10px 16px 0;
-  padding:12px;border-radius:12px;border:none;
-  background:#efefef;color:#262626;font-size:14px;font-weight:900;cursor:pointer;
-  font-family:'Nunito',sans-serif;
-}
-.copy-toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
-  background:#262626;color:white;padding:10px 20px;border-radius:10px;
-  font-size:13px;font-weight:800;pointer-events:none;
-  opacity:0;transition:opacity .3s;z-index:9999;
-}
-.copy-toast.show{opacity:1;}
+    .delete-btn {
+      color: #ef4444;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: #fef2f2;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
 
-/* ── Empty state ── */
-.empty-state{text-align:center;padding:60px 20px;}
-.empty-state .icon{font-size:52px;margin-bottom:12px;}
-.empty-state p{font-size:14px;font-weight:700;color:#8e8e8e;margin-bottom:16px;}
-.empty-btn{
-  display:inline-block;padding:11px 24px;
-  background:#0095f6;color:white;border-radius:10px;
-  font-size:14px;font-weight:900;
-}
+    .delete-btn:hover {
+      background: #fee2e2;
+    }
 
-/* ── Bottom nav ── */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;width:100%;z-index:998;
-  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
-  border-top:1px solid #dbdbdb;
-  display:flex;justify-content:space-around;align-items:center;
-  padding:10px 0 14px;
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;color:#262626;padding:4px 12px;transition:.2s;}
-.nav-item i{font-size:24px;transition:.2s;}
-.nav-item.active i{color:#e76f51;}
-.nav-item:hover i{color:#e76f51;transform:scale(1.1);}
-</style>
+    .media-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: black;
+    }
+
+    .media-box img,
+    .media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px 4px;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ln-text);
+    }
+
+    .caption-box {
+      padding: 2px 16px 12px;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .comments-section {
+      background: #f8fafc;
+      border-top: 1px solid var(--ln-border-light);
+      padding: 12px 16px;
+    }
+
+    .comment-item {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="ig-header">
-  <div class="ig-header-inner">
-    <a class="ig-back" href="/child/profile/"><i class="fa-solid fa-arrow-left"></i></a>
-    <div class="ig-title">My Posts</div>
-    <a class="ig-new" href="/child/upload-post/" title="New post"><i class="fa-solid fa-square-plus"></i></a>
+<div class="my-posts-wrap">
+
+  <div class="top-header">
+    <a href="/child/profile/" style="color:var(--ln-text);font-size:20px;padding:4px;">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div class="header-title">My Posts Stream</div>
+    <a href="/child/upload-post/" style="color:var(--ln-coral);font-size:20px;padding:4px;">
+      <i class="fa-solid fa-plus"></i>
+    </a>
   </div>
-</div>
 
-{% if posts %}
-  {% for post in posts %}
-  <div class="feed-card" data-post-id="{{ post.post_id }}">
+  <main>
+    {% if posts %}
+      {% for post in posts %}
+      <article class="post-card">
+        <div class="post-header-row">
+          <div class="user-info-box">
+            <div class="avatar-small">
+              {% if profile and profile.profile_picture %}
+                <img src="/{{ profile.profile_picture|replace('\\','/') }}" alt="">
+              {% else %}
+                <i class="fa-solid fa-user"></i>
+              {% endif %}
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:800;color:var(--ln-text);">You</div>
+              {% if post.content_category %}
+                <div style="font-size:11px;font-weight:700;color:var(--ln-purple);"><i class="fa-solid fa-tag"></i> {{ post.content_category }}</div>
+              {% endif %}
+            </div>
+          </div>
 
-    <!-- Header -->
-    <div class="feed-head">
-      <div class="feed-user" onclick="window.location.href='/child/profile/'">
-        <div class="feed-avatar">
-          {% if profile and profile.profile_picture %}
-            <img src="/{{ profile.profile_picture | replace('\\', '/') }}" alt="dp">
-          {% else %}
-            {{ (profile.full_name[0]|upper) if profile and profile.full_name else '?' }}
-          {% endif %}
-        </div>
-        <div>
-          <div class="feed-username">{{ profile.full_name if profile else 'Me' }}</div>
-          <div class="feed-date">{{ post.created_at.strftime('%d %b %Y') if post.created_at else '' }}</div>
-        </div>
-      </div>
-
-      <!-- More / delete -->
-      <div class="feed-more">
-        <button class="more-btn" onclick="toggleMenu(event, {{ post.post_id }})">···</button>
-        <div class="more-menu" id="menu-{{ post.post_id }}">
-          <a href="/delete-post/{{ post.post_id }}/"
-             onclick="return confirm('Delete this post?')">
-            <i class="fa-solid fa-trash"></i> Delete
+          <a href="/delete-post/{{ post.post_id }}/" class="delete-btn" onclick="return confirm('Are you sure you want to delete this post?')">
+            <i class="fa-regular fa-trash-can"></i>
+            <span>Delete</span>
           </a>
         </div>
+
+        <div class="media-box">
+          {% if post.media_type == 'VIDEO' %}
+            <video controls playsinline src="/{{ post.media_path|replace('\\','/') }}"></video>
+          {% else %}
+            <img src="/{{ post.media_path|replace('\\','/') }}" loading="lazy" alt="Post">
+          {% endif %}
+        </div>
+
+        <div class="stats-row">
+          <span>❤️ {{ post.likes_count }} likes</span>
+          <span>💬 {{ post.comments|length if post.comments is defined else 0 }} comments</span>
+        </div>
+
+        <div class="caption-box">
+          {{ post.caption }}
+        </div>
+
+        {% if post.comments %}
+        <div class="comments-section">
+          <div style="font-size:12px;font-weight:800;color:var(--ln-text-muted);margin-bottom:8px;">Recent Comments</div>
+          {% for c in post.comments %}
+          <div class="comment-item">
+            <strong>{{ c.full_name }}:</strong> <span>{{ c.comment_text }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:60px 20px;color:var(--ln-text-muted);">
+        <i class="fa-solid fa-camera-retro" style="font-size:48px;color:#cbd5e1;margin-bottom:12px;"></i>
+        <h3 style="font-weight:900;color:var(--ln-text);margin-bottom:6px;">You haven't uploaded any posts</h3>
+        <p style="font-size:14px;font-weight:700;margin-bottom:16px;">Share your proud moments, sketches, code, or activities!</p>
+        <a href="/child/upload-post/" class="ln-btn-primary" style="display:inline-flex;">Create New Post</a>
       </div>
-    </div>
-
-    <!-- Media -->
-    <div class="feed-media">
-      {% if post.media_type == "IMAGE" %}
-        <img src="/{{ post.media_path | replace('\\', '/') }}" alt="post" loading="lazy">
-      {% elif post.media_type == "VIDEO" %}
-        <video src="/{{ post.media_path | replace('\\', '/') }}" muted loop playsinline></video>
-      {% endif %}
-    </div>
-
-    <!-- Actions -->
-    <div class="feed-actions">
-      <button class="act-btn like-btn" title="Like">
-        <i class="fa-regular fa-heart" id="heart-{{ post.post_id }}"></i>
-      </button>
-      <button class="act-btn comment-toggle-btn" title="Comment">
-        <i class="fa-regular fa-comment"></i>
-      </button>
-      <button class="act-btn share-btn" title="Share"
-              data-pid="{{ post.post_id }}"
-              data-name="{{ (profile.full_name if profile else 'Me') | e }}"
-              data-path="{{ post.media_path | replace('\\', '/') }}"
-              data-mtype="{{ post.media_type }}"
-              data-caption="{{ (post.caption or '') | truncate(80, True, '…') | e }}">
-        <i class="fa-regular fa-paper-plane"></i>
-      </button>
-      <button class="act-btn act-save"><i class="fa-regular fa-bookmark"></i></button>
-    </div>
-
-    <div class="feed-likes" id="likes-{{ post.post_id }}">
-      {{ post.likes }} like{{ 's' if post.likes != 1 else '' }}
-    </div>
-
-    {% if post.caption %}
-    <div class="feed-caption">
-      <span class="uname" onclick="window.location.href='/child/profile/'">{{ profile.full_name if profile else 'Me' }}</span>{{ post.caption }}
-    </div>
     {% endif %}
+  </main>
 
-    {% if post.comments_count > 0 %}
-    <span class="feed-view-comments comment-toggle-btn">View {{ post.comments_count }} comment{{ 's' if post.comments_count != 1 else '' }}</span>
-    {% endif %}
+  <!-- Bottom Navigation -->
+  <nav class="ln-bottom-nav">
+    <div class="ln-bottom-nav-inner">
+      <a href="/child/dashboard/" class="ln-nav-item">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+      </a>
 
-    <!-- Comments section (AJAX) -->
-    <div class="comments-section" id="cmt-{{ post.post_id }}">
-      <div class="comments-list" id="clist-{{ post.post_id }}"></div>
-      <div class="comment-input-row">
-        <input type="text" placeholder="Add a comment…" id="cinput-{{ post.post_id }}">
-        <button class="ci-send" data-pid="{{ post.post_id }}">Post</button>
-      </div>
+      <a href="/discover/" class="ln-nav-item">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+      </a>
+
+      <a href="/child/upload-post/" class="ln-nav-item ln-nav-post">
+        <div class="post-btn-circle">
+          <i class="fa-solid fa-plus"></i>
+        </div>
+      </a>
+
+      <a href="/quiz/start/" class="ln-nav-item">
+        <i class="fa-solid fa-brain"></i>
+        <span>Quiz</span>
+      </a>
+
+      <a href="/child/profile/" class="ln-nav-item active">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
     </div>
+  </nav>
 
-  </div>
-  {% endfor %}
-{% else %}
-  <div class="empty-state">
-    <div class="icon">📭</div>
-    <p>No posts yet!<br>Share something fun 🎉</p>
-    <a class="empty-btn" href="/child/upload-post/">Create my first post</a>
-  </div>
-{% endif %}
-
-<!-- Share modal -->
-<div class="share-overlay" id="shareOverlay" onclick="closeShare(event)">
-  <div class="share-sheet" onclick="event.stopPropagation()">
-    <div class="share-handle"></div>
-    <div class="share-title">Share Post</div>
-    <div class="share-row" id="friendsRow">
-      <div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Loading friends…</div>
-    </div>
-    <div class="share-actions">
-      <button class="share-action-btn" onclick="copyLink()"><i class="fa-solid fa-link"></i> Copy Link</button>
-      <button class="share-action-btn" onclick="shareNative()"><i class="fa-solid fa-share-nodes"></i> More</button>
-    </div>
-    <button class="share-cancel" onclick="closeShare()">Cancel</button>
-  </div>
 </div>
-<div class="copy-toast" id="copyToast">🔗 Link copied!</div>
 
-<!-- Bottom nav -->
-<nav class="bottom-nav">
-
-    <!-- Home -->
-    <a class="nav-item active" href="/child/dashboard/">
-        🏠
-    </a>
-
-    <!-- Discover -->
-    <a class="nav-item" href="/discover/">
-        🔍
-    </a>
-
-    <!-- Create Post -->
-    <a class="nav-item nav-post" href="/child/upload-post/">
-        ➕
-    </a>
-
-    <!-- Quiz -->
-    <a class="nav-item" href="/quiz/start/">
-        🧠
-    </a>
-
-    <!-- Profile -->
-    <a class="nav-item" href="/child/profile/">
-        👤
-    </a>
-
-</nav>
-
-<script>
-// Wire up each card
-document.querySelectorAll('.feed-card').forEach(function(card){
-  var postId = parseInt(card.dataset.postId);
-  var liked = false;
-
-  // Like
-  card.querySelector('.like-btn').addEventListener('click', function(){
-    fetch('/api/like/'+postId+'/', {method:'POST', credentials:'same-origin'})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        liked = d.liked;
-        var hEl = document.getElementById('heart-'+postId);
-        hEl.className = 'fa-heart '+(d.liked?'fa-solid liked-heart':'fa-regular');
-        hEl.classList.add('heart-pop');
-        setTimeout(function(){hEl.classList.remove('heart-pop');}, 400);
-        var lEl = document.getElementById('likes-'+postId);
-        if(lEl) lEl.textContent = d.count+' like'+(d.count!==1?'s':'');
-      }).catch(function(){});
-  });
-
-  // Comment toggle
-  card.querySelectorAll('.comment-toggle-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var sec = document.getElementById('cmt-'+postId);
-      var wasOpen = sec.classList.contains('open');
-      sec.classList.toggle('open');
-      if(!wasOpen){
-        loadComments(postId);
-      }
-    });
-  });
-
-  // Submit comment
-  var sendBtn = card.querySelector('.ci-send');
-  if(sendBtn) sendBtn.addEventListener('click', function(){ submitComment(postId); });
-  var inp = document.getElementById('cinput-'+postId);
-  if(inp) inp.addEventListener('keydown', function(e){ if(e.key==='Enter') submitComment(postId); });
-
-  // Share
-  var shareBtn = card.querySelector('.share-btn');
-  if(shareBtn){
-    shareBtn.addEventListener('click', function(){
-      openShare(shareBtn.dataset.pid, shareBtn.dataset.name,
-                shareBtn.dataset.path, shareBtn.dataset.mtype,
-                shareBtn.dataset.caption);
-    });
-  }
-});
-
-function loadComments(postId){
-  var list = document.getElementById('clist-'+postId);
-  if(list.dataset.loaded) return;
-  list.dataset.loaded = '1';
-  fetch('/api/comments/'+postId+'/', {credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(items){
-      list.innerHTML = '';
-      items.slice().reverse().forEach(function(c){
-        var d = document.createElement('div'); d.className='comment-item';
-        d.innerHTML='<span class="ci-name">'+escHtml(c.full_name)+'</span><span class="ci-text">'+escHtml(c.text)+'</span>';
-        list.appendChild(d);
-      });
-    }).catch(function(){});
-}
-
-function submitComment(postId){
-  var inp = document.getElementById('cinput-'+postId);
-  var text = (inp.value||'').trim(); if(!text) return;
-  inp.value = '';
-  fetch('/api/comment/'+postId+'/', {
-    method:'POST', credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({text:text})
-  })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    if(!d.ok) return;
-    var list = document.getElementById('clist-'+postId);
-    var item = document.createElement('div'); item.className='comment-item';
-    item.innerHTML='<span class="ci-name">'+escHtml(d.full_name||'You')+'</span><span class="ci-text">'+escHtml(d.text)+'</span>';
-    list.appendChild(item);
-    document.getElementById('cmt-'+postId).classList.add('open');
-  }).catch(function(){});
-}
-
-function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// Video autoplay on scroll
-(function(){
-  var vids = document.querySelectorAll('.feed-media video');
-  if(!vids.length || !('IntersectionObserver' in window)) return;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting) e.target.play(); else e.target.pause(); });
-  }, {threshold:.5});
-  vids.forEach(function(v){ io.observe(v); });
-})();
-
-// ── More menu toggle ──
-function toggleMenu(e, postId){
-  e.stopPropagation();
-  var menu = document.getElementById('menu-'+postId);
-  var isOpen = menu.classList.toggle('open');
-  if(isOpen){
-    document.addEventListener('click', function handler(){
-      menu.classList.remove('open');
-      document.removeEventListener('click', handler);
-    });
-  }
-}
-
-// ── Share modal ──
-var _sharePostId=null, _friends=null;
-function openShare(postId, name, path, mtype, caption){
-  _sharePostId=postId;
-  document.getElementById('shareOverlay').classList.add('show');
-  if(_friends===null) loadShareFriends();
-}
-function closeShare(e){
-  if(!e||e.target===document.getElementById('shareOverlay')||!e.target){
-    document.getElementById('shareOverlay').classList.remove('show');
-  }
-}
-function loadShareFriends(){
-  fetch('/api/following/', {credentials:'same-origin'})
-    .then(function(r){return r.json();})
-    .then(function(data){_friends=data; renderShareFriends();})
-    .catch(function(){});
-}
-function renderShareFriends(){
-  var row=document.getElementById('friendsRow');
-  if(!_friends||!_friends.length){
-    row.innerHTML='<div style="font-size:13px;font-weight:700;color:#8e8e8e;padding:10px 0;">Follow friends to share with them!</div>';
-    return;
-  }
-  row.innerHTML='';
-  _friends.forEach(function(f){
-    var div=document.createElement('div'); div.className='share-friend';
-    div.innerHTML='<div class="sf-avatar" id="sf-'+f.user_id+'">'+escHtml(f.full_name[0].toUpperCase())+'</div><span class="sf-name">'+escHtml(f.full_name)+'</span>';
-    div.onclick=function(){sendToFriend(f.user_id, f.full_name, div.querySelector('.sf-avatar'));};
-    row.appendChild(div);
-  });
-}
-function sendToFriend(userId, name, el){
-  if(el.classList.contains('sent')) return;
-  fetch('/api/share-post/', {
-    method:'POST', credentials:'same-origin',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({receiver_id:userId, post_id:_sharePostId})
-  }).then(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');})
-    .catch(function(){el.classList.add('sent');el.textContent='✓';showToast('Sent to '+name+'!');});
-}
-function copyLink(){
-  var url=window.location.origin+'/my-posts/?from='+(_sharePostId||'');
-  if(navigator.clipboard) navigator.clipboard.writeText(url).then(function(){showToast('🔗 Link copied!');});
-  else{var t=document.createElement('textarea');t.value=url;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);showToast('🔗 Link copied!');}
-  closeShare();
-}
-function shareNative(){
-  var url=window.location.origin+'/my-posts/?from='+(_sharePostId||'');
-  if(navigator.share) navigator.share({title:'LittleNet',url:url}).catch(function(){});
-  else copyLink();
-}
-function showToast(msg){
-  var t=document.getElementById('copyToast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2500);
-}
-</script>
 </body>
 </html>
